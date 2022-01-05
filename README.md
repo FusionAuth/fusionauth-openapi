@@ -4,7 +4,7 @@ This is an **experimental** OpenAPI specification for the FusionAuth API.
 
 You can find the file here:
 
-[openapi.yaml](/FusionAuth/fusionauth-openapi/blob/main/openapi.yaml)
+[openapi.yaml](https://github.com/FusionAuth/fusionauth-openapi/blob/main/openapi.yaml)
 
 It can be used in a variety of contexts, including generating client libraries, tracking API changes over time and testing. More here: https://openapi.tools/
 
