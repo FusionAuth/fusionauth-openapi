@@ -21,16 +21,37 @@ schemathesis run -vvvv --checks not_a_server_error openapi.yaml --base-url http:
 
 Install either Swagger: https://github.com/swagger-api/swagger-codegen/ or openapi: https://github.com/OpenAPITools/openapi-generator
 
-Java
+These instructions will be for openapi.
+
+#### Java
 
 ```
 cd <dir>
 swagger-codegen generate  --group-id io.fusionauth --artifact-id fusionauth-client-library-codegen --artifact-version 1.0.2-SNAPSHOT --api-package io.fusionauth.codegen.api  --invoker-package io.fusionauth.codegen.invoker --model-package io.fusionauth.codegen.model -l java -o . -i ../fusionauth-client-builder/bin/openapi.yaml
 ```
 
-Ruby
+#### Ruby
+
+To build the ruby client libraries:
+
+Create a file called `postprocess.sh`. Put this in the file (make sure to update with the correct `sed` path):
+
 ```
-npx @openapitools/openapi-generator-cli generate -i ../fusionauth-client-builder/bin/openapi.yaml -g ruby -o . 
+/path/to/sed -i "" 's/END = "end".freeze/END_ENUM = "end".freeze/' $1
+```
+
+Set an environment variable with the full path of this script:
+
+```
+export RUBY_POST_PROCESS_FILE=/path/to/postprocess.sh
+```
+
+Copy the `openapi.yaml` file to your current directory.
+
+Then generate the library:
+
+```
+npx @openapitools/openapi-generator-cli generate  --enable-post-process-file  -i openapi.yaml  -g ruby -o ruby
 ```
 
 ## Known issues
@@ -42,10 +63,11 @@ While the specification is valid, the generated client libraries haven't been fu
 * There's no information about what parameters are required or not, because that is not part of the API JSON files.
 * There are certain operations, status codes and security mechanisms (JWT auth, cookies for auth) that are not currently supported because they are not included in the API JSON files.
 * OAuth grant actions aren't currently supported (the /oauth2/ endpoints).
+* There is an issue generating the ruby client libraries. https://github.com/OpenAPITools/openapi-generator/issues/11350 has the repro steps. The `RUBY_POST_PROCESS_FILE` environment variable is a workaround.
 
 ## Next steps
 
-We are putting this out to see how useful the FusionAuth community finds it. We welcome feedback on your usage of this spec. We'll plan to revisit this after we've received some feedback on how useful it is and determine if there are additional features we need to implement.
+We are publishing this to see how useful the FusionAuth community finds it. We welcome feedback on your usage of this spec. We'll plan to revisit this after we've received some feedback on how useful it is and determine if there are additional features we need to implement.
 
 ## Questions and support
 
