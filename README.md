@@ -54,6 +54,8 @@ Then generate the library:
 npx @openapitools/openapi-generator-cli generate  --enable-post-process-file  -i openapi.yaml  -g ruby -o ruby
 ```
 
+More docs here: https://openapi-generator.tech/docs/generators/ruby
+
 ## Known issues
 
 While the specification is valid, the generated client libraries haven't been fully exercised.
