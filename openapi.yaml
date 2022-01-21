@@ -1,7 +1,7 @@
 
 openapi: "3.0.3"
 info:
-  version: 1.0.0
+  version: 1.32.2
   title: FusionAuth API
   license:
     name: Apache2
@@ -2033,8 +2033,8 @@ components:
     ManagedFields:
       description: 'This class contains the managed fields that are also put into
         the database during FusionAuth setup.  <p>  NOTE TO FUSIONAUTH DEVS: These
-        fields are are also declared in SQL in order to boot strap the system. These
-        need to stay in sync.  - Any changes to these fields needs to also be reflected
+        fields are also declared in SQL in order to boot strap the system. These need
+        to stay in sync.  - Any changes to these fields needs to also be reflected
         in mysql.sql and postgresql.sql'
       type: object
       properties: {}
