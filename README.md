@@ -10,12 +10,8 @@ It can be used in a variety of contexts, including generating client libraries, 
 
 Use this file to do all your OpenAPI related actions. For additional information and documentation on FusionAuth refer to [https://fusionauth.io](https://fusionauth.io).
 
-## Test the YAML
+To repeat, this is currently **experimental** and we make no promises about backwards compatibility.
 
-```
-pip3 install schemathesis # one time
-schemathesis run -vvvv --checks not_a_server_error openapi.yaml --base-url http://localhost:9011 -H "Authorization: bf69486b-4733-4470-a592-f1bfce7af580" 
-```
 
 ### Generate libraries
 
@@ -58,12 +54,20 @@ npx @openapitools/openapi-generator-cli generate  --enable-post-process-file  -i
 
 More docs here: https://openapi-generator.tech/docs/generators/ruby
 
+### Test the YAML
+
+```
+pip3 install schemathesis # one time
+schemathesis run -vvvv --checks not_a_server_error openapi.yaml --base-url http://localhost:9011 -H "Authorization: bf69486b-4733-4470-a592-f1bfce7af580" 
+```
+
 ## Known issues
 
 While the specification is valid, the generated client libraries haven't been fully exercised.
 
-* FusionAuth uses polymorphic responses for some API calls, particularly Identity Provider. The support for that in client library generation code is problematic, based on our testing. I'm not sure if there are workarounds, but it seems like some work is being done. See https://github.com/swagger-api/swagger-codegen/issues/10011 and https://github.com/OpenAPITools/openapi-generator/issues/10880#issuecomment-995243186 for an openapi workaround.
+* FusionAuth uses polymorphic responses for some API calls, particularly Identity Providers. The support for that in client library generation code is problematic, based on our testing. I'm not sure if there are workarounds, but it seems like some work is being done. See https://github.com/swagger-api/swagger-codegen/issues/10011 and https://github.com/OpenAPITools/openapi-generator/issues/10880#issuecomment-995243186 for an openapi workaround.
 * This spec is built using the [fusionauth-client-builder](https://github.com/fusionauth/fusionauth-client-builder) project JSON files. This covers almost all of the API, but not everything. A few calls may be missing. If you find one that you need, please open a bug report.
+* Deprecated API endpoints are not included.
 * There's no information about what parameters are required or not, because that is not part of the API JSON files.
 * There are certain operations, status codes and security mechanisms (JWT auth, cookies for auth) that are not currently supported because they are not included in the API JSON files.
 * OAuth grant actions aren't currently supported (the /oauth2/ endpoints).
@@ -73,9 +77,11 @@ While the specification is valid, the generated client libraries haven't been fu
 
 We are publishing this to see how useful the FusionAuth community finds it. We welcome feedback on your usage of this spec. We'll plan to revisit this after we've received some feedback on how useful it is and determine if there are additional features we need to implement.
 
+Please open bugs on this repository. For support in using this, please see the next section.
+
 ## Questions and support
 
-If you have a question or support issue regarding this OpenAPI sepc, we'd love to hear from you.
+If you have a question or support issue regarding this OpenAPI spec, we'd love to hear from you.
 
 If you have a paid edition with support included, please [open a ticket in your account portal](https://account.fusionauth.io/account/support/). Learn more about [paid editions here](https://fusionauth.io/pricing/).
 
