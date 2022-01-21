@@ -26,8 +26,10 @@ These instructions will be for openapi.
 #### Java
 
 ```
-cd <dir>
-swagger-codegen generate  --group-id io.fusionauth --artifact-id fusionauth-client-library-codegen --artifact-version 1.0.2-SNAPSHOT --api-package io.fusionauth.codegen.api  --invoker-package io.fusionauth.codegen.invoker --model-package io.fusionauth.codegen.model -l java -o . -i ../fusionauth-client-builder/bin/openapi.yaml
+npx @openapitools/openapi-generator-cli generate -i openapi.yaml  -g java -o java
+cd java
+mvn package
+# use jar
 ```
 
 #### Ruby
@@ -60,7 +62,7 @@ More docs here: https://openapi-generator.tech/docs/generators/ruby
 
 While the specification is valid, the generated client libraries haven't been fully exercised.
 
-* FusionAuth uses polymorphic responses for some API calls, particularly Identity Provider. The support for that in client library generation code is problematic, based on our testing. I'm not sure if there are workarounds, but it seems like some work is being done. See https://github.com/swagger-api/swagger-codegen/issues/10011 for example.
+* FusionAuth uses polymorphic responses for some API calls, particularly Identity Provider. The support for that in client library generation code is problematic, based on our testing. I'm not sure if there are workarounds, but it seems like some work is being done. See https://github.com/swagger-api/swagger-codegen/issues/10011 and https://github.com/OpenAPITools/openapi-generator/issues/10880#issuecomment-995243186 for an openapi workaround.
 * This spec is built using the [fusionauth-client-builder](https://github.com/fusionauth/fusionauth-client-builder) project JSON files. This covers almost all of the API, but not everything. A few calls may be missing. If you find one that you need, please open a bug report.
 * There's no information about what parameters are required or not, because that is not part of the API JSON files.
 * There are certain operations, status codes and security mechanisms (JWT auth, cookies for auth) that are not currently supported because they are not included in the API JSON files.
