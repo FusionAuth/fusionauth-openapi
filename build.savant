@@ -38,6 +38,10 @@ target(name: "clean", description: "Releases a local integration build of the pr
  // No-op
 }
 
+target(name: "idea", description: "Releases a local integration build of the project") {
+ // No-op
+}
+
 target(name: "int", description: "Releases a local integration build of the project") {
  // No-op
 }
