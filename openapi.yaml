@@ -1,7 +1,7 @@
 
 openapi: "3.0.3"
 info:
-  version: 1.32.1
+  version: 1.32.2
   title: FusionAuth API
   license:
     name: Apache2
@@ -885,6 +885,9 @@ components:
           type: object
           additionalProperties:
             type: object
+        userId:
+          type: string
+          format: uuid
     ConnectorPolicy:
       description: ''
       type: object
@@ -1621,6 +1624,8 @@ components:
         applicationId:
           type: string
           format: uuid
+        changePasswordId:
+          type: string
         currentPassword:
           type: string
         loginId:
@@ -2032,10 +2037,10 @@ components:
           type: boolean
     ManagedFields:
       description: 'This class contains the managed fields that are also put into
-        the database during FusionAuth setup.  <p>  NOTE TO FUSIONAUTH DEVS: These
-        fields are are also declared in SQL in order to boot strap the system. These
-        need to stay in sync.  - Any changes to these fields needs to also be reflected
-        in mysql.sql and postgresql.sql'
+        the database during FusionAuth setup.  <p>  Internal Note: These fields are
+        also declared in SQL in order to bootstrap the system. These need to stay
+        in sync.  Any changes to these fields needs to also be reflected in mysql.sql
+        and postgresql.sql'
       type: object
       properties: {}
     MonthlyActiveUserReportResponse:
@@ -3663,6 +3668,8 @@ components:
             type: string
         token:
           type: string
+        tokenExpirationInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
         user:
           "$ref": "#/components/schemas/User"
     DeviceInfo:
@@ -5697,6 +5704,8 @@ components:
           type: string
         token:
           type: string
+        tokenExpirationInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
         user:
           "$ref": "#/components/schemas/User"
     UserRegistrationUpdateCompleteEvent:
@@ -6627,6 +6636,8 @@ components:
           items: {}
         token:
           type: string
+        tokenExpirationInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
         twoFactorId:
           type: string
         twoFactorTrustId:
@@ -14150,7 +14161,9 @@ paths:
     post:
       description: Changes a user's password using the change password Id. This usually
         occurs after an email has been sent to the user and they clicked on a link
-        to reset their password.
+        to reset their password.  As of version 1.32.2, prefer sending the changePasswordId
+        in the request body. To do this, omit the first parameter, and set the value
+        in the request body.
       operationId: changePasswordWithId
       security: []
       parameters:
