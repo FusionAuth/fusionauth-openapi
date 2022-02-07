@@ -885,6 +885,8 @@ components:
           type: object
           additionalProperties:
             type: object
+        trustChallenge:
+          type: string
         userId:
           type: string
           format: uuid
@@ -1633,6 +1635,10 @@ components:
         password:
           type: string
         refreshToken:
+          type: string
+        trustChallenge:
+          type: string
+        trustToken:
           type: string
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
@@ -3621,6 +3627,8 @@ components:
         setupPasswordIdGenerator:
           "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         setupPasswordIdTimeToLiveInSeconds:
+          type: integer
+        trustTokenTimeToLiveInSeconds:
           type: integer
         twoFactorIdTimeToLiveInSeconds:
           type: integer
@@ -6638,6 +6646,8 @@ components:
           type: string
         tokenExpirationInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
+        trustToken:
+          type: string
         twoFactorId:
           type: string
         twoFactorTrustId:
@@ -11321,6 +11331,58 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/user/change-password":
+    get:
+      description: Check to see if the user must obtain a Trust Request Id in order
+        to complete a change password request. When a user has enabled Two-Factor
+        authentication, before you are allowed to use the Change Password API to change
+        your password, you must obtain a Truest Request Id by completing a Two-Factor
+        Step-Up authentication.  An HTTP status code of 412 indicates that a Trust
+        Token is required to make a POST request to this API. OR Check to see if the
+        user must obtain a Trust Token Id in order to complete a change password request.
+        When a user has enabled Two-Factor authentication, before you are allowed
+        to use the Change Password API to change your password, you must obtain a
+        Truest Token by completing a Two-Factor Step-Up authentication.  An HTTP status
+        code of 412 indicates that a Trust Token is required to make a POST request
+        to this API.
+      operationId: retrieveUserChangePassword
+      parameters:
+      - name: loginId
+        in: query
+        schema:
+          type: string
+        description: The loginId of the User that you intend to change the password
+          for.
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    post:
+      description: 'Changes a user''s password using their identity (login id and
+        password). Using a loginId instead of the changePasswordId bypasses the email
+        verification and allows a password to be changed directly without first calling
+        the #forgotPassword method.'
+      operationId: changePasswordByIdentityWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ChangePasswordRequest"
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/key/{keyId}":
     delete:
       description: Deletes the key for the given Id.
@@ -12734,6 +12796,67 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/SystemConfigurationResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/user/change-password/{changePasswordId}":
+    get:
+      description: Check to see if the user must obtain a Trust Token Id in order
+        to complete a change password request. When a user has enabled Two-Factor
+        authentication, before you are allowed to use the Change Password API to change
+        your password, you must obtain a Truest Token by completing a Two-Factor Step-Up
+        authentication.  An HTTP status code of 412 indicates that a Trust Token is
+        required to make a POST request to this API.
+      operationId: checkChangePasswordUsingIdWithId
+      security: []
+      parameters:
+      - name: changePasswordId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The change password Id used to find the user. This value is generated
+          by FusionAuth once the change password workflow has been initiated.
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    post:
+      description: Changes a user's password using the change password Id. This usually
+        occurs after an email has been sent to the user and they clicked on a link
+        to reset their password.  As of version 1.32.2, prefer sending the changePasswordId
+        in the request body. To do this, omit the first parameter, and set the value
+        in the request body.
+      operationId: changePasswordWithId
+      security: []
+      parameters:
+      - name: changePasswordId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The change password Id used to find the user. This value is generated
+          by FusionAuth once the change password workflow has been initiated.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ChangePasswordRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ChangePasswordResponse"
         default:
           description: Error
           content:
@@ -14157,41 +14280,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
-  "/api/user/change-password/{changePasswordId}":
-    post:
-      description: Changes a user's password using the change password Id. This usually
-        occurs after an email has been sent to the user and they clicked on a link
-        to reset their password.  As of version 1.32.2, prefer sending the changePasswordId
-        in the request body. To do this, omit the first parameter, and set the value
-        in the request body.
-      operationId: changePasswordWithId
-      security: []
-      parameters:
-      - name: changePasswordId
-        in: path
-        schema:
-          type: string
-        required: true
-        description: The change password Id used to find the user. This value is generated
-          by FusionAuth once the change password workflow has been initiated.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/ChangePasswordRequest"
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/ChangePasswordResponse"
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
   "/api/jwt/refresh/{tokenId}":
     delete:
       description: Revokes a single refresh token by the unique Id. The unique Id
@@ -14520,28 +14608,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/EntityTypeResponse"
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
-  "/api/user/change-password":
-    post:
-      description: 'Changes a user''s password using their identity (login id and
-        password). Using a loginId instead of the changePasswordId bypasses the email
-        verification and allows a password to be changed directly without first calling
-        the #forgotPassword method.'
-      operationId: changePasswordByIdentityWithId
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/ChangePasswordRequest"
-      responses:
-        '200':
-          description: Success
         default:
           description: Error
           content:
