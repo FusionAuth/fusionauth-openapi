@@ -1,7 +1,7 @@
 
 openapi: "3.0.3"
 info:
-  version: 1.34.1
+  version: 1.99.0
   title: FusionAuth API
   license:
     name: Apache2
@@ -180,6 +180,12 @@ components:
         userId:
           type: string
           format: uuid
+    GroupMemberSearchRequest:
+      description: Search request for Group Members.
+      type: object
+      properties:
+        search:
+          "$ref": "#/components/schemas/GroupMemberSearchCriteria"
     MultiFactorSMSTemplate:
       type: object
       properties:
@@ -602,6 +608,47 @@ components:
           type: string
         startRow:
           type: integer
+    ScimExternalServerConfiguration:
+      description: A SCIM server where events are sent.
+      type: object
+      properties:
+        connectTimeout:
+          type: integer
+        data:
+          type: object
+          additionalProperties:
+            type: object
+        description:
+          type: string
+        global:
+          type: boolean
+        headers:
+          "$ref": "#/components/schemas/HTTPHeaders"
+        httpAuthenticationPassword:
+          type: string
+        httpAuthenticationUsername:
+          type: string
+        id:
+          type: string
+          format: uuid
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        lastUpdateInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        readTimeout:
+          type: integer
+        sslCertificate:
+          type: string
+        tenantIds:
+          type: array
+          items:
+            type: string
+            format: uuid
+        url:
+          type: string
+          format: URI
+        enabled:
+          type: boolean
     Email:
       description: This class is an abstraction of a simple email message.
       type: object
@@ -885,8 +932,6 @@ components:
           type: object
           additionalProperties:
             type: object
-        trustChallenge:
-          type: string
         userId:
           type: string
           format: uuid
@@ -945,6 +990,27 @@ components:
           "$ref": "#/components/schemas/FormDataType"
         validator:
           "$ref": "#/components/schemas/FormFieldValidator"
+    GroupMemberData:
+      description: Info about a group member for listing members
+      type: object
+      properties:
+        data:
+          type: object
+          additionalProperties:
+            type: object
+        groupId:
+          type: string
+          format: uuid
+        id:
+          type: string
+          format: uuid
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        userId:
+          type: string
+          format: uuid
+        user:
+          "$ref": "#/components/schemas/User"
     FamilyConfiguration:
       description: ''
       type: object
@@ -1228,6 +1294,21 @@ components:
       - Required
       - NotRequired
       - NotRequiredWhenUsingClientAuthentication
+    BaseScimResource:
+      description: Base class for all SCIM resources
+      type: object
+      properties:
+        externalId:
+          type: string
+        id:
+          type: string
+          format: uuid
+        meta:
+          "$ref": "#/components/schemas/ScimMeta"
+        schemas:
+          type: array
+          items:
+            type: string
     AuditLogSearchResponse:
       description: Audit log response.
       type: object
@@ -1518,6 +1599,56 @@ components:
         userActionId:
           type: string
           format: uuid
+    ScimUserEventRequest:
+      description: Container for SCIM event information. This is the JSON that is
+        sent from FusionAuth to a SCIM server.
+      type: object
+      properties:
+        active:
+          type: boolean
+        displayName:
+          type: string
+        emails:
+          type: array
+          items:
+            type: object
+        groups:
+          type: array
+          items:
+            "$ref": "#/components/schemas/GroupMember"
+        name:
+          type: object
+          additionalProperties:
+            type: string
+        phoneNumbers:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Map"
+        photos:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Map"
+        preferredLanguage:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Locale"
+        timezone:
+          "$ref": "#/components/schemas/ZoneId"
+        userName:
+          type: string
+        externalId:
+          type: string
+        id:
+          type: string
+          format: uuid
+        meta:
+          type: object
+          additionalProperties:
+            type: object
+        schemas:
+          type: array
+          items:
+            type: string
     EmailAddress:
       description: An email address.
       type: object
@@ -1588,6 +1719,18 @@ components:
       - Low
       - Medium
       - High
+    GroupMemberSearchCriteria:
+      description: Search criteria for Group Members
+      type: object
+      properties:
+        name:
+          type: string
+        numberOfResults:
+          type: integer
+        orderBy:
+          type: string
+        startRow:
+          type: integer
     UserRequest:
       description: User API request object.
       type: object
@@ -1626,8 +1769,6 @@ components:
         applicationId:
           type: string
           format: uuid
-        changePasswordId:
-          type: string
         currentPassword:
           type: string
         loginId:
@@ -1635,10 +1776,6 @@ components:
         password:
           type: string
         refreshToken:
-          type: string
-        trustChallenge:
-          type: string
-        trustToken:
           type: string
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
@@ -1909,6 +2046,23 @@ components:
       description: ''
       type: object
       properties: {}
+    BaseScimEventRequest:
+      description: Base class for all SCIM events
+      type: object
+      properties:
+        externalId:
+          type: string
+        id:
+          type: string
+          format: uuid
+        meta:
+          type: object
+          additionalProperties:
+            type: object
+        schemas:
+          type: array
+          items:
+            type: string
     MultiFactorEmailMethod:
       type: object
       properties:
@@ -2043,10 +2197,10 @@ components:
           type: boolean
     ManagedFields:
       description: 'This class contains the managed fields that are also put into
-        the database during FusionAuth setup.  <p>  Internal Note: These fields are
-        also declared in SQL in order to bootstrap the system. These need to stay
-        in sync.  Any changes to these fields needs to also be reflected in mysql.sql
-        and postgresql.sql'
+        the database during FusionAuth setup.  <p>  NOTE TO FUSIONAUTH DEVS: These
+        fields are also declared in SQL in order to boot strap the system. These need
+        to stay in sync.  - Any changes to these fields needs to also be reflected
+        in mysql.sql and postgresql.sql'
       type: object
       properties: {}
     MonthlyActiveUserReportResponse:
@@ -2099,6 +2253,12 @@ components:
       - TwitchReconcile
       - XboxReconcile
       - ClientCredentialsJWTPopulate
+      - SCIMServerEnterpriseUserRequest
+      - SCIMServerEnterpriseUserResponse
+      - SCIMServerGroupRequest
+      - SCIMServerGroupResponse
+      - SCIMServerUserRequest
+      - SCIMServerUserResponse
     SecureGeneratorConfiguration:
       description: ''
       type: object
@@ -2244,6 +2404,17 @@ components:
         userId:
           type: string
           format: uuid
+    GroupMemberSearchResponse:
+      description: Search response for Group Members
+      type: object
+      properties:
+        members:
+          type: array
+          items:
+            "$ref": "#/components/schemas/GroupMember"
+        total:
+          type: integer
+          format: int64
     RefreshTokenResponse:
       description: API response for retrieving Refresh Tokens
       type: object
@@ -2761,6 +2932,9 @@ components:
       - TABLET
       - TV
       - UNKNOWN
+    ScimMeta:
+      type: object
+      properties: {}
     EventLog:
       description: Event log used internally by FusionAuth to help developers debug
         hooks, Webhooks, email templates, etc.
@@ -3628,8 +3802,6 @@ components:
           "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         setupPasswordIdTimeToLiveInSeconds:
           type: integer
-        trustTokenTimeToLiveInSeconds:
-          type: integer
         twoFactorIdTimeToLiveInSeconds:
           type: integer
         twoFactorOneTimeCodeIdGenerator:
@@ -3664,6 +3836,13 @@ components:
         clientCredentialsAccessTokenPopulateLambdaId:
           type: string
           format: uuid
+    ScimEventRequest:
+      description: Container for the SCIM event information. This is the JSON that
+        is sent from FusionAuth to SCIM Servers.
+      type: object
+      properties:
+        resource:
+          "$ref": "#/components/schemas/BaseScimResource"
     UserResponse:
       description: User API response object.
       type: object
@@ -3998,6 +4177,10 @@ components:
           "$ref": "#/components/schemas/TenantUserDeletePolicy"
         usernameConfiguration:
           "$ref": "#/components/schemas/TenantUsernameConfiguration"
+        tenantLambdaConfiguration:
+          "$ref": "#/components/schemas/TenantLambdaConfiguration"
+        scimServerConfiguration:
+          "$ref": "#/components/schemas/SCIMServerConfiguration"
     BaseMessengerConfiguration:
       description: Do not require a setter for 'type', it is defined by the concrete
         class and is not mutable
@@ -4162,6 +4345,14 @@ components:
       properties:
         ipAccessControlList:
           "$ref": "#/components/schemas/IPAccessControlList"
+    SCIMServerConfiguration:
+      description: ''
+      type: object
+      properties:
+        baseUrl:
+          type: string
+        schemasResponse:
+          type: string
     SAMLv2ApplicationConfiguration:
       description: ''
       type: object
@@ -5993,7 +6184,7 @@ components:
           type: string
           format: uuid
     EntityTypeSearchResponse:
-      description: Search request for entity types.
+      description: Search response for entity types.
       type: object
       properties:
         entityTypes:
@@ -6196,6 +6387,27 @@ components:
       description: ''
       type: object
       properties: {}
+    TenantLambdaConfiguration:
+      type: object
+      properties:
+        SCIMEnterpriseUserRequestId:
+          type: string
+          format: uuid
+        SCIMEnterpriseUserResponseId:
+          type: string
+          format: uuid
+        SCIMGroupRequestId:
+          type: string
+          format: uuid
+        SCIMGroupResponseId:
+          type: string
+          format: uuid
+        SCIMUserRequestId:
+          type: string
+          format: uuid
+        SCIMUserResponseId:
+          type: string
+          format: uuid
     MessageTemplate:
       description: Stores an message template used to distribute messages;
       type: object
@@ -6646,8 +6858,6 @@ components:
           type: string
         tokenExpirationInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
-        trustToken:
-          type: string
         twoFactorId:
           type: string
         twoFactorTrustId:
@@ -6922,6 +7132,14 @@ components:
           format: uuid
         type:
           "$ref": "#/components/schemas/EventType"
+    GroupMemberListResponse:
+      description: Group Member List Response
+      type: object
+      properties:
+        members:
+          type: array
+          items:
+            "$ref": "#/components/schemas/GroupMemberData"
     ConsentRequest:
       description: API request for User consent types.
       type: object
@@ -9894,6 +10112,87 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/group/member":
+    get:
+      description: Retrieves all of the members of a group.
+      operationId: retrieveGroupMemberListWithId
+      parameters:
+      - name: groupId
+        in: query
+        schema:
+          type: string
+        description: The Id of the group.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GroupMemberListResponse"
+        default:
+          description: Error
+    delete:
+      description: Removes users as members of a group.
+      operationId: deleteGroupMembersWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/MemberDeleteRequest"
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    post:
+      description: Creates a member in a group.
+      operationId: createGroupMembersWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/MemberRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/MemberResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    put:
+      description: Creates a member in a group.
+      operationId: updateGroupMembersWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/MemberRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/MemberResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/report/monthly-active-user":
     get:
       description: Retrieves the monthly active user report between the two instants.
@@ -11331,58 +11630,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
-  "/api/user/change-password":
-    get:
-      description: Check to see if the user must obtain a Trust Request Id in order
-        to complete a change password request. When a user has enabled Two-Factor
-        authentication, before you are allowed to use the Change Password API to change
-        your password, you must obtain a Truest Request Id by completing a Two-Factor
-        Step-Up authentication.  An HTTP status code of 412 indicates that a Trust
-        Token is required to make a POST request to this API. OR Check to see if the
-        user must obtain a Trust Token Id in order to complete a change password request.
-        When a user has enabled Two-Factor authentication, before you are allowed
-        to use the Change Password API to change your password, you must obtain a
-        Truest Token by completing a Two-Factor Step-Up authentication.  An HTTP status
-        code of 412 indicates that a Trust Token is required to make a POST request
-        to this API.
-      operationId: retrieveUserChangePassword
-      parameters:
-      - name: loginId
-        in: query
-        schema:
-          type: string
-        description: The loginId of the User that you intend to change the password
-          for.
-      responses:
-        '200':
-          description: Success
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
-    post:
-      description: 'Changes a user''s password using their identity (login id and
-        password). Using a loginId instead of the changePasswordId bypasses the email
-        verification and allows a password to be changed directly without first calling
-        the #forgotPassword method.'
-      operationId: changePasswordByIdentityWithId
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/ChangePasswordRequest"
-      responses:
-        '200':
-          description: Success
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
   "/api/key/{keyId}":
     delete:
       description: Deletes the key for the given Id.
@@ -12515,47 +12762,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
-  "/api/group/member":
-    delete:
-      description: Removes users as members of a group.
-      operationId: deleteGroupMembersWithId
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/MemberDeleteRequest"
-      responses:
-        '200':
-          description: Success
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
-    post:
-      description: Creates a member in a group.
-      operationId: createGroupMembersWithId
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/MemberRequest"
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/MemberResponse"
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
   "/api/two-factor/secret":
     get:
       description: Generate a Two Factor secret that can be used to enable Two Factor
@@ -12796,67 +13002,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/SystemConfigurationResponse"
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
-  "/api/user/change-password/{changePasswordId}":
-    get:
-      description: Check to see if the user must obtain a Trust Token Id in order
-        to complete a change password request. When a user has enabled Two-Factor
-        authentication, before you are allowed to use the Change Password API to change
-        your password, you must obtain a Truest Token by completing a Two-Factor Step-Up
-        authentication.  An HTTP status code of 412 indicates that a Trust Token is
-        required to make a POST request to this API.
-      operationId: checkChangePasswordUsingIdWithId
-      security: []
-      parameters:
-      - name: changePasswordId
-        in: path
-        schema:
-          type: string
-        required: true
-        description: The change password Id used to find the user. This value is generated
-          by FusionAuth once the change password workflow has been initiated.
-      responses:
-        '200':
-          description: Success
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
-    post:
-      description: Changes a user's password using the change password Id. This usually
-        occurs after an email has been sent to the user and they clicked on a link
-        to reset their password.  As of version 1.32.2, prefer sending the changePasswordId
-        in the request body. To do this, omit the first parameter, and set the value
-        in the request body.
-      operationId: changePasswordWithId
-      security: []
-      parameters:
-      - name: changePasswordId
-        in: path
-        schema:
-          type: string
-        required: true
-        description: The change password Id used to find the user. This value is generated
-          by FusionAuth once the change password workflow has been initiated.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/ChangePasswordRequest"
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/ChangePasswordResponse"
         default:
           description: Error
           content:
@@ -14280,6 +14425,39 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/user/change-password/{changePasswordId}":
+    post:
+      description: Changes a user's password using the change password Id. This usually
+        occurs after an email has been sent to the user and they clicked on a link
+        to reset their password.
+      operationId: changePasswordWithId
+      security: []
+      parameters:
+      - name: changePasswordId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The change password Id used to find the user. This value is generated
+          by FusionAuth once the change password workflow has been initiated.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ChangePasswordRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ChangePasswordResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/jwt/refresh/{tokenId}":
     delete:
       description: Revokes a single refresh token by the unique Id. The unique Id
@@ -14608,6 +14786,28 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/EntityTypeResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/user/change-password":
+    post:
+      description: 'Changes a user''s password using their identity (login id and
+        password). Using a loginId instead of the changePasswordId bypasses the email
+        verification and allows a password to be changed directly without first calling
+        the #forgotPassword method.'
+      operationId: changePasswordByIdentityWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ChangePasswordRequest"
+      responses:
+        '200':
+          description: Success
         default:
           description: Error
           content:
