@@ -1,7 +1,7 @@
 
 openapi: "3.0.3"
 info:
-  version: 1.34.2
+  version: 1.35.0
   title: FusionAuth API
   license:
     name: Apache2
@@ -1785,6 +1785,8 @@ components:
       type: object
       properties:
         advancedIdentityProviders:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
+        advancedLambdas:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         advancedMultiFactorAuthentication:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
@@ -4378,6 +4380,12 @@ components:
             type: object
         createRegistration:
           type: boolean
+    LambdaEngineType:
+      description: ''
+      type: string
+      enum:
+      - GraalJS
+      - Nashorn
     UserActionLog:
       description: A log for an action that was taken on a User.
       type: object
@@ -4948,13 +4956,16 @@ components:
         type:
           "$ref": "#/components/schemas/EventType"
     Lambda:
-      description: 'TODO : Future : This shouldn''t be enableable'
+      description: A JavaScript lambda function that is executed during certain events
+        inside FusionAuth.
       type: object
       properties:
         body:
           type: string
         debug:
           type: boolean
+        engineType:
+          "$ref": "#/components/schemas/LambdaEngineType"
         id:
           type: string
           format: uuid
@@ -4966,8 +4977,6 @@ components:
           type: string
         type:
           "$ref": "#/components/schemas/LambdaType"
-        enabled:
-          type: boolean
     SonyPSNIdentityProvider:
       description: SonyPSN gaming login provider.
       type: object
