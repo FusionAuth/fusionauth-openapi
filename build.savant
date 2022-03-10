@@ -15,7 +15,7 @@
  */
 savantVersion = "1.0.0"
 
-project(group: "io.fusionauth", name: "fusionauth-openapi", version: "1.34.2", licenses: ["ApacheV2_0"]) {
+project(group: "io.fusionauth", name: "fusionauth-openapi", version: "1.35.0", licenses: ["ApacheV2_0"]) {
   workflow {
     fetch {
       cache()
@@ -35,15 +35,15 @@ project(group: "io.fusionauth", name: "fusionauth-openapi", version: "1.34.2", l
 release = loadPlugin(id: "org.savantbuild.plugin:release-git:${savantVersion}")
 
 target(name: "clean", description: "Releases a local integration build of the project") {
- // No-op
+  // No-op
 }
 
 target(name: "idea", description: "Releases a local integration build of the project") {
- // No-op
+  // No-op
 }
 
 target(name: "int", description: "Releases a local integration build of the project") {
- // No-op
+  // No-op
 }
 
 target(name: "publish", description: "Publish the project") {
