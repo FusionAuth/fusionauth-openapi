@@ -10128,6 +10128,25 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/group/member/search":
+    post:
+      description: Searches group members with the specified criteria and pagination.
+      operationId: searchGroupMembersWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/GroupMemberSearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GroupMemberSearchResponse"
+        default:
+          description: Error
   "/api/group/member":
     get:
       description: Retrieves all of the members of a group.
