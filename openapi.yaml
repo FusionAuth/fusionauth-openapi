@@ -792,6 +792,8 @@ components:
           format: uuid
         insertInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
+        user:
+          "$ref": "#/components/schemas/User"
         userId:
           type: string
           format: uuid
@@ -992,27 +994,6 @@ components:
           "$ref": "#/components/schemas/FormDataType"
         validator:
           "$ref": "#/components/schemas/FormFieldValidator"
-    GroupMemberData:
-      description: Info about a group member for listing members
-      type: object
-      properties:
-        data:
-          type: object
-          additionalProperties:
-            type: object
-        groupId:
-          type: string
-          format: uuid
-        id:
-          type: string
-          format: uuid
-        insertInstant:
-          "$ref": "#/components/schemas/ZonedDateTime"
-        userId:
-          type: string
-          format: uuid
-        user:
-          "$ref": "#/components/schemas/User"
     FamilyConfiguration:
       description: ''
       type: object
@@ -7148,14 +7129,6 @@ components:
           format: uuid
         type:
           "$ref": "#/components/schemas/EventType"
-    GroupMemberListResponse:
-      description: Group Member List Response
-      type: object
-      properties:
-        members:
-          type: array
-          items:
-            "$ref": "#/components/schemas/GroupMemberData"
     ConsentRequest:
       description: API request for User consent types.
       type: object
@@ -7777,7 +7750,7 @@ components:
 paths:
   "/api/user/family/{familyId}":
     get:
-      description: Retrieves all of the members of a family by the unique Family Id.
+      description: Retrieves all the members of a family by the unique Family Id.
       operationId: retrieveFamilyMembersByFamilyIdWithId
       parameters:
       - name: familyId
@@ -8486,15 +8459,15 @@ paths:
                 "$ref": "#/components/schemas/Errors"
   "/api/user/action":
     get:
-      description: Retrieves all of the actions for the user with the given Id that
-        are currently preventing the User from logging in. OR Retrieves all of the
-        actions for the user with the given Id. This will return all time based actions
-        that are active, and inactive as well as non-time based actions. OR Retrieves
-        all of the actions for the user with the given Id that are currently active.
-        An active action means one that is time based and has not been canceled, and
-        has not ended. OR Retrieves all of the actions for the user with the given
-        Id that are currently inactive. An inactive action means one that is time
-        based and has been canceled or has expired, or is not time based.
+      description: Retrieves all the actions for the user with the given Id that are
+        currently preventing the User from logging in. OR Retrieves all the actions
+        for the user with the given Id. This will return all time based actions that
+        are active, and inactive as well as non-time based actions. OR Retrieves all
+        the actions for the user with the given Id that are currently active. An active
+        action means one that is time based and has not been canceled, and has not
+        ended. OR Retrieves all the actions for the user with the given Id that are
+        currently inactive. An inactive action means one that is time based and has
+        been canceled or has expired, or is not time based.
       operationId: retrieveUserActioning
       parameters:
       - name: userId
@@ -9273,7 +9246,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/Errors"
     get:
-      description: Retrieves all of the lambdas for the provided type.
+      description: Retrieves all the lambdas for the provided type.
       operationId: retrieveLambdasByTypeWithId
       parameters:
       - name: type
@@ -10145,83 +10118,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/GroupMemberSearchResponse"
-        default:
-          description: Error
-  "/api/group/member":
-    get:
-      description: Retrieves all of the members of a group.
-      operationId: retrieveGroupMemberListWithId
-      parameters:
-      - name: groupId
-        in: query
-        schema:
-          type: string
-        description: The Id of the group.
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/GroupMemberListResponse"
-        default:
-          description: Error
-    delete:
-      description: Removes users as members of a group.
-      operationId: deleteGroupMembersWithId
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/MemberDeleteRequest"
-      responses:
-        '200':
-          description: Success
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
-    post:
-      description: Creates a member in a group.
-      operationId: createGroupMembersWithId
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/MemberRequest"
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/MemberResponse"
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
-    put:
-      description: Creates a member in a group.
-      operationId: updateGroupMembersWithId
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/MemberRequest"
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/MemberResponse"
         default:
           description: Error
           content:
@@ -11133,6 +11029,10 @@ paths:
                 "$ref": "#/components/schemas/LoginRecordSearchResponse"
         default:
           description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/user-action-reason/{userActionReasonId}":
     patch:
       description: Updates, via PATCH, the user action reason with the given Id.
@@ -11910,7 +11810,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
   "/api/user/family":
     get:
-      description: Retrieves all of the families that a user belongs to.
+      description: Retrieves all the families that a user belongs to.
       operationId: retrieveFamiliesWithId
       parameters:
       - name: userId
@@ -12036,7 +11936,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/Errors"
     get:
-      description: Retrieves all of the consents for a User.
+      description: Retrieves all the consents for a User.
       operationId: retrieveUserConsentsWithId
       parameters:
       - name: userId
@@ -12303,6 +12203,10 @@ paths:
                 "$ref": "#/components/schemas/IPAccessControlListSearchResponse"
         default:
           description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/group/{groupId}":
     patch:
       description: Updates, via PATCH, the group with the given Id.
@@ -12849,6 +12753,69 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/group/member":
+    delete:
+      description: Removes users as members of a group.
+      operationId: deleteGroupMembersWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/MemberDeleteRequest"
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    post:
+      description: Creates a member in a group.
+      operationId: createGroupMembersWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/MemberRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/MemberResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    put:
+      description: Creates a member in a group.
+      operationId: updateGroupMembersWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/MemberRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/MemberResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/two-factor/secret":
     get:
       description: Generate a Two Factor secret that can be used to enable Two Factor
@@ -13255,8 +13222,7 @@ paths:
   "/api/application":
     get:
       description: Retrieves the application for the given id or all of the applications
-        if the id is null. OR Retrieves all of the applications that are currently
-        inactive.
+        if the id is null. OR Retrieves all the applications that are currently inactive.
       operationId: retrieveApplication
       parameters:
       - in: header
@@ -13331,9 +13297,9 @@ paths:
           description: Error
   "/api/user-action":
     get:
-      description: Retrieves all of the user actions that are currently inactive.
-        OR Retrieves the user action for the given Id. If you pass in null for the
-        id, this will return all of the user actions.
+      description: Retrieves all the user actions that are currently inactive. OR
+        Retrieves the user action for the given Id. If you pass in null for the id,
+        this will return all of the user actions.
       operationId: retrieveUserAction
       parameters:
       - name: inactive
@@ -13391,7 +13357,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
   "/api/user/comment/{userId}":
     get:
-      description: Retrieves all of the comments for the user with the given Id.
+      description: Retrieves all the comments for the user with the given Id.
       operationId: retrieveUserCommentsWithId
       parameters:
       - name: userId
@@ -13977,6 +13943,10 @@ paths:
                 "$ref": "#/components/schemas/EntityTypeSearchResponse"
         default:
           description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/system/audit-log/{auditLogId}":
     get:
       description: Retrieves a single audit log for the given Id.
@@ -14269,6 +14239,10 @@ paths:
                 "$ref": "#/components/schemas/EventLogSearchResponse"
         default:
           description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/oauth2/userinfo":
     get:
       description: Call the UserInfo endpoint to retrieve User Claims from the access
@@ -14522,6 +14496,10 @@ paths:
                 "$ref": "#/components/schemas/AuditLogSearchResponse"
         default:
           description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/identity-provider/lookup":
     get:
       description: Retrieves the identity provider for the given domain. A 200 response
@@ -14778,7 +14756,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
   "/api/user/family/pending":
     get:
-      description: Retrieves all of the children for the given parent email address.
+      description: Retrieves all the children for the given parent email address.
       operationId: retrievePendingChildrenWithId
       parameters:
       - name: parentEmail
