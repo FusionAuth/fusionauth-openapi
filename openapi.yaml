@@ -608,47 +608,6 @@ components:
           type: string
         startRow:
           type: integer
-    ScimExternalServerConfiguration:
-      description: A SCIM server where events are sent.
-      type: object
-      properties:
-        connectTimeout:
-          type: integer
-        data:
-          type: object
-          additionalProperties:
-            type: object
-        description:
-          type: string
-        global:
-          type: boolean
-        headers:
-          "$ref": "#/components/schemas/HTTPHeaders"
-        httpAuthenticationPassword:
-          type: string
-        httpAuthenticationUsername:
-          type: string
-        id:
-          type: string
-          format: uuid
-        insertInstant:
-          "$ref": "#/components/schemas/ZonedDateTime"
-        lastUpdateInstant:
-          "$ref": "#/components/schemas/ZonedDateTime"
-        readTimeout:
-          type: integer
-        sslCertificate:
-          type: string
-        tenantIds:
-          type: array
-          items:
-            type: string
-            format: uuid
-        url:
-          type: string
-          format: URI
-        enabled:
-          type: boolean
     Email:
       description: This class is an abstraction of a simple email message.
       type: object
@@ -1277,21 +1236,6 @@ components:
       - Required
       - NotRequired
       - NotRequiredWhenUsingClientAuthentication
-    BaseScimResource:
-      description: Base class for all SCIM resources
-      type: object
-      properties:
-        externalId:
-          type: string
-        id:
-          type: string
-          format: uuid
-        meta:
-          "$ref": "#/components/schemas/ScimMeta"
-        schemas:
-          type: array
-          items:
-            type: string
     AuditLogSearchResponse:
       description: Audit log response.
       type: object
@@ -1582,56 +1526,6 @@ components:
         userActionId:
           type: string
           format: uuid
-    ScimUserEventRequest:
-      description: Container for SCIM event information. This is the JSON that is
-        sent from FusionAuth to a SCIM server.
-      type: object
-      properties:
-        active:
-          type: boolean
-        displayName:
-          type: string
-        emails:
-          type: array
-          items:
-            type: object
-        groups:
-          type: array
-          items:
-            "$ref": "#/components/schemas/GroupMember"
-        name:
-          type: object
-          additionalProperties:
-            type: string
-        phoneNumbers:
-          type: array
-          items:
-            "$ref": "#/components/schemas/Map"
-        photos:
-          type: array
-          items:
-            "$ref": "#/components/schemas/Map"
-        preferredLanguage:
-          type: array
-          items:
-            "$ref": "#/components/schemas/Locale"
-        timezone:
-          "$ref": "#/components/schemas/ZoneId"
-        userName:
-          type: string
-        externalId:
-          type: string
-        id:
-          type: string
-          format: uuid
-        meta:
-          type: object
-          additionalProperties:
-            type: object
-        schemas:
-          type: array
-          items:
-            type: string
     EmailAddress:
       description: An email address.
       type: object
@@ -2039,23 +1933,6 @@ components:
       description: ''
       type: object
       properties: {}
-    BaseScimEventRequest:
-      description: Base class for all SCIM events
-      type: object
-      properties:
-        externalId:
-          type: string
-        id:
-          type: string
-          format: uuid
-        meta:
-          type: object
-          additionalProperties:
-            type: object
-        schemas:
-          type: array
-          items:
-            type: string
     MultiFactorEmailMethod:
       type: object
       properties:
@@ -2925,9 +2802,6 @@ components:
       - TABLET
       - TV
       - UNKNOWN
-    ScimMeta:
-      type: object
-      properties: {}
     EventLog:
       description: Event log used internally by FusionAuth to help developers debug
         hooks, Webhooks, email templates, etc.
@@ -3831,13 +3705,6 @@ components:
         clientCredentialsAccessTokenPopulateLambdaId:
           type: string
           format: uuid
-    ScimEventRequest:
-      description: Container for the SCIM event information. This is the JSON that
-        is sent from FusionAuth to SCIM Servers.
-      type: object
-      properties:
-        resource:
-          "$ref": "#/components/schemas/BaseScimResource"
     UserResponse:
       description: User API response object.
       type: object
@@ -4344,10 +4211,12 @@ components:
       description: ''
       type: object
       properties:
-        baseUrl:
+        baseURL:
           type: string
         schemasResponse:
           type: string
+        enabled:
+          type: boolean
     SAMLv2ApplicationConfiguration:
       description: ''
       type: object
