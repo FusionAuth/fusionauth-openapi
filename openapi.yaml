@@ -2157,8 +2157,6 @@ components:
       - TwitchReconcile
       - XboxReconcile
       - ClientCredentialsJWTPopulate
-      - SCIMServerEnterpriseUserRequest
-      - SCIMServerEnterpriseUserResponse
       - SCIMServerGroupRequest
       - SCIMServerGroupResponse
       - SCIMServerUserRequest
