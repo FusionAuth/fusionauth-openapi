@@ -1,7 +1,7 @@
 
 openapi: "3.0.3"
 info:
-  version: 1.99.0
+  version: 1.36.0
   title: FusionAuth API
   license:
     name: Apache2
@@ -2167,10 +2167,10 @@ components:
       - TwitchReconcile
       - XboxReconcile
       - ClientCredentialsJWTPopulate
-      - SCIMServerGroupRequest
-      - SCIMServerGroupResponse
-      - SCIMServerUserRequest
-      - SCIMServerUserResponse
+      - SCIMServerGroupRequestConverter
+      - SCIMServerGroupResponseConverter
+      - SCIMServerUserRequestConverter
+      - SCIMServerUserResponseConverter
     SecureGeneratorConfiguration:
       description: ''
       type: object
