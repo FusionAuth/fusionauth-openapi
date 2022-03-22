@@ -1,7 +1,7 @@
 
 openapi: "3.0.3"
 info:
-  version: 1.99.0
+  version: 1.36.0
   title: FusionAuth API
   license:
     name: Apache2
@@ -1909,10 +1909,10 @@ components:
       - TwitchReconcile
       - XboxReconcile
       - ClientCredentialsJWTPopulate
-      - SCIMServerGroupRequest
-      - SCIMServerGroupResponse
-      - SCIMServerUserRequest
-      - SCIMServerUserResponse
+      - SCIMServerGroupRequestConverter
+      - SCIMServerGroupResponseConverter
+      - SCIMServerUserRequestConverter
+      - SCIMServerUserResponseConverter
     CleanSpeakConfiguration:
       description: CleanSpeak configuration at the system and application level.
       type: object
@@ -4600,10 +4600,16 @@ components:
       description: ''
       type: object
       properties:
+        clientEntityTypeId:
+          type: string
+          format: uuid
         schemas:
           type: object
           additionalProperties:
             type: object
+        serverEntityTypeId:
+          type: string
+          format: uuid
         enabled:
           type: boolean
     UIConfiguration:
@@ -4799,6 +4805,8 @@ components:
           type: string
         jwtConfiguration:
           "$ref": "#/components/schemas/JWTConfiguration"
+        lambdaConfiguration:
+          "$ref": "#/components/schemas/TenantLambdaConfiguration"
         lastUpdateInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         loginConfiguration:
@@ -4830,8 +4838,6 @@ components:
           "$ref": "#/components/schemas/TenantSSOConfiguration"
         state:
           "$ref": "#/components/schemas/ObjectState"
-        tenantLambdaConfiguration:
-          "$ref": "#/components/schemas/TenantLambdaConfiguration"
         themeId:
           type: string
           format: uuid
