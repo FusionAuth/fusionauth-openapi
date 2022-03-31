@@ -1480,10 +1480,6 @@ components:
           "$ref": "#/components/schemas/LoginRecordConfiguration"
         reportTimezone:
           "$ref": "#/components/schemas/ZoneId"
-        state:
-          type: object
-          additionalProperties:
-            type: string
         uiConfiguration:
           "$ref": "#/components/schemas/UIConfiguration"
     IPAccessControlEntryAction:
