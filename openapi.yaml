@@ -1979,11 +1979,11 @@ components:
         type:
           "$ref": "#/components/schemas/EventType"
     UserIdentityProviderLinkEvent:
-      description: Models the User IdP Link Event.
+      description: Models the User Identity Provider Link Event.
       type: object
       properties:
-        identityProviderName:
-          type: string
+        identityProviderLink:
+          "$ref": "#/components/schemas/IdentityProviderLink"
         user:
           "$ref": "#/components/schemas/User"
         createInstant:
@@ -4248,11 +4248,11 @@ components:
       - UserBulkCreate
       - UserCreate
       - UserCreateComplete
-      - UserIdentityProviderLink
-      - UserIdentityProviderUnlink
       - UserDeactivate
       - UserDelete
       - UserDeleteComplete
+      - UserIdentityProviderLink
+      - UserIdentityProviderUnlink
       - UserLoginIdDuplicateOnCreate
       - UserLoginIdDuplicateOnUpdate
       - UserEmailUpdate
@@ -5717,8 +5717,8 @@ components:
       description: Models the User IdP Unlink Event.
       type: object
       properties:
-        identityProviderName:
-          type: string
+        identityProviderLink:
+          "$ref": "#/components/schemas/IdentityProviderLink"
         user:
           "$ref": "#/components/schemas/User"
         createInstant:
