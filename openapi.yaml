@@ -1,7 +1,7 @@
 
 openapi: "3.0.3"
 info:
-  version: 1.35.1
+  version: 1.36.0
   title: FusionAuth API
   license:
     name: Apache2
@@ -12,6 +12,28 @@ security:
 
 components:
   schemas:
+    TenantLambdaConfiguration:
+      description: ''
+      type: object
+      properties:
+        scimEnterpriseUserRequestConverterId:
+          type: string
+          format: uuid
+        scimEnterpriseUserResponseConverterId:
+          type: string
+          format: uuid
+        scimGroupRequestConverterId:
+          type: string
+          format: uuid
+        scimGroupResponseConverterId:
+          type: string
+          format: uuid
+        scimUserRequestConverterId:
+          type: string
+          format: uuid
+        scimUserResponseConverterId:
+          type: string
+          format: uuid
     UserActionReason:
       description: Models action reasons.
       type: object
@@ -180,6 +202,12 @@ components:
         userId:
           type: string
           format: uuid
+    GroupMemberSearchRequest:
+      description: Search request for Group Members.
+      type: object
+      properties:
+        search:
+          "$ref": "#/components/schemas/GroupMemberSearchCriteria"
     MultiFactorSMSTemplate:
       type: object
       properties:
@@ -745,6 +773,8 @@ components:
           format: uuid
         insertInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
+        user:
+          "$ref": "#/components/schemas/User"
         userId:
           type: string
           format: uuid
@@ -1410,6 +1440,10 @@ components:
           "$ref": "#/components/schemas/OAuthErrorType"
         error_uri:
           type: string
+        two_factor_methods:
+          type: array
+          items:
+            "$ref": "#/components/schemas/TwoFactorMethod"
         error_reason:
           "$ref": "#/components/schemas/OAuthErrorReason"
         two_factor_id:
@@ -1518,6 +1552,22 @@ components:
         userActionId:
           type: string
           format: uuid
+    TenantSCIMServerConfiguration:
+      description: ''
+      type: object
+      properties:
+        clientEntityTypeId:
+          type: string
+          format: uuid
+        schemas:
+          type: object
+          additionalProperties:
+            type: object
+        serverEntityTypeId:
+          type: string
+          format: uuid
+        enabled:
+          type: boolean
     EmailAddress:
       description: An email address.
       type: object
@@ -1588,6 +1638,22 @@ components:
       - Low
       - Medium
       - High
+    GroupMemberSearchCriteria:
+      description: Search criteria for Group Members
+      type: object
+      properties:
+        groupId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        numberOfResults:
+          type: integer
+        orderBy:
+          type: string
+        startRow:
+          type: integer
     UserRequest:
       description: User API request object.
       type: object
@@ -1800,8 +1866,12 @@ components:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         entityManagement:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
+        expiration:
+          "$ref": "#/components/schemas/LocalDate"
         licensed:
           type: boolean
+        scimServer:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
         threatDetection:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
     FamilyMember:
@@ -2101,6 +2171,10 @@ components:
       - TwitchReconcile
       - XboxReconcile
       - ClientCredentialsJWTPopulate
+      - SCIMServerGroupRequestConverter
+      - SCIMServerGroupResponseConverter
+      - SCIMServerUserRequestConverter
+      - SCIMServerUserResponseConverter
     SecureGeneratorConfiguration:
       description: ''
       type: object
@@ -2246,6 +2320,17 @@ components:
         userId:
           type: string
           format: uuid
+    GroupMemberSearchResponse:
+      description: Search response for Group Members
+      type: object
+      properties:
+        members:
+          type: array
+          items:
+            "$ref": "#/components/schemas/GroupMember"
+        total:
+          type: integer
+          format: int64
     RefreshTokenResponse:
       description: API response for retrieving Refresh Tokens
       type: object
@@ -3964,6 +4049,8 @@ components:
           type: string
         jwtConfiguration:
           "$ref": "#/components/schemas/JWTConfiguration"
+        lambdaConfiguration:
+          "$ref": "#/components/schemas/TenantLambdaConfiguration"
         lastUpdateInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         loginConfiguration:
@@ -3989,6 +4076,8 @@ components:
           "$ref": "#/components/schemas/TenantRateLimitConfiguration"
         registrationConfiguration:
           "$ref": "#/components/schemas/TenantRegistrationConfiguration"
+        scimServerConfiguration:
+          "$ref": "#/components/schemas/TenantSCIMServerConfiguration"
         ssoConfiguration:
           "$ref": "#/components/schemas/TenantSSOConfiguration"
         state:
@@ -5044,7 +5133,13 @@ components:
           type: string
         client_secret:
           type: string
+        emailClaim:
+          type: string
         scope:
+          type: string
+        uniqueIdClaim:
+          type: string
+        usernameClaim:
           type: string
         data:
           type: object
@@ -5600,7 +5695,13 @@ components:
           type: string
         client_secret:
           type: string
+        emailClaim:
+          type: string
         scope:
+          type: string
+        uniqueIdClaim:
+          type: string
+        usernameClaim:
           type: string
         data:
           type: object
@@ -6002,7 +6103,7 @@ components:
           type: string
           format: uuid
     EntityTypeSearchResponse:
-      description: Search request for entity types.
+      description: Search response for entity types.
       type: object
       properties:
         entityTypes:
@@ -7552,7 +7653,7 @@ components:
 paths:
   "/api/user/family/{familyId}":
     get:
-      description: Retrieves all of the members of a family by the unique Family Id.
+      description: Retrieves all the members of a family by the unique Family Id.
       operationId: retrieveFamilyMembersByFamilyIdWithId
       parameters:
       - name: familyId
@@ -8261,15 +8362,15 @@ paths:
                 "$ref": "#/components/schemas/Errors"
   "/api/user/action":
     get:
-      description: Retrieves all of the actions for the user with the given Id that
-        are currently preventing the User from logging in. OR Retrieves all of the
-        actions for the user with the given Id. This will return all time based actions
-        that are active, and inactive as well as non-time based actions. OR Retrieves
-        all of the actions for the user with the given Id that are currently active.
-        An active action means one that is time based and has not been canceled, and
-        has not ended. OR Retrieves all of the actions for the user with the given
-        Id that are currently inactive. An inactive action means one that is time
-        based and has been canceled or has expired, or is not time based.
+      description: Retrieves all the actions for the user with the given Id that are
+        currently preventing the User from logging in. OR Retrieves all the actions
+        for the user with the given Id. This will return all time based actions that
+        are active, and inactive as well as non-time based actions. OR Retrieves all
+        the actions for the user with the given Id that are currently active. An active
+        action means one that is time based and has not been canceled, and has not
+        ended. OR Retrieves all the actions for the user with the given Id that are
+        currently inactive. An inactive action means one that is time based and has
+        been canceled or has expired, or is not time based.
       operationId: retrieveUserActioning
       parameters:
       - name: userId
@@ -9048,7 +9149,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/Errors"
     get:
-      description: Retrieves all of the lambdas for the provided type.
+      description: Retrieves all the lambdas for the provided type.
       operationId: retrieveLambdasByTypeWithId
       parameters:
       - name: type
@@ -9897,6 +9998,29 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/RefreshTokenResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/group/member/search":
+    post:
+      description: Searches group members with the specified criteria and pagination.
+      operationId: searchGroupMembersWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/GroupMemberSearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GroupMemberSearchResponse"
         default:
           description: Error
           content:
@@ -10808,6 +10932,10 @@ paths:
                 "$ref": "#/components/schemas/LoginRecordSearchResponse"
         default:
           description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/user-action-reason/{userActionReasonId}":
     patch:
       description: Updates, via PATCH, the user action reason with the given Id.
@@ -11585,7 +11713,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
   "/api/user/family":
     get:
-      description: Retrieves all of the families that a user belongs to.
+      description: Retrieves all the families that a user belongs to.
       operationId: retrieveFamiliesWithId
       parameters:
       - name: userId
@@ -11711,7 +11839,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/Errors"
     get:
-      description: Retrieves all of the consents for a User.
+      description: Retrieves all the consents for a User.
       operationId: retrieveUserConsentsWithId
       parameters:
       - name: userId
@@ -11978,6 +12106,10 @@ paths:
                 "$ref": "#/components/schemas/IPAccessControlListSearchResponse"
         default:
           description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/group/{groupId}":
     patch:
       description: Updates, via PATCH, the group with the given Id.
@@ -12565,6 +12697,28 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    put:
+      description: Creates a member in a group.
+      operationId: updateGroupMembersWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/MemberRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/MemberResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/two-factor/secret":
     get:
       description: Generate a Two Factor secret that can be used to enable Two Factor
@@ -12971,8 +13125,7 @@ paths:
   "/api/application":
     get:
       description: Retrieves the application for the given id or all of the applications
-        if the id is null. OR Retrieves all of the applications that are currently
-        inactive.
+        if the id is null. OR Retrieves all the applications that are currently inactive.
       operationId: retrieveApplication
       parameters:
       - in: header
@@ -13047,9 +13200,9 @@ paths:
           description: Error
   "/api/user-action":
     get:
-      description: Retrieves all of the user actions that are currently inactive.
-        OR Retrieves the user action for the given Id. If you pass in null for the
-        id, this will return all of the user actions.
+      description: Retrieves all the user actions that are currently inactive. OR
+        Retrieves the user action for the given Id. If you pass in null for the id,
+        this will return all of the user actions.
       operationId: retrieveUserAction
       parameters:
       - name: inactive
@@ -13107,7 +13260,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
   "/api/user/comment/{userId}":
     get:
-      description: Retrieves all of the comments for the user with the given Id.
+      description: Retrieves all the comments for the user with the given Id.
       operationId: retrieveUserCommentsWithId
       parameters:
       - name: userId
@@ -13693,6 +13846,10 @@ paths:
                 "$ref": "#/components/schemas/EntityTypeSearchResponse"
         default:
           description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/system/audit-log/{auditLogId}":
     get:
       description: Retrieves a single audit log for the given Id.
@@ -13985,6 +14142,10 @@ paths:
                 "$ref": "#/components/schemas/EventLogSearchResponse"
         default:
           description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/oauth2/userinfo":
     get:
       description: Call the UserInfo endpoint to retrieve User Claims from the access
@@ -14238,6 +14399,10 @@ paths:
                 "$ref": "#/components/schemas/AuditLogSearchResponse"
         default:
           description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/identity-provider/lookup":
     get:
       description: Retrieves the identity provider for the given domain. A 200 response
@@ -14494,7 +14659,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
   "/api/user/family/pending":
     get:
-      description: Retrieves all of the children for the given parent email address.
+      description: Retrieves all the children for the given parent email address.
       operationId: retrievePendingChildrenWithId
       parameters:
       - name: parentEmail
