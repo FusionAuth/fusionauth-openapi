@@ -683,6 +683,26 @@ components:
           type: object
         reason:
           type: string
+    UserIdentityProviderLinkEvent:
+      description: Models the User Identity Provider Link Event.
+      type: object
+      properties:
+        identityProviderLink:
+          "$ref": "#/components/schemas/IdentityProviderLink"
+        user:
+          "$ref": "#/components/schemas/User"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     OAuthConfigurationResponse:
       description: ''
       type: object
@@ -2148,6 +2168,8 @@ components:
         userId:
           type: string
           format: uuid
+        eventInfo:
+          "$ref": "#/components/schemas/EventInfo"
     LambdaType:
       description: The types of lambdas that indicate how they are invoked by FusionAuth.
       type: string
@@ -5383,6 +5405,26 @@ components:
           type: string
         startRow:
           type: integer
+    UserIdentityProviderUnlinkEvent:
+      description: Models the User Identity Provider Unlink Event.
+      type: object
+      properties:
+        identityProviderLink:
+          "$ref": "#/components/schemas/IdentityProviderLink"
+        user:
+          "$ref": "#/components/schemas/User"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     AuthenticatorConfiguration:
       description: ''
       type: object
@@ -6511,10 +6553,12 @@ components:
       - UserDeactivate
       - UserDelete
       - UserDeleteComplete
-      - UserLoginIdDuplicateOnCreate
-      - UserLoginIdDuplicateOnUpdate
       - UserEmailUpdate
       - UserEmailVerified
+      - UserIdentityProviderLink
+      - UserIdentityProviderUnlink
+      - UserLoginIdDuplicateOnCreate
+      - UserLoginIdDuplicateOnUpdate
       - UserLoginFailed
       - UserLoginNewDevice
       - UserLoginSuccess
