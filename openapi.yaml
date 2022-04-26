@@ -4237,6 +4237,28 @@ components:
       enum:
       - Allow
       - Gated
+    GroupMembershipAddEvent:
+      description: Model the Group Membership Add event
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
+        groupMembers:
+          type: array
+          items:
+            "$ref": "#/components/schemas/GroupMember"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     Consent:
       description: Models a consent.
       type: object
@@ -4844,6 +4866,8 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/GroupMember"
+        eventInfo:
+          "$ref": "#/components/schemas/EventInfo"
     BaseSearchCriteria:
       description: ''
       type: object
@@ -6545,6 +6569,8 @@ components:
       - JWTRefresh
       - AuditLogCreate
       - EventLogCreate
+      - GroupMembershipAdd
+      - GroupMembershipRemove
       - KickstartSuccess
       - UserAction
       - UserBulkCreate
@@ -7565,6 +7591,28 @@ components:
           type: string
         licenseId:
           type: string
+    GroupMembershipRemoveEvent:
+      description: Model the Group Membership Remove event
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
+        groupMembers:
+          type: array
+          items:
+            "$ref": "#/components/schemas/GroupMember"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     MessageTemplateResponse:
       description: ''
       type: object
