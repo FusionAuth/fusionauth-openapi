@@ -4398,6 +4398,9 @@ components:
       properties:
         oneTimeCode:
           type: string
+        userId:
+          type: string
+          format: uuid
         verificationId:
           type: string
         eventInfo:
@@ -7837,16 +7840,18 @@ paths:
               schema:
                 "$ref": "#/components/schemas/Errors"
     post:
-      description: Confirms a user's email address.   The request body will contain
-        the verificationId. You may also be required to send a one-time use code based
-        upon your configuration. When  the tenant is configured to gate a user until
-        their email address is verified, this procedures requires two values instead
-        of one.  The verificationId is a high entropy value and the one-time use code
-        is a low entropy value that is easily entered in a user interactive form.
-        The  two values together are able to confirm a user's email address and mark
-        the user's email address as verified.
-      operationId: verifyEmailAddressWithId
-      security: []
+      description: Administratively verify a user's email address. Use this method
+        to bypass email verification for the user.  The request body will contain
+        the userId to be verified. An API key is required when sending the userId
+        in the request body. OR Confirms a user's email address.   The request body
+        will contain the verificationId. You may also be required to send a one-time
+        use code based upon your configuration. When  the tenant is configured to
+        gate a user until their email address is verified, this procedures requires
+        two values instead of one.  The verificationId is a high entropy value and
+        the one-time use code is a low entropy value that is easily entered in a user
+        interactive form. The  two values together are able to confirm a user's email
+        address and mark the user's email address as verified.
+      operationId: createUserVerifyEmail
       parameters: []
       requestBody:
         content:
