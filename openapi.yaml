@@ -453,7 +453,7 @@ components:
           type: string
         kty:
           "$ref": "#/components/schemas/KeyType"
-        "n":
+        n:
           type: string
         other:
           type: object
@@ -477,7 +477,7 @@ components:
           type: string
         x5t#S256:
           type: string
-        "y":
+        y:
           type: string
     UserReactivateEvent:
       description: Models the User Reactivate Event (and can be converted to JSON).
@@ -4652,8 +4652,6 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/EmailHeader"
-        debug:
-          type: boolean
         defaultFromEmail:
           type: string
         defaultFromName:
