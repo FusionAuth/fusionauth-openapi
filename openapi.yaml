@@ -14403,19 +14403,19 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
-  "/api/jwt/refresh/{userId}":
+  "/api/jwt/refresh/{tokenId}":
     get:
       description: Retrieves a single refresh token by unique Id. This is not the
-        same thing as the string value of the refresh token, if you have that, you
-        already have what you need..
+        same thing as the string value of the refresh token. If you have that, you
+        already have what you need.
       operationId: retrieveRefreshTokenByIdWithId
       parameters:
-      - name: userId
+      - name: tokenId
         in: path
         schema:
           type: string
         required: true
-        description: The Id of the user.
+        description: The Id of the token.
       responses:
         '200':
           description: Success
@@ -14423,6 +14423,26 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/RefreshTokenResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    delete:
+      description: Revokes a single refresh token by the unique Id. The unique Id
+        is not sensitive as it cannot be used to obtain another JWT.
+      operationId: revokeRefreshTokenByIdWithId
+      parameters:
+      - name: tokenId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The unique Id of the token to delete.
+      responses:
+        '200':
+          description: Success
         default:
           description: Error
           content:
@@ -14497,27 +14517,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/TwoFactorStartResponse"
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
-  "/api/jwt/refresh/{tokenId}":
-    delete:
-      description: Revokes a single refresh token by the unique Id. The unique Id
-        is not sensitive as it cannot be used to obtain another JWT.
-      operationId: revokeRefreshTokenByIdWithId
-      parameters:
-      - name: tokenId
-        in: path
-        schema:
-          type: string
-        required: true
-        description: The unique Id of the token to delete.
-      responses:
-        '200':
-          description: Success
         default:
           description: Error
           content:
