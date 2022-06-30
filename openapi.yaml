@@ -13747,6 +13747,25 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    delete:
+      description: Deletes the WebAuthn credential for the given Id.
+      operationId: deleteWebAuthnCredentialWithId
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the WebAuthn credential to delete.
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/webauthn/register":
     post:
       description: Start a WebAuthn registration ceremony by generating a new challenge
