@@ -6269,6 +6269,16 @@ components:
             "$ref": "#/components/schemas/RefreshToken"
         validateDbConstraints:
           type: boolean
+    WebAuthnCredentialResponse:
+      description: WebAuthn Credential API response
+      type: object
+      properties:
+        webauthnCredential:
+          "$ref": "#/components/schemas/WebAuthnCredential"
+        webauthnCredentials:
+          type: array
+          items:
+            "$ref": "#/components/schemas/WebAuthnCredential"
     ConnectorResponse:
       description: ''
       type: object
@@ -13707,6 +13717,30 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/UserCommentResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/webauthn/{id}":
+    get:
+      description: Retrieves the WebAuthn credential for the given Id.
+      operationId: retrieveWebAuthnCredentialWithId
+      parameters:
+      - name: id
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the WebAuthn credential.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/WebAuthnCredentialResponse"
         default:
           description: Error
           content:
