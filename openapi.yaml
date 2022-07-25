@@ -10294,6 +10294,29 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/webauthn":
+    get:
+      description: Retrieves all WebAuthn credentials for the given user.
+      operationId: retrieveWebAuthnCredentialsForUserWithId
+      parameters:
+      - name: userId
+        in: query
+        schema:
+          type: string
+        description: The user's ID.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/WebAuthnCredentialResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/jwt/refresh":
     delete:
       description: 'Revoke all refresh tokens that belong to a user by user Id. OR
