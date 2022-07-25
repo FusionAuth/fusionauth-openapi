@@ -12516,7 +12516,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/PublicKeyCredentialRequestOptions"
+                "$ref": "#/components/schemas/WebAuthnStartResponse"
         default:
           description: Error
           content:
@@ -13776,14 +13776,14 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/WebAuthnStartRequest"
+              "$ref": "#/components/schemas/WebAuthnRegisterRequest"
       responses:
         '200':
           description: Success
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/PublicKeyCredentialCreationOptions"
+                "$ref": "#/components/schemas/WebAuthnRegisterResponse"
         default:
           description: Error
           content:
