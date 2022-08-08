@@ -7653,9 +7653,9 @@ components:
           uniqueItems: true
           items: {}
     ZonedDateTime:
-      description: A date-time with a time-zone in the ISO-8601 calendar system, such
-        as 2007-12-03T10:15:30+01:00 Europe/Paris.
-      example: '2007-12-03'
+      description: 'The number of milliseconds since the unix epoch: January 1, 1970
+        00:00:00 UTC. This value is always in UTC.'
+      example: '1659380719000'
       type: integer
       format: int64
     Locale:
@@ -14438,19 +14438,19 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
-  "/api/jwt/refresh/{userId}":
+  "/api/jwt/refresh/{tokenId}":
     get:
       description: Retrieves a single refresh token by unique Id. This is not the
-        same thing as the string value of the refresh token, if you have that, you
-        already have what you need..
+        same thing as the string value of the refresh token. If you have that, you
+        already have what you need.
       operationId: retrieveRefreshTokenByIdWithId
       parameters:
-      - name: userId
+      - name: tokenId
         in: path
         schema:
           type: string
         required: true
-        description: The Id of the user.
+        description: The Id of the token.
       responses:
         '200':
           description: Success
@@ -14458,6 +14458,26 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/RefreshTokenResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    delete:
+      description: Revokes a single refresh token by the unique Id. The unique Id
+        is not sensitive as it cannot be used to obtain another JWT.
+      operationId: revokeRefreshTokenByIdWithId
+      parameters:
+      - name: tokenId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The unique Id of the token to delete.
+      responses:
+        '200':
+          description: Success
         default:
           description: Error
           content:
@@ -14568,27 +14588,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/TwoFactorStatusResponse"
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
-  "/api/jwt/refresh/{tokenId}":
-    delete:
-      description: Revokes a single refresh token by the unique Id. The unique Id
-        is not sensitive as it cannot be used to obtain another JWT.
-      operationId: revokeRefreshTokenByIdWithId
-      parameters:
-      - name: tokenId
-        in: path
-        schema:
-          type: string
-        required: true
-        description: The unique Id of the token to delete.
-      responses:
-        '200':
-          description: Success
         default:
           description: Error
           content:
