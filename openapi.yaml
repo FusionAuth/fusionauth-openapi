@@ -1,7 +1,7 @@
 
 openapi: "3.0.3"
 info:
-  version: 1.36.9
+  version: 1.37.0
   title: FusionAuth API
   license:
     name: Apache2
@@ -11522,15 +11522,16 @@ paths:
       description: Check to see if the user must obtain a Trust Request Id in order
         to complete a change password request. When a user has enabled Two-Factor
         authentication, before you are allowed to use the Change Password API to change
-        your password, you must obtain a Truest Request Id by completing a Two-Factor
-        Step-Up authentication.  An HTTP status code of 412 indicates that a Trust
-        Token is required to make a POST request to this API. OR Check to see if the
-        user must obtain a Trust Token Id in order to complete a change password request.
-        When a user has enabled Two-Factor authentication, before you are allowed
-        to use the Change Password API to change your password, you must obtain a
-        Truest Token by completing a Two-Factor Step-Up authentication.  An HTTP status
-        code of 412 indicates that a Trust Token is required to make a POST request
-        to this API.
+        your password, you must obtain a Trust Request Id by completing a Two-Factor
+        Step-Up authentication.  An HTTP status code of 400 with a general error code
+        of [TrustTokenRequired] indicates that a Trust Token is required to make a
+        POST request to this API. OR Check to see if the user must obtain a Trust
+        Token Id in order to complete a change password request. When a user has enabled
+        Two-Factor authentication, before you are allowed to use the Change Password
+        API to change your password, you must obtain a Trust Token by completing a
+        Two-Factor Step-Up authentication.  An HTTP status code of 400 with a general
+        error code of [TrustTokenRequired] indicates that a Trust Token is required
+        to make a POST request to this API.
       operationId: retrieveUserChangePassword
       parameters:
       - name: loginId
@@ -12786,6 +12787,72 @@ paths:
                 "$ref": "#/components/schemas/SecretResponse"
         default:
           description: Error
+  "/api/login":
+    put:
+      description: Sends a ping to FusionAuth indicating that the user was automatically
+        logged into an application. When using FusionAuth's SSO or your own, you should
+        call this if the user is already logged in centrally, but accesses an application
+        where they no longer have a session. This helps correctly track login counts,
+        times and helps with reporting.
+      operationId: loginPingWithRequestWithId
+      parameters:
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/LoginPingRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/LoginResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    post:
+      description: Authenticates a user to FusionAuth.   This API optionally requires
+        an API key. See <code>Application.loginConfiguration.requireAuthentication</code>.
+      operationId: loginWithId
+      parameters:
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/LoginRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/LoginResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/identity-provider/{identityProviderId}":
     patch:
       description: Updates, via PATCH, the identity provider with the given Id.
@@ -13019,9 +13086,9 @@ paths:
       description: Check to see if the user must obtain a Trust Token Id in order
         to complete a change password request. When a user has enabled Two-Factor
         authentication, before you are allowed to use the Change Password API to change
-        your password, you must obtain a Truest Token by completing a Two-Factor Step-Up
-        authentication.  An HTTP status code of 412 indicates that a Trust Token is
-        required to make a POST request to this API.
+        your password, you must obtain a Trust Token by completing a Two-Factor Step-Up
+        authentication.  An HTTP status code of 400 with a general error code of [TrustTokenRequired]
+        indicates that a Trust Token is required to make a POST request to this API.
       operationId: checkChangePasswordUsingIdWithId
       security: []
       parameters:
@@ -13741,38 +13808,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
-  "/api/login":
-    post:
-      description: Authenticates a user to FusionAuth.   This API optionally requires
-        an API key. See <code>Application.loginConfiguration.requireAuthentication</code>.
-      operationId: loginWithId
-      parameters:
-      - in: header
-        name: X-FusionAuth-TenantId
-        description: The unique Id of the tenant used to scope this API request. Only
-          required when there is more than one tenant and the API key is not tenant-scoped.
-        required: false
-        schema:
-          type: string
-          format: UUID
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/LoginRequest"
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/LoginResponse"
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
   "/api/two-factor/send":
     post:
       description: Send a Two Factor authentication code to assist in setting up Two
@@ -14403,19 +14438,19 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
-  "/api/jwt/refresh/{tokenId}":
+  "/api/jwt/refresh/{userId}":
     get:
       description: Retrieves a single refresh token by unique Id. This is not the
-        same thing as the string value of the refresh token. If you have that, you
-        already have what you need.
+        same thing as the string value of the refresh token, if you have that, you
+        already have what you need..
       operationId: retrieveRefreshTokenByIdWithId
       parameters:
-      - name: tokenId
+      - name: userId
         in: path
         schema:
           type: string
         required: true
-        description: The Id of the token.
+        description: The Id of the user.
       responses:
         '200':
           description: Success
@@ -14423,26 +14458,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/RefreshTokenResponse"
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
-    delete:
-      description: Revokes a single refresh token by the unique Id. The unique Id
-        is not sensitive as it cannot be used to obtain another JWT.
-      operationId: revokeRefreshTokenByIdWithId
-      parameters:
-      - name: tokenId
-        in: path
-        schema:
-          type: string
-        required: true
-        description: The unique Id of the token to delete.
-      responses:
-        '200':
-          description: Success
         default:
           description: Error
           content:
@@ -14517,6 +14532,63 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/TwoFactorStartResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/two-factor/status/{twoFactorTrustId}":
+    get:
+      description: Retrieve a user's two-factor status.  This can be used to see if
+        a user will need to complete a two-factor challenge to complete a login, and
+        optionally identify the state of the two-factor trust across various applications.
+      operationId: retrieveTwoFactorStatusWithId
+      parameters:
+      - name: userId
+        in: query
+        schema:
+          type: string
+        description: The user Id to retrieve the Two-Factor status.
+      - name: applicationId
+        in: query
+        schema:
+          type: string
+        description: The optional applicationId to verify.
+      - name: twoFactorTrustId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The optional two-factor trust Id to verify.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TwoFactorStatusResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/jwt/refresh/{tokenId}":
+    delete:
+      description: Revokes a single refresh token by the unique Id. The unique Id
+        is not sensitive as it cannot be used to obtain another JWT.
+      operationId: revokeRefreshTokenByIdWithId
+      parameters:
+      - name: tokenId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The unique Id of the token to delete.
+      responses:
+        '200':
+          description: Success
         default:
           description: Error
           content:
