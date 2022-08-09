@@ -62,6 +62,11 @@ components:
       properties:
         auditLog:
           "$ref": "#/components/schemas/AuditLog"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -171,6 +176,11 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -193,6 +203,9 @@ components:
           type: string
         refresh_token:
           type: string
+        refresh_token_id:
+          type: string
+          format: uuid
         scope:
           type: string
         access_token:
@@ -240,11 +253,6 @@ components:
       description: Models the user action event (and can be converted to JSON).
       type: object
       properties:
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         action:
           type: string
         actionId:
@@ -282,6 +290,11 @@ components:
           type: string
         reasonCode:
           type: string
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -402,6 +415,11 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -431,6 +449,13 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/Form"
+    ApplicationMultiFactorTrustPolicy:
+      description: ''
+      type: string
+      enum:
+      - Any
+      - This
+      - None
     JSONWebKey:
       description: A JSON Web Key as defined by <a href="https:tools.ietf.orghtmlrfc7517#section-4">RFC
         7517 JSON Web Key (JWK)  Section 4<a> and <a href="https:tools.ietf.orghtmlrfc7518">RFC
@@ -453,7 +478,7 @@ components:
           type: string
         kty:
           "$ref": "#/components/schemas/KeyType"
-        n:
+        "n":
           type: string
         other:
           type: object
@@ -477,7 +502,7 @@ components:
           type: string
         x5t#S256:
           type: string
-        y:
+        "y":
           type: string
     UserReactivateEvent:
       description: Models the User Reactivate Event (and can be converted to JSON).
@@ -485,6 +510,11 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -691,6 +721,11 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLink"
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -806,6 +841,11 @@ components:
           "$ref": "#/components/schemas/User"
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -1131,6 +1171,11 @@ components:
           "$ref": "#/components/schemas/User"
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -1210,9 +1255,9 @@ components:
           type: string
         client_id:
           type: string
-        webAPIKey:
-          type: string
         scope:
+          type: string
+        webAPIKey:
           type: string
         data:
           type: object
@@ -1228,6 +1273,8 @@ components:
           "$ref": "#/components/schemas/MultiFactorAuthenticatorMethod"
         email:
           "$ref": "#/components/schemas/MultiFactorEmailMethod"
+        loginPolicy:
+          "$ref": "#/components/schemas/MultiFactorLoginPolicy"
         sms:
           "$ref": "#/components/schemas/MultiFactorSMSMethod"
     XboxIdentityProvider:
@@ -1349,11 +1396,6 @@ components:
         and any other events sent by FusionAuth.
       type: object
       properties:
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         connectTimeout:
           type: integer
         data:
@@ -1385,6 +1427,11 @@ components:
           type: integer
         sslCertificate:
           type: string
+        tenantIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         url:
           type: string
           format: URI
@@ -1878,6 +1925,8 @@ components:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         advancedRegistration:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
+        applicationMultiFactorAuthentication:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
         applicationThemes:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         breachedPasswordDetection:
@@ -1888,6 +1937,10 @@ components:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         expiration:
           "$ref": "#/components/schemas/LocalDate"
+        licenseAttributes:
+          type: object
+          additionalProperties:
+            type: string
         licensed:
           type: boolean
         scimServer:
@@ -2023,6 +2076,11 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -2101,6 +2159,11 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -2316,6 +2379,11 @@ components:
           type: string
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -2547,10 +2615,6 @@ components:
           "$ref": "#/components/schemas/IdentityProviderOauth2Configuration"
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
-    ApplicationEvent:
-      description: Events that are bound to applications.
-      type: object
-      properties: {}
     AuthenticationThreats:
       description: ''
       type: string
@@ -2565,6 +2629,11 @@ components:
           format: uuid
         tenant:
           "$ref": "#/components/schemas/Tenant"
+        webhookIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
     IPAccessControlListSearchCriteria:
@@ -2608,6 +2677,11 @@ components:
           "$ref": "#/components/schemas/TwoFactorMethod"
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -2729,6 +2803,11 @@ components:
       properties:
         message:
           type: string
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -2818,6 +2897,11 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -2949,6 +3033,8 @@ components:
             type: object
         emailConfiguration:
           "$ref": "#/components/schemas/ApplicationEmailConfiguration"
+        externalIdentifierConfiguration:
+          "$ref": "#/components/schemas/ApplicationExternalIdentifierConfiguration"
         formConfiguration:
           "$ref": "#/components/schemas/ApplicationFormConfiguration"
         id:
@@ -3207,6 +3293,11 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -3243,6 +3334,11 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -3261,8 +3357,12 @@ components:
       properties:
         email:
           "$ref": "#/components/schemas/MultiFactorEmailTemplate"
+        loginPolicy:
+          "$ref": "#/components/schemas/MultiFactorLoginPolicy"
         sms:
           "$ref": "#/components/schemas/MultiFactorSMSTemplate"
+        trustPolicy:
+          "$ref": "#/components/schemas/ApplicationMultiFactorTrustPolicy"
     FormType:
       description: ''
       type: string
@@ -3346,6 +3446,11 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -3621,6 +3726,12 @@ components:
           "$ref": "#/components/schemas/ContentStatus"
         verified:
           type: boolean
+    ApplicationExternalIdentifierConfiguration:
+      description: ''
+      type: object
+      properties:
+        twoFactorTrustIdTimeToLiveInSeconds:
+          type: integer
     EntityTypeResponse:
       description: Entity Type API response object.
       type: object
@@ -3682,6 +3793,12 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/IdentityProviderField"
+    MultiFactorLoginPolicy:
+      description: ''
+      type: string
+      enum:
+      - Disabled
+      - Enabled
     PasswordlessStartRequest:
       description: ''
       type: object
@@ -4018,6 +4135,11 @@ components:
           type: string
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -4302,6 +4424,11 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -4366,6 +4493,11 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -4549,6 +4681,24 @@ components:
         userActionId:
           type: string
           format: uuid
+    LoginPingRequest:
+      description: Login Ping API request object.
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        applicationId:
+          type: string
+          format: uuid
+        ipAddress:
+          type: string
+        metaData:
+          "$ref": "#/components/schemas/MetaData"
+        newDevice:
+          type: boolean
+        noJWT:
+          type: boolean
     IdentityProviderLimitUserLinkingPolicy:
       description: ''
       type: object
@@ -4652,6 +4802,8 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/EmailHeader"
+        debug:
+          type: boolean
         defaultFromEmail:
           type: string
         defaultFromName:
@@ -4741,6 +4893,7 @@ components:
       type: string
       enum:
       - CreatePendingLink
+      - Disabled
       - LinkAnonymously
       - LinkByEmail
       - LinkByEmailForExistingUser
@@ -4889,6 +5042,11 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -4989,6 +5147,11 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -5057,6 +5220,11 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -5218,11 +5386,18 @@ components:
           type: object
           additionalProperties:
             type: integer
+        refreshToken:
+          "$ref": "#/components/schemas/RefreshToken"
         user:
           "$ref": "#/components/schemas/User"
         userId:
           type: string
           format: uuid
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -5416,6 +5591,11 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLink"
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -5488,11 +5668,6 @@ components:
           "$ref": "#/components/schemas/Application"
         role:
           "$ref": "#/components/schemas/ApplicationRole"
-        webhookIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
     TwoFactorResponse:
@@ -5631,6 +5806,9 @@ components:
       - HS256
       - HS384
       - HS512
+      - PS256
+      - PS384
+      - PS512
       - RS256
       - RS384
       - RS512
@@ -5786,6 +5964,11 @@ components:
           "$ref": "#/components/schemas/User"
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -5829,6 +6012,11 @@ components:
           type: string
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -5886,6 +6074,11 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -5982,6 +6175,16 @@ components:
         total:
           type: integer
           format: int64
+    TwoFactorTrust:
+      type: object
+      properties:
+        applicationId:
+          type: string
+          format: uuid
+        expiration:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        startInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
     GenericConnectorConfiguration:
       description: Models a generic connector.
       type: object
@@ -6254,11 +6457,14 @@ components:
     JWTRefreshResponse:
       description: API response for refreshing a JWT with a Refresh Token.  <p>  Using
         a different response object from RefreshTokenResponse because the retrieve
-        response will return an object for refreshToken, and this is a string.
+        response will return an object for refreshToken, and this is a  string.
       type: object
       properties:
         refreshToken:
           type: string
+        refreshTokenId:
+          type: string
+          format: uuid
         token:
           type: string
     Count:
@@ -6347,6 +6553,16 @@ components:
         total:
           type: integer
           format: int64
+    TwoFactorStatusResponse:
+      description: ''
+      type: object
+      properties:
+        trusts:
+          type: array
+          items:
+            "$ref": "#/components/schemas/TwoFactorTrust"
+        twoFactorTrustId:
+          type: string
     RefreshResponse:
       description: ''
       type: object
@@ -6378,8 +6594,9 @@ components:
       properties:
         applicationIds:
           type: array
-          uniqueItems: true
-          items: {}
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -6451,6 +6668,11 @@ components:
         instanceId:
           type: string
           format: uuid
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -6491,6 +6713,11 @@ components:
       description: Base-class for all FusionAuth events.
       type: object
       properties:
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -6675,6 +6902,11 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -6789,6 +7021,9 @@ components:
           type: string
         refreshToken:
           type: string
+        refreshTokenId:
+          type: string
+          format: uuid
         registrationVerificationId:
           type: string
         state:
@@ -6936,6 +7171,11 @@ components:
           "$ref": "#/components/schemas/TwoFactorMethod"
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -6972,6 +7212,11 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -7067,6 +7312,11 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -7186,6 +7436,11 @@ components:
         userId:
           type: string
           format: uuid
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -7337,6 +7592,11 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -7409,6 +7669,11 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -7605,6 +7870,11 @@ components:
       properties:
         eventLog:
           "$ref": "#/components/schemas/EventLog"
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
