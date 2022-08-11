@@ -1,6 +1,6 @@
 openapi: "3.0.3"
 info:
-  version: 1.36.5
+  version: 1.38.0-{integration}
   title: FusionAuth API
   license:
     name: Apache2
