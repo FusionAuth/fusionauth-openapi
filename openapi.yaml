@@ -2518,8 +2518,6 @@ components:
           "$ref": "#/components/schemas/AuthenticatorAttachmentPreference"
         userVerificationRequirement:
           "$ref": "#/components/schemas/UserVerificationRequirement"
-        authenticatorAttachment:
-          "$ref": "#/components/schemas/AuthenticatorAttachment"
         enabled:
           type: boolean
     GroupMemberSearchResponse:
