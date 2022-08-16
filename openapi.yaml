@@ -5892,6 +5892,10 @@ components:
       properties:
         reauthenticationWorkflowConfiguration:
           "$ref": "#/components/schemas/WebAuthnWorkflowConfiguration"
+        rpId:
+          type: string
+        rpName:
+          type: string
         enabled:
           type: boolean
     PasswordEncryptionConfiguration:
