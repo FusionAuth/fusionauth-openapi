@@ -160,8 +160,7 @@ components:
         unverified:
           "$ref": "#/components/schemas/TimeBasedDeletePolicy"
     UserRegistrationDeleteEvent:
-      description: Models the User Delete Registration Event (and can be converted
-        to JSON).
+      description: Models the User Delete Registration Event.
       type: object
       properties:
         applicationId:
@@ -235,7 +234,7 @@ components:
           type: string
           format: uuid
     GroupDeleteCompleteEvent:
-      description: Models the Group Create Event (and can be converted to JSON).
+      description: Models the Group Create Complete Event.
       type: object
       properties:
         group:
@@ -258,7 +257,7 @@ components:
       type: object
       properties: {}
     UserActionEvent:
-      description: Models the user action event (and can be converted to JSON).
+      description: Models the user action Event.
       type: object
       properties:
         applicationIds:
@@ -418,7 +417,7 @@ components:
         name:
           type: string
     UserEmailVerifiedEvent:
-      description: Models the User Email Verify Event (and can be converted to JSON).
+      description: Models the User Email Verify Event.
       type: object
       properties:
         user:
@@ -508,7 +507,7 @@ components:
         y:
           type: string
     UserReactivateEvent:
-      description: Models the User Reactivate Event (and can be converted to JSON).
+      description: Models the User Reactivate Event.
       type: object
       properties:
         user:
@@ -827,7 +826,7 @@ components:
           type: string
           format: uuid
     UserUpdateEvent:
-      description: Models the User Update Event (and can be converted to JSON).
+      description: Models the User Update Event.
       type: object
       properties:
         original:
@@ -969,7 +968,7 @@ components:
           type: string
           format: uuid
     GroupCreateEvent:
-      description: Models the Group Create Event (and can be converted to JSON).
+      description: Models the Group Create Event.
       type: object
       properties:
         group:
@@ -1525,7 +1524,7 @@ components:
           items:
             type: string
     GroupUpdateCompleteEvent:
-      description: Models the Group Create Event (and can be converted to JSON).
+      description: Models the Group Update Complete Event.
       type: object
       properties:
         group:
@@ -2093,9 +2092,9 @@ components:
         connector:
           "$ref": "#/components/schemas/BaseConnectorConfiguration"
     UserCreateCompleteEvent:
-      description: Models the User Created Event (and can be converted to JSON).  <p>  This
-        is different than the user.create event in that it will be sent after the
-        user has been created. This event cannot be made transactional.
+      description: Models the User Created Event.  <p>  This is different than the
+        user.create event in that it will be sent after the user has been created.
+        This event cannot be made transactional.
       type: object
       properties:
         user:
@@ -2165,10 +2164,9 @@ components:
         type:
           "$ref": "#/components/schemas/MessengerType"
     UserRegistrationCreateCompleteEvent:
-      description: Models the User Created Registration Event (and can be converted
-        to JSON).  <p>  This is different than the user.registration.create event
-        in that it will be sent after the user has been created. This event cannot
-        be made transactional.
+      description: Models the User Created Registration Event.  <p>  This is different
+        than the user.registration.create event in that it will be sent after the
+        user has been created. This event cannot be made  transactional.
       type: object
       properties:
         applicationId:
@@ -3276,8 +3274,7 @@ components:
           type: string
           format: uuid
     UserRegistrationVerifiedEvent:
-      description: Models the User Registration Verified Event (and can be converted
-        to JSON).
+      description: Models the User Registration Verified Event.
       type: object
       properties:
         applicationId:
@@ -3318,7 +3315,7 @@ components:
       type: object
       properties: {}
     UserCreateEvent:
-      description: Models the User Create Event (and can be converted to JSON).
+      description: Models the User Create Event.
       type: object
       properties:
         user:
@@ -3423,7 +3420,7 @@ components:
         type:
           "$ref": "#/components/schemas/KeyType"
     UserBulkCreateEvent:
-      description: Models the User Bulk Create Event (and can be converted to JSON).
+      description: Models the User Bulk Create Event.
       type: object
       properties:
         users:
@@ -3499,7 +3496,7 @@ components:
         apiKey:
           "$ref": "#/components/schemas/APIKey"
     GroupUpdateEvent:
-      description: Models the Group Create Event (and can be converted to JSON).
+      description: Models the Group Update Event.
       type: object
       properties:
         group:
@@ -3778,7 +3775,7 @@ components:
         user:
           "$ref": "#/components/schemas/User"
     GroupMemberRemoveCompleteEvent:
-      description: Models the Group Create Event (and can be converted to JSON).
+      description: Models the Group Member Remove Complete Event.
       type: object
       properties:
         group:
@@ -3815,7 +3812,7 @@ components:
           items:
             "$ref": "#/components/schemas/IdentityProviderField"
     GroupMemberAddCompleteEvent:
-      description: Models the Group Create Event (and can be converted to JSON).
+      description: Models the Group Member Add Complete Event.
       type: object
       properties:
         group:
@@ -4271,6 +4268,28 @@ components:
           "$ref": "#/components/schemas/TenantUserDeletePolicy"
         usernameConfiguration:
           "$ref": "#/components/schemas/TenantUsernameConfiguration"
+    GroupMemberUpdateCompleteEvent:
+      description: Models the Group Member Update Complete Event.
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
+        members:
+          type: array
+          items:
+            "$ref": "#/components/schemas/GroupMember"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     BaseMessengerConfiguration:
       description: Do not require a setter for 'type', it is defined by the concrete
         class and is not mutable
@@ -5057,8 +5076,7 @@ components:
       - Debug
       - Error
     UserRegistrationUpdateEvent:
-      description: Models the User Update Registration Event (and can be converted
-        to JSON).
+      description: Models the User Update Registration Event.
       type: object
       properties:
         applicationId:
@@ -5158,9 +5176,9 @@ components:
         createRegistration:
           type: boolean
     UserRegistrationDeleteCompleteEvent:
-      description: Models the User Deleted Registration Event (and can be converted
-        to JSON).  <p>  This is different than user.registration.delete in that it
-        is sent after the TX has been committed. This event cannot be transactional.
+      description: Models the User Deleted Registration Event.  <p>  This is different
+        than user.registration.delete in that it is sent after the TX has been committed.
+        This event cannot be transactional.
       type: object
       properties:
         applicationId:
@@ -5388,8 +5406,8 @@ components:
         search:
           "$ref": "#/components/schemas/EntityTypeSearchCriteria"
     JWTRefreshTokenRevokeEvent:
-      description: Models the Refresh Token Revoke Event (and can be converted to
-        JSON). This event might be for a single token, a user  or an entire application.
+      description: Models the Refresh Token Revoke Event. This event might be for
+        a single token, a user  or an entire application.
       type: object
       properties:
         applicationId:
@@ -5634,7 +5652,7 @@ components:
         mobilePhone:
           type: string
     GroupCreateCompleteEvent:
-      description: Models the Group Created Event (and can be converted to JSON).
+      description: Models the Group Created Event.
       type: object
       properties:
         group:
@@ -6071,9 +6089,9 @@ components:
         user:
           "$ref": "#/components/schemas/User"
     UserRegistrationUpdateCompleteEvent:
-      description: Models the User Update Registration Event (and can be converted
-        to JSON).  <p>  This is different than user.registration.update in that it
-        is sent after this event completes, this cannot be transactional.
+      description: Models the User Update Registration Event.  <p>  This is different
+        than user.registration.update in that it is sent after this event completes,
+        this cannot be transactional.
       type: object
       properties:
         applicationId:
@@ -6165,7 +6183,7 @@ components:
         requireAuthentication:
           type: boolean
     GroupMemberAddEvent:
-      description: Models the Group Create Event (and can be converted to JSON).
+      description: Models the Group Member Add Event.
       type: object
       properties:
         group:
@@ -6615,9 +6633,8 @@ components:
         type:
           "$ref": "#/components/schemas/MessageType"
     JWTPublicKeyUpdateEvent:
-      description: Models the JWT public key Refresh Token Revoke Event (and can be
-        converted to JSON). This event might be for a single  token, a user or an
-        entire application.
+      description: Models the JWT public key Refresh Token Revoke Event. This event
+        might be for a single  token, a user or an entire application.
       type: object
       properties:
         applicationIds:
@@ -6801,6 +6818,8 @@ components:
       - GroupMemberAddComplete
       - GroupMemberRemove
       - GroupMemberRemoveComplete
+      - GroupMemberUpdate
+      - GroupMemberUpdateComplete
       - GroupUpdate
       - GroupUpdateComplete
       - UserAction
@@ -7223,8 +7242,30 @@ components:
           type: string
         startIPAddress:
           type: string
+    GroupMemberUpdateEvent:
+      description: Models the Group Member Update Event.
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
+        members:
+          type: array
+          items:
+            "$ref": "#/components/schemas/GroupMember"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     UserDeactivateEvent:
-      description: Models the User Deactivate Event (and can be converted to JSON).
+      description: Models the User Deactivate Event.
       type: object
       properties:
         user:
@@ -7313,8 +7354,7 @@ components:
           items:
             "$ref": "#/components/schemas/HistoryItem"
     UserRegistrationCreateEvent:
-      description: Models the User Create Registration Event (and can be converted
-        to JSON).
+      description: Models the User Create Registration Event.
       type: object
       properties:
         applicationId:
@@ -7679,7 +7719,7 @@ components:
         type:
           "$ref": "#/components/schemas/EventType"
     GroupDeleteEvent:
-      description: Models the Group Create Event (and can be converted to JSON).
+      description: Models the Group Delete Event.
       type: object
       properties:
         group:
@@ -7776,7 +7816,7 @@ components:
           items:
             "$ref": "#/components/schemas/Consent"
     GroupMemberRemoveEvent:
-      description: Models the Group Create Event (and can be converted to JSON).
+      description: Models the Group Member Remove Event.
       type: object
       properties:
         group:
