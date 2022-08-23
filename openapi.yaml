@@ -7211,8 +7211,6 @@ components:
           type: string
         oauth2WebAuthN:
           type: string
-        oauth2WebAuthNComplete:
-          type: string
         passwordChange:
           type: string
         passwordComplete:
