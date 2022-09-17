@@ -4156,9 +4156,6 @@ components:
       description: Search criteria for Groups
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
         name:
           type: string
         tenantId:
