@@ -376,6 +376,8 @@ components:
           type: boolean
         lastUseInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
+        name:
+          type: string
         publicKey:
           type: string
         rpId:
@@ -389,6 +391,8 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/AuthenticatorTransport"
+        userAgent:
+          type: string
         userId:
           type: string
           format: uuid
@@ -2574,10 +2578,10 @@ components:
       description: API request to start a WebAuthn registration ceremony
       type: object
       properties:
-        state:
-          type: object
-          additionalProperties:
-            type: object
+        credentialName:
+          type: string
+        userAgent:
+          type: string
         userId:
           type: string
           format: uuid
@@ -8007,6 +8011,7 @@ components:
       - nfc
       - ble
       - internal
+      - cable
     APIKey:
       description: domain POJO to represent AuthenticationKey
       type: object
