@@ -51,20 +51,6 @@ components:
           "$ref": "#/components/schemas/LocalizedStrings"
         text:
           type: string
-    CoseEllipticCurve:
-      description: COSE Elliptic Curve identifier to determine which elliptic curve
-        to use with a given key
-      type: string
-      enum:
-      - Reserved
-      - P256
-      - P384
-      - P521
-      - X25519
-      - X448
-      - Ed25519
-      - Ed448
-      - Secp256k1
     AuthenticationTokenConfiguration:
       type: object
       properties:
@@ -367,6 +353,8 @@ components:
           type: boolean
         credentialId:
           type: string
+        displayName:
+          type: string
         id:
           type: string
           format: uuid
@@ -376,8 +364,6 @@ components:
           type: boolean
         lastUseInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
-        name:
-          type: string
         publicKey:
           type: string
         rpId:
@@ -1063,6 +1049,16 @@ components:
         userId:
           type: string
           format: uuid
+    AuthenticatorTransport:
+      description: Describes how the authenticator communicates with a client. This
+        can be used by the client as a hint to locate the  appropriate authenticator.
+      type: string
+      enum:
+      - usb
+      - nfc
+      - ble
+      - internal
+      - cable
     ConnectorPolicy:
       description: ''
       type: object
@@ -1777,6 +1773,21 @@ components:
           type: string
         type:
           "$ref": "#/components/schemas/MessengerType"
+    CoseAlgorithmIdentifier:
+      description: A number identifying a cryptographic algorithm. Values should be
+        registered with the <a  href="https:www.iana.orgassignmentscosecose.xhtml#algorithms">IANA
+        COSE Algorithms registry<a>
+      type: string
+      enum:
+      - ES256
+      - ES384
+      - ES512
+      - RS256
+      - RS384
+      - RS512
+      - PS256
+      - PS384
+      - PS512
     FormControl:
       description: ''
       type: string
@@ -1928,6 +1939,15 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/UserAction"
+    WebAuthnWorkflow:
+      description: Identifies the WebAuthn workflow. This will affect the parameters
+        used for credential creation  and request based on the Tenant configuration.
+      type: string
+      enum:
+      - REAUTH
+      - BOOTSTRAP
+      - TWO_FACTOR
+      - GENERAL
     ThemeResponse:
       description: Theme API response object.
       type: object
@@ -2101,6 +2121,20 @@ components:
       properties:
         version:
           type: string
+    ResidentKeyRequirement:
+      description: Describes the Relying Party's requirements for <a href="https:www.w3.orgTRwebauthn-2#client-side-discoverable-credential">client-side  discoverable
+        credentials<a> (formerly known as "resident keys")
+      type: string
+      enum:
+      - Discouraged
+      - Preferred
+      - Required
+    PublicKeyCredentialType:
+      description: Defines valid credential types. This is an extension point in the
+        WebAuthn spec. The only defined value at this time is "public-key"
+      type: string
+      enum:
+      - PUBLIC_KEY
     PreviewMessageTemplateRequest:
       description: ''
       type: object
@@ -2465,16 +2499,6 @@ components:
       properties:
         lambda:
           "$ref": "#/components/schemas/Lambda"
-    AttestationType:
-      description: Used to indicate what type of attestation was included in the authenticator
-        response for a given WebAuthn credential at the time it was created
-      type: string
-      enum:
-      - basic
-      - self
-      - attestationCa
-      - anonymizationCa
-      - none
     UserEmailUpdateEvent:
       description: Models an event where a user's email is updated outside of a forgot  change
         password workflow.
@@ -2785,14 +2809,6 @@ components:
             format: uuid
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
-    AuthenticatorAttachmentPreference:
-      description: Describes the authenticator attachment modality preference for
-        a WebAuthn workflow. See {@link AuthenticatorAttachment}
-      type: string
-      enum:
-      - PLATFORM
-      - CROSS_PLATFORM
-      - EITHER
     IPAccessControlListSearchCriteria:
       description: ''
       type: object
@@ -2826,14 +2842,6 @@ components:
             type: object
         createRegistration:
           type: boolean
-    UserVerificationRequirement:
-      description: Used to express whether the Relying Party requires <a href="https:www.w3.orgTRwebauthn-2#user-verification">user
-        verification<a> for the  current operation.
-      type: string
-      enum:
-      - required
-      - preferred
-      - discouraged
     UserTwoFactorMethodRemoveEvent:
       description: Model a user event when a two-factor method has been added.
       type: object
@@ -3500,6 +3508,14 @@ components:
           format: uuid
         type:
           "$ref": "#/components/schemas/EventType"
+    UserVerificationRequirement:
+      description: Used to express whether the Relying Party requires <a href="https:www.w3.orgTRwebauthn-2#user-verification">user
+        verification<a> for the  current operation.
+      type: string
+      enum:
+      - required
+      - preferred
+      - discouraged
     MessageTemplateRequest:
       description: A Message Template Request to the API
       type: object
@@ -3717,6 +3733,15 @@ components:
       properties:
         apiKey:
           "$ref": "#/components/schemas/APIKey"
+    CoseKeyType:
+      description: COSE key type
+      type: string
+      enum:
+      - Reserved
+      - OKP
+      - EC2
+      - RSA
+      - Symmetric
     Entity:
       description: Models an entity that a user can be granted permissions to. Or
         an entity that can be granted permissions to another entity.
@@ -4216,15 +4241,6 @@ components:
             "$ref": "#/components/schemas/Application"
         role:
           "$ref": "#/components/schemas/ApplicationRole"
-    WebAuthnWorkflow:
-      description: Identifies the WebAuthn workflow. This will affect the parameters
-        used for credential creation  and request based on the Tenant configuration.
-      type: string
-      enum:
-      - REAUTH
-      - BOOTSTRAP
-      - TWO_FACTOR
-      - GENERAL
     LoginIdType:
       type: string
       enum:
@@ -4478,6 +4494,13 @@ components:
             "$ref": "#/components/schemas/TwoFactorMethod"
         twoFactorId:
           type: string
+    AuthenticatorAttachment:
+      description: Describes the <a href="https:www.w3.orgTRwebauthn-2#authenticator-attachment-modality">authenticator
+        attachment modality<a>.
+      type: string
+      enum:
+      - PLATFORM
+      - CROSS_PLATFORM
     PasswordlessConfiguration:
       type: object
       properties:
@@ -4759,14 +4782,6 @@ components:
           type: string
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
-    CoseKeyType:
-      type: string
-      enum:
-      - Reserved
-      - OKP
-      - EC2
-      - RSA
-      - Symmetric
     TwoFactorDisableRequest:
       description: ''
       type: object
@@ -4987,6 +5002,16 @@ components:
       enum:
       - asc
       - desc
+    AttestationType:
+      description: Used to indicate what type of attestation was included in the authenticator
+        response for a given WebAuthn credential at the time it was created
+      type: string
+      enum:
+      - basic
+      - self
+      - attestationCa
+      - anonymizationCa
+      - none
     ForgotPasswordRequest:
       description: Forgot password request object.
       type: object
@@ -5024,15 +5049,6 @@ components:
       enum:
       - AllParticipants
       - OnlyOriginator
-    AttestationConveyancePreference:
-      description: Used to communicate whether and how authenticator attestation should
-        be delivered to the Relying Party
-      type: string
-      enum:
-      - none
-      - indirect
-      - direct
-      - enterprise
     EmailConfiguration:
       description: ''
       type: object
@@ -5194,21 +5210,6 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         name:
           type: string
-    CoseAlgorithmIdentifier:
-      description: A number identifying a cryptographic algorithm. Values should be
-        registered with the <a  href="https:www.iana.orgassignmentscosecose.xhtml#algorithms">IANA
-        COSE Algorithms registry<a>
-      type: string
-      enum:
-      - ES256
-      - ES384
-      - ES512
-      - RS256
-      - RS384
-      - RS512
-      - PS256
-      - PS384
-      - PS512
     VerifyRegistrationResponse:
       description: ''
       type: object
@@ -5429,12 +5430,6 @@ components:
           items:
             type: string
             format: uuid
-    PublicKeyCredentialType:
-      description: Defines valid credential types. This is an extension point in the
-        WebAuthn spec. The only defined value at this time is "public-key"
-      type: string
-      enum:
-      - PUBLIC_KEY
     UserCommentResponse:
       description: User Comment Response
       type: object
@@ -5519,6 +5514,20 @@ components:
           type: string
         type:
           "$ref": "#/components/schemas/LambdaType"
+    CoseEllipticCurve:
+      description: COSE Elliptic Curve identifier to determine which elliptic curve
+        to use with a given key
+      type: string
+      enum:
+      - Reserved
+      - P256
+      - P384
+      - P521
+      - X25519
+      - X448
+      - Ed25519
+      - Ed448
+      - Secp256k1
     SonyPSNIdentityProvider:
       description: SonyPSN gaming login provider.
       type: object
@@ -6168,6 +6177,14 @@ components:
           type: object
           additionalProperties:
             type: string
+    AuthenticatorAttachmentPreference:
+      description: Describes the authenticator attachment modality preference for
+        a WebAuthn workflow. See {@link AuthenticatorAttachment}
+      type: string
+      enum:
+      - PLATFORM
+      - CROSS_PLATFORM
+      - EITHER
     TenantRateLimitConfiguration:
       description: ''
       type: object
@@ -6283,6 +6300,15 @@ components:
           format: uuid
         type:
           "$ref": "#/components/schemas/EventType"
+    AttestationConveyancePreference:
+      description: Used to communicate whether and how authenticator attestation should
+        be delivered to the Relying Party
+      type: string
+      enum:
+      - none
+      - indirect
+      - direct
+      - enterprise
     TransactionType:
       description: The transaction types for Webhooks and other event systems within
         FusionAuth.
@@ -6890,14 +6916,6 @@ components:
             "$ref": "#/components/schemas/TwoFactorTrust"
         twoFactorTrustId:
           type: string
-    ResidentKeyRequirement:
-      description: Describes the Relying Party's requirements for <a href="https:www.w3.orgTRwebauthn-2#client-side-discoverable-credential">client-side  discoverable
-        credentials<a> (formerly known as "resident keys")
-      type: string
-      enum:
-      - Discouraged
-      - Preferred
-      - Required
     RefreshResponse:
       description: ''
       type: object
@@ -7332,13 +7350,6 @@ components:
       enum:
       - Always
       - OnCollision
-    AuthenticatorAttachment:
-      description: Describes the <a href="https:www.w3.orgTRwebauthn-2#authenticator-attachment-modality">authenticator
-        attachment modality<a>.
-      type: string
-      enum:
-      - PLATFORM
-      - CROSS_PLATFORM
     ExternalJWTApplicationConfiguration:
       description: ''
       type: object
@@ -8002,16 +8013,6 @@ components:
           type: array
           items:
             type: string
-    AuthenticatorTransport:
-      description: Describes how the authenticator communicates with a client. This
-        can be used by the client as a hint to locate the  appropriate authenticator.
-      type: string
-      enum:
-      - usb
-      - nfc
-      - ble
-      - internal
-      - cable
     APIKey:
       description: domain POJO to represent AuthenticationKey
       type: object
