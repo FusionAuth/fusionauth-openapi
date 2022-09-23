@@ -1210,6 +1210,12 @@ components:
         selfServiceFormId:
           type: string
           format: uuid
+    WebAuthnImportRequest:
+      description: API request to import an existing WebAuthn credential
+      type: object
+      properties:
+        credential:
+          "$ref": "#/components/schemas/WebAuthnCredential"
     TimeBasedDeletePolicy:
       description: A policy for deleting Users.
       type: object
@@ -11856,6 +11862,25 @@ paths:
                 "$ref": "#/components/schemas/UserActionReasonResponse"
         default:
           description: Error
+  "/api/webauthn/import":
+    post:
+      description: Import a WebAuthn credential
+      operationId: importWebAuthnCredentialWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/WebAuthnImportRequest"
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/email/template/{emailTemplateId}":
     get:
       description: Retrieves the email template for the given Id. If you don't specify
