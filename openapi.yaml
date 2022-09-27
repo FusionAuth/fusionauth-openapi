@@ -3575,6 +3575,13 @@ components:
           "$ref": "#/components/schemas/MultiFactorSMSTemplate"
         trustPolicy:
           "$ref": "#/components/schemas/ApplicationMultiFactorTrustPolicy"
+    WebAuthnCompleteResponse:
+      description: API response for completing WebAuthn credential registration
+      type: object
+      properties:
+        credentialId:
+          type: string
+          format: uuid
     FormType:
       description: ''
       type: string
@@ -14121,6 +14128,10 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/WebAuthnCompleteResponse"
         default:
           description: Error
           content:
