@@ -1950,10 +1950,10 @@ components:
         used for credential creation  and request based on the Tenant configuration.
       type: string
       enum:
-      - REAUTH
-      - BOOTSTRAP
-      - TWO_FACTOR
-      - GENERAL
+      - reAuthentication
+      - bootstrap
+      - twoFactor
+      - general
     ThemeResponse:
       description: Theme API response object.
       type: object
@@ -2132,15 +2132,15 @@ components:
         credentials<a> (formerly known as "resident keys")
       type: string
       enum:
-      - Discouraged
-      - Preferred
-      - Required
+      - discouraged
+      - preferred
+      - required
     PublicKeyCredentialType:
       description: Defines valid credential types. This is an extension point in the
         WebAuthn spec. The only defined value at this time is "public-key"
       type: string
       enum:
-      - PUBLIC_KEY
+      - publicKey
     PreviewMessageTemplateRequest:
       description: ''
       type: object
@@ -4512,8 +4512,8 @@ components:
         attachment modality<a>.
       type: string
       enum:
-      - PLATFORM
-      - CROSS_PLATFORM
+      - platform
+      - crossPlatform
     PasswordlessConfiguration:
       type: object
       properties:
@@ -6195,9 +6195,9 @@ components:
         a WebAuthn workflow. See {@link AuthenticatorAttachment}
       type: string
       enum:
-      - PLATFORM
-      - CROSS_PLATFORM
-      - EITHER
+      - platform
+      - crossPlatform
+      - either
     TenantRateLimitConfiguration:
       description: ''
       type: object
