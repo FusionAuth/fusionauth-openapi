@@ -3576,7 +3576,8 @@ components:
         trustPolicy:
           "$ref": "#/components/schemas/ApplicationMultiFactorTrustPolicy"
     WebAuthnCompleteResponse:
-      description: API response for completing WebAuthn credential registration
+      description: API response for completing WebAuthn credential registration or
+        assertion
       type: object
       properties:
         credentialId:
@@ -6719,12 +6720,18 @@ components:
         applicationId:
           type: string
           format: uuid
+        credentialId:
+          type: string
+          format: uuid
         loginId:
           type: string
         state:
           type: object
           additionalProperties:
             type: object
+        userId:
+          type: string
+          format: uuid
         workflow:
           "$ref": "#/components/schemas/WebAuthnWorkflow"
     LinkedInApplicationConfiguration:
@@ -14096,6 +14103,31 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/webauthn/assertion":
+    post:
+      description: Complete a WebAuthn authentication ceremony by validating the signature
+        against the previously generated challenge without logging the user in
+      operationId: completeWebAuthnAssertionWithId
+      security: []
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/WebAuthnLoginRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/WebAuthnCompleteResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/jwt/validate":
     get:
       description: Validates the provided JWT (encoded JWT string) to ensure the token
@@ -15910,7 +15942,7 @@ paths:
   "/api/webauthn/login":
     post:
       description: Complete a WebAuthn authentication ceremony by validating the signature
-        against the previously generated challenge
+        against the previously generated challenge and then login the user in
       operationId: completeWebAuthnLoginWithId
       security: []
       parameters: []
