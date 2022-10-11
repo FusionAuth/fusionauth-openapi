@@ -1027,16 +1027,6 @@ components:
         userId:
           type: string
           format: uuid
-    AuthenticatorTransport:
-      description: Describes how the authenticator communicates with a client. This
-        can be used by the client as a hint to locate the  appropriate authenticator.
-      type: string
-      enum:
-      - usb
-      - nfc
-      - ble
-      - internal
-      - cable
     GroupCreateEvent:
       description: Models the Group Create Event.
       type: object
@@ -1055,6 +1045,16 @@ components:
           format: uuid
         type:
           "$ref": "#/components/schemas/EventType"
+    AuthenticatorTransport:
+      description: Describes how the authenticator communicates with a client. This
+        can be used by the client as a hint to locate the  appropriate authenticator.
+      type: string
+      enum:
+      - usb
+      - nfc
+      - ble
+      - internal
+      - cable
     ConnectorPolicy:
       description: ''
       type: object
@@ -3726,15 +3726,6 @@ components:
       properties:
         apiKey:
           "$ref": "#/components/schemas/APIKey"
-    CoseKeyType:
-      description: COSE key type
-      type: string
-      enum:
-      - Reserved
-      - OKP
-      - EC2
-      - RSA
-      - Symmetric
     GroupUpdateEvent:
       description: Models the Group Update Event.
       type: object
@@ -3755,6 +3746,15 @@ components:
           format: uuid
         type:
           "$ref": "#/components/schemas/EventType"
+    CoseKeyType:
+      description: COSE key type
+      type: string
+      enum:
+      - Reserved
+      - OKP
+      - EC2
+      - RSA
+      - Symmetric
     Entity:
       description: Models an entity that a user can be granted permissions to. Or
         an entity that can be granted permissions to another entity.
@@ -8146,24 +8146,6 @@ components:
           format: uuid
         type:
           "$ref": "#/components/schemas/EventType"
-    GroupDeleteEvent:
-      description: Models the Group Delete Event.
-      type: object
-      properties:
-        group:
-          "$ref": "#/components/schemas/Group"
-        createInstant:
-          "$ref": "#/components/schemas/ZonedDateTime"
-        id:
-          type: string
-          format: uuid
-        info:
-          "$ref": "#/components/schemas/EventInfo"
-        tenantId:
-          type: string
-          format: uuid
-        type:
-          "$ref": "#/components/schemas/EventType"
     PublicKeyCredentialCreationOptions:
       description: Allows the Relying Party to specify desired attributes of a new
         credential.
@@ -8192,6 +8174,24 @@ components:
           format: int64
         user:
           "$ref": "#/components/schemas/PublicKeyCredentialUserEntity"
+    GroupDeleteEvent:
+      description: Models the Group Delete Event.
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     MultiFactorEmailTemplate:
       type: object
       properties:
