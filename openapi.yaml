@@ -345,7 +345,7 @@ components:
         WebAuthn authentication ceremonies.
       type: object
       properties:
-        alg:
+        algorithm:
           "$ref": "#/components/schemas/CoseAlgorithmIdentifier"
         attestationType:
           "$ref": "#/components/schemas/AttestationType"
@@ -366,7 +366,7 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         publicKey:
           type: string
-        rpId:
+        relyingPartyId:
           type: string
         signCount:
           type: integer
@@ -659,15 +659,6 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/SortField"
-    PublicKeyCredentialRpEntity:
-      description: Supply additional information about the Relying Party when creating
-        a new credential
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
     PublicKeyCredentialEntity:
       description: Describes a user account or WebAuthn Relying Party associated with
         a public key credential
@@ -2545,15 +2536,6 @@ components:
         userId:
           type: string
           format: uuid
-    WebAuthnWorkflowConfiguration:
-      type: object
-      properties:
-        authenticatorAttachmentPreference:
-          "$ref": "#/components/schemas/AuthenticatorAttachmentPreference"
-        userVerificationRequirement:
-          "$ref": "#/components/schemas/UserVerificationRequirement"
-        enabled:
-          type: boolean
     GroupMemberSearchResponse:
       description: Search response for Group Members
       type: object
@@ -2784,10 +2766,10 @@ components:
           "$ref": "#/components/schemas/WebAuthnExtensionsClientOutputs"
         id:
           type: string
-        response:
-          "$ref": "#/components/schemas/AuthenticatorRegistrationResponse"
         rpId:
           type: string
+        response:
+          "$ref": "#/components/schemas/AuthenticatorRegistrationResponse"
         transports:
           type: array
           items:
@@ -2847,6 +2829,16 @@ components:
           additionalProperties:
             type: object
         createRegistration:
+          type: boolean
+    TenantWebAuthnWorkflowConfiguration:
+      description: ''
+      type: object
+      properties:
+        authenticatorAttachmentPreference:
+          "$ref": "#/components/schemas/AuthenticatorAttachmentPreference"
+        userVerificationRequirement:
+          "$ref": "#/components/schemas/UserVerificationRequirement"
+        enabled:
           type: boolean
     UserTwoFactorMethodRemoveEvent:
       description: Model a user event when a two-factor method has been added.
@@ -2962,7 +2954,7 @@ components:
             "$ref": "#/components/schemas/PublicKeyCredentialDescriptor"
         challenge:
           type: string
-        rpId:
+        relyingPartyId:
           type: string
         timeout:
           type: integer
@@ -5914,14 +5906,14 @@ components:
         mobilePhone:
           type: string
     TenantWebAuthnConfiguration:
-      description: Tenant-level configuration for WebAuthn
+      description: 'TODO : WebAuthn : Daniel Review : Do we need this Enableable'
       type: object
       properties:
         reauthenticationWorkflowConfiguration:
-          "$ref": "#/components/schemas/WebAuthnWorkflowConfiguration"
-        rpId:
+          "$ref": "#/components/schemas/TenantWebAuthnWorkflowConfiguration"
+        relyingPartyId:
           type: string
-        rpName:
+        relyingPartyName:
           type: string
         enabled:
           type: boolean
@@ -6988,6 +6980,15 @@ components:
       properties:
         options:
           "$ref": "#/components/schemas/PublicKeyCredentialRequestOptions"
+    PublicKeyCredentialRelyingPartyEntity:
+      description: Supply additional information about the Relying Party when creating
+        a new credential
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
     EntityType:
       description: Models an entity type that has a specific set of permissions. These
         are global objects and can be used across tenants.
@@ -7586,7 +7587,7 @@ components:
           "$ref": "#/components/schemas/PublicKeyRegistrationRequest"
         origin:
           type: string
-        rpId:
+        relyingPartyId:
           type: string
         userId:
           type: string
@@ -8103,7 +8104,7 @@ components:
           items:
             "$ref": "#/components/schemas/PublicKeyCredentialParameters"
         rp:
-          "$ref": "#/components/schemas/PublicKeyCredentialRpEntity"
+          "$ref": "#/components/schemas/PublicKeyCredentialRelyingPartyEntity"
         timeout:
           type: integer
           format: int64
@@ -8256,10 +8257,10 @@ components:
           "$ref": "#/components/schemas/WebAuthnExtensionsClientOutputs"
         id:
           type: string
+        relyingPartyId:
+          type: string
         response:
           "$ref": "#/components/schemas/AuthenticatorAuthenticationResponse"
-        rpId:
-          type: string
         type:
           type: string
     ReactorRequest:
@@ -8294,7 +8295,7 @@ components:
           "$ref": "#/components/schemas/PublicKeyAuthenticationRequest"
         origin:
           type: string
-        rpId:
+        relyingPartyId:
           type: string
         applicationId:
           type: string
