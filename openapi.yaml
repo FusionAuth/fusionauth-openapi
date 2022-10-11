@@ -62,11 +62,6 @@ components:
       properties:
         auditLog:
           "$ref": "#/components/schemas/AuditLog"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -165,8 +160,7 @@ components:
         unverified:
           "$ref": "#/components/schemas/TimeBasedDeletePolicy"
     UserRegistrationDeleteEvent:
-      description: Models the User Delete Registration Event (and can be converted
-        to JSON).
+      description: Models the User Delete Registration Event.
       type: object
       properties:
         applicationId:
@@ -176,11 +170,6 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -244,15 +233,38 @@ components:
         userId:
           type: string
           format: uuid
+    GroupDeleteCompleteEvent:
+      description: Models the Group Create Complete Event.
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     InstanceEvent:
       description: A marker interface indicating this event is not scoped to a tenant
         and will be sent to all webhooks.
       type: object
       properties: {}
     UserActionEvent:
-      description: Models the user action event (and can be converted to JSON).
+      description: Models the user action Event.
       type: object
       properties:
+        applicationIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         action:
           type: string
         actionId:
@@ -290,11 +302,6 @@ components:
           type: string
         reasonCode:
           type: string
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -452,16 +459,11 @@ components:
         name:
           type: string
     UserEmailVerifiedEvent:
-      description: Models the User Email Verify Event (and can be converted to JSON).
+      description: Models the User Email Verify Event.
       type: object
       properties:
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -558,16 +560,11 @@ components:
         name:
           type: string
     UserReactivateEvent:
-      description: Models the User Reactivate Event (and can be converted to JSON).
+      description: Models the User Reactivate Event.
       type: object
       properties:
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -781,11 +778,6 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLink"
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -894,18 +886,13 @@ components:
           type: string
           format: uuid
     UserUpdateEvent:
-      description: Models the User Update Event (and can be converted to JSON).
+      description: Models the User Update Event.
       type: object
       properties:
         original:
           "$ref": "#/components/schemas/User"
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -1050,6 +1037,24 @@ components:
       - ble
       - internal
       - cable
+    GroupCreateEvent:
+      description: Models the Group Create Event.
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     ConnectorPolicy:
       description: ''
       type: object
@@ -1247,11 +1252,6 @@ components:
           "$ref": "#/components/schemas/User"
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -1421,6 +1421,17 @@ components:
       enum:
       - Bearer
       - MAC
+    GroupSearchResponse:
+      description: Search response for Groups
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Group"
+        total:
+          type: integer
+          format: int64
     XMLSignatureLocation:
       type: string
       enum:
@@ -1605,6 +1616,26 @@ components:
           type: array
           items:
             type: string
+    GroupUpdateCompleteEvent:
+      description: Models the Group Update Complete Event.
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
+        original:
+          "$ref": "#/components/schemas/Group"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     ConnectorLambdaConfiguration:
       type: object
       properties:
@@ -1807,6 +1838,9 @@ components:
       type: object
       properties:
         groupId:
+          type: string
+          format: uuid
+        tenantId:
           type: string
           format: uuid
         userId:
@@ -2195,18 +2229,13 @@ components:
         connector:
           "$ref": "#/components/schemas/BaseConnectorConfiguration"
     UserCreateCompleteEvent:
-      description: Models the User Created Event (and can be converted to JSON).  <p>  This
-        is different than the user.create event in that it will be sent after the
-        user has been created. This event cannot be made transactional.
+      description: Models the User Created Event.  <p>  This is different than the
+        user.create event in that it will be sent after the user has been created.
+        This event cannot be made transactional.
       type: object
       properties:
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -2272,10 +2301,9 @@ components:
         type:
           "$ref": "#/components/schemas/MessengerType"
     UserRegistrationCreateCompleteEvent:
-      description: Models the User Created Registration Event (and can be converted
-        to JSON).  <p>  This is different than the user.registration.create event
-        in that it will be sent after the user has been created. This event cannot
-        be made transactional.
+      description: Models the User Created Registration Event.  <p>  This is different
+        than the user.registration.create event in that it will be sent after the
+        user has been created. This event cannot be made  transactional.
       type: object
       properties:
         applicationId:
@@ -2285,11 +2313,6 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -2505,11 +2528,6 @@ components:
           type: string
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -2848,11 +2866,6 @@ components:
           "$ref": "#/components/schemas/TwoFactorMethod"
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -2992,11 +3005,6 @@ components:
       properties:
         message:
           type: string
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -3093,11 +3101,6 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -3478,8 +3481,7 @@ components:
           type: string
           format: uuid
     UserRegistrationVerifiedEvent:
-      description: Models the User Registration Verified Event (and can be converted
-        to JSON).
+      description: Models the User Registration Verified Event.
       type: object
       properties:
         applicationId:
@@ -3489,11 +3491,6 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -3533,16 +3530,11 @@ components:
       type: object
       properties: {}
     UserCreateEvent:
-      description: Models the User Create Event (and can be converted to JSON).
+      description: Models the User Create Event.
       type: object
       properties:
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -3659,18 +3651,13 @@ components:
         type:
           "$ref": "#/components/schemas/PublicKeyCredentialType"
     UserBulkCreateEvent:
-      description: Models the User Bulk Create Event (and can be converted to JSON).
+      description: Models the User Bulk Create Event.
       type: object
       properties:
         users:
           type: array
           items:
             "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -3748,6 +3735,26 @@ components:
       - EC2
       - RSA
       - Symmetric
+    GroupUpdateEvent:
+      description: Models the Group Update Event.
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
+        original:
+          "$ref": "#/components/schemas/Group"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     Entity:
       description: Models an entity that a user can be granted permissions to. Or
         an entity that can be granted permissions to another entity.
@@ -4007,6 +4014,28 @@ components:
           "$ref": "#/components/schemas/User"
         user:
           "$ref": "#/components/schemas/User"
+    GroupMemberRemoveCompleteEvent:
+      description: Models the Group Member Remove Complete Event.
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
+        members:
+          type: array
+          items:
+            "$ref": "#/components/schemas/GroupMember"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     EventLogConfiguration:
       type: object
       properties:
@@ -4022,6 +4051,28 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/IdentityProviderField"
+    GroupMemberAddCompleteEvent:
+      description: Models the Group Member Add Complete Event.
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
+        members:
+          type: array
+          items:
+            "$ref": "#/components/schemas/GroupMember"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     MultiFactorLoginPolicy:
       description: ''
       type: string
@@ -4330,6 +4381,21 @@ components:
             type: object
         createRegistration:
           type: boolean
+    GroupSearchCriteria:
+      description: Search criteria for Groups
+      type: object
+      properties:
+        name:
+          type: string
+        tenantId:
+          type: string
+          format: uuid
+        numberOfResults:
+          type: integer
+        orderBy:
+          type: string
+        startRow:
+          type: integer
     MultiFactorSMSMethod:
       type: object
       properties:
@@ -4364,11 +4430,6 @@ components:
           type: string
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -4464,6 +4525,28 @@ components:
           "$ref": "#/components/schemas/TenantUsernameConfiguration"
         webAuthnConfiguration:
           "$ref": "#/components/schemas/TenantWebAuthnConfiguration"
+    GroupMemberUpdateCompleteEvent:
+      description: Models the Group Member Update Complete Event.
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
+        members:
+          type: array
+          items:
+            "$ref": "#/components/schemas/GroupMember"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     BaseMessengerConfiguration:
       description: Do not require a setter for 'type', it is defined by the concrete
         class and is not mutable
@@ -4675,11 +4758,6 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -4744,11 +4822,6 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -5290,8 +5363,7 @@ components:
       - Debug
       - Error
     UserRegistrationUpdateEvent:
-      description: Models the User Update Registration Event (and can be converted
-        to JSON).
+      description: Models the User Update Registration Event.
       type: object
       properties:
         applicationId:
@@ -5303,11 +5375,6 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -5396,9 +5463,9 @@ components:
         createRegistration:
           type: boolean
     UserRegistrationDeleteCompleteEvent:
-      description: Models the User Deleted Registration Event (and can be converted
-        to JSON).  <p>  This is different than user.registration.delete in that it
-        is sent after the TX has been committed. This event cannot be transactional.
+      description: Models the User Deleted Registration Event.  <p>  This is different
+        than user.registration.delete in that it is sent after the TX has been committed.
+        This event cannot be transactional.
       type: object
       properties:
         applicationId:
@@ -5408,11 +5475,6 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -5481,11 +5543,6 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -5650,8 +5707,8 @@ components:
         search:
           "$ref": "#/components/schemas/EntityTypeSearchCriteria"
     JWTRefreshTokenRevokeEvent:
-      description: Models the Refresh Token Revoke Event (and can be converted to
-        JSON). This event might be for a single token, a user  or an entire application.
+      description: Models the Refresh Token Revoke Event. This event might be for
+        a single token, a user  or an entire application.
       type: object
       properties:
         applicationId:
@@ -5668,11 +5725,6 @@ components:
         userId:
           type: string
           format: uuid
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -5866,11 +5918,6 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLink"
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -5917,6 +5964,24 @@ components:
           type: string
         enabled:
           type: boolean
+    GroupCreateCompleteEvent:
+      description: Models the Group Created Event.
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     PasswordEncryptionConfiguration:
       description: Password Encryption Scheme Configuration
       type: object
@@ -6035,6 +6100,12 @@ components:
           type: boolean
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
+    GroupSearchRequest:
+      description: Search request for Groups.
+      type: object
+      properties:
+        search:
+          "$ref": "#/components/schemas/GroupSearchCriteria"
     HTTPHeaders:
       description: Type for webhook headers.
       type: object
@@ -6289,11 +6360,6 @@ components:
           "$ref": "#/components/schemas/User"
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -6346,11 +6412,6 @@ components:
           type: string
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -6394,9 +6455,9 @@ components:
         user:
           "$ref": "#/components/schemas/User"
     UserRegistrationUpdateCompleteEvent:
-      description: Models the User Update Registration Event (and can be converted
-        to JSON).  <p>  This is different than user.registration.update in that it
-        is sent after this event completes, this cannot be transactional.
+      description: Models the User Update Registration Event.  <p>  This is different
+        than user.registration.update in that it is sent after this event completes,
+        this cannot be transactional.
       type: object
       properties:
         applicationId:
@@ -6408,11 +6469,6 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -6492,6 +6548,28 @@ components:
           type: boolean
         requireAuthentication:
           type: boolean
+    GroupMemberAddEvent:
+      description: Models the Group Member Add Event.
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
+        members:
+          type: array
+          items:
+            "$ref": "#/components/schemas/GroupMember"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     KeyRequest:
       description: Key API request object.
       type: object
@@ -6952,16 +7030,14 @@ components:
         type:
           "$ref": "#/components/schemas/MessageType"
     JWTPublicKeyUpdateEvent:
-      description: Models the JWT public key Refresh Token Revoke Event (and can be
-        converted to JSON). This event might be for a single  token, a user or an
-        entire application.
+      description: Models the JWT public key Refresh Token Revoke Event. This event
+        might be for a single  token, a user or an entire application.
       type: object
       properties:
         applicationIds:
           type: array
-          items:
-            type: string
-            format: uuid
+          uniqueItems: true
+          items: {}
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -7048,11 +7124,6 @@ components:
         instanceId:
           type: string
           format: uuid
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -7093,11 +7164,6 @@ components:
       description: Base-class for all FusionAuth events.
       type: object
       properties:
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -7156,6 +7222,18 @@ components:
       - AuditLogCreate
       - EventLogCreate
       - KickstartSuccess
+      - GroupCreate
+      - GroupCreateComplete
+      - GroupDelete
+      - GroupDeleteComplete
+      - GroupMemberAdd
+      - GroupMemberAddComplete
+      - GroupMemberRemove
+      - GroupMemberRemoveComplete
+      - GroupMemberUpdate
+      - GroupMemberUpdateComplete
+      - GroupUpdate
+      - GroupUpdateComplete
       - UserAction
       - UserBulkCreate
       - UserCreate
@@ -7284,11 +7362,6 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -7553,11 +7626,6 @@ components:
           "$ref": "#/components/schemas/TwoFactorMethod"
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -7602,17 +7670,34 @@ components:
           type: string
         startIPAddress:
           type: string
+    GroupMemberUpdateEvent:
+      description: Models the Group Member Update Event.
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
+        members:
+          type: array
+          items:
+            "$ref": "#/components/schemas/GroupMember"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     UserDeactivateEvent:
-      description: Models the User Deactivate Event (and can be converted to JSON).
+      description: Models the User Deactivate Event.
       type: object
       properties:
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -7697,8 +7782,7 @@ components:
           items:
             "$ref": "#/components/schemas/HistoryItem"
     UserRegistrationCreateEvent:
-      description: Models the User Create Registration Event (and can be converted
-        to JSON).
+      description: Models the User Create Registration Event.
       type: object
       properties:
         applicationId:
@@ -7708,11 +7792,6 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -7832,11 +7911,6 @@ components:
         userId:
           type: string
           format: uuid
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -7988,11 +8062,6 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -8065,11 +8134,24 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
+    GroupDeleteEvent:
+      description: Models the Group Delete Event.
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -8189,6 +8271,28 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/Consent"
+    GroupMemberRemoveEvent:
+      description: Models the Group Member Remove Event.
+      type: object
+      properties:
+        group:
+          "$ref": "#/components/schemas/Group"
+        members:
+          type: array
+          items:
+            "$ref": "#/components/schemas/GroupMember"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     ChangePasswordResponse:
       description: Change password response object.
       type: object
@@ -8329,11 +8433,6 @@ components:
       properties:
         eventLog:
           "$ref": "#/components/schemas/EventLog"
-        applicationIds:
-          type: array
-          items:
-            type: string
-            format: uuid
         createInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         id:
@@ -15476,6 +15575,29 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/TwoFactorStartResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/group/search":
+    post:
+      description: Searches groups with the specified criteria and pagination.
+      operationId: searchGroupsWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/GroupSearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GroupSearchResponse"
         default:
           description: Error
           content:
