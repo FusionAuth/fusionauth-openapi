@@ -2794,6 +2794,11 @@ components:
             "$ref": "#/components/schemas/AuthenticatorTransport"
         type:
           type: string
+    AuthenticationThreats:
+      description: ''
+      type: string
+      enum:
+      - ImpossibleTravel
     TenantRequest:
       description: ''
       type: object
@@ -5587,6 +5592,47 @@ components:
       - Ed25519
       - Ed448
       - Secp256k1
+    SonyPSNIdentityProvider:
+      description: SonyPSN gaming login provider.
+      type: object
+      properties:
+        buttonText:
+          type: string
+        client_id:
+          type: string
+        client_secret:
+          type: string
+        scope:
+          type: string
+        data:
+          type: object
+          additionalProperties:
+            type: object
+        applicationConfiguration:
+          type: object
+          additionalProperties:
+            "$ref": "#/components/schemas/SonyPSNApplicationConfiguration"
+        debug:
+          type: boolean
+        id:
+          type: string
+          format: uuid
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        lambdaConfiguration:
+          "$ref": "#/components/schemas/ProviderLambdaConfiguration"
+        lastUpdateInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        linkingStrategy:
+          "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
+        name:
+          type: string
+        tenantConfiguration:
+          type: object
+          additionalProperties:
+            "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        type:
+          "$ref": "#/components/schemas/IdentityProviderType"
     BreachedPasswordTenantMetric:
       description: ''
       type: object
@@ -8488,6 +8534,7 @@ components:
       - "$ref": "#/components/schemas/AppleIdentityProvider"
       - "$ref": "#/components/schemas/OpenIdConnectIdentityProvider"
       - "$ref": "#/components/schemas/GoogleIdentityProvider"
+      - "$ref": "#/components/schemas/SonyPSNIdentityProvider"
       - "$ref": "#/components/schemas/TwitchIdentityProvider"
       - "$ref": "#/components/schemas/EpicGamesIdentityProvider"
       - "$ref": "#/components/schemas/NintendoIdentityProvider"
