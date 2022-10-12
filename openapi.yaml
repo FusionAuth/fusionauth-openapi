@@ -1053,7 +1053,7 @@ components:
       - usb
       - nfc
       - ble
-      - internal
+      - platform
       - cable
     ConnectorPolicy:
       description: ''
