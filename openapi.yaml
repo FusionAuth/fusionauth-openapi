@@ -2087,6 +2087,12 @@ components:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         threatDetection:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
+        webAuthn:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
+        webAuthnPlatformAuthenticators:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
+        webAuthnRoamingAuthenticators:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
     FamilyMember:
       description: Models a single family member.
       type: object
