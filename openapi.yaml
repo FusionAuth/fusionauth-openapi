@@ -371,6 +371,8 @@ components:
           type: boolean
         lastUseInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
+        name:
+          type: string
         publicKey:
           type: string
         relyingPartyId:
@@ -2614,7 +2616,9 @@ components:
       description: API request to start a WebAuthn registration ceremony
       type: object
       properties:
-        credentialName:
+        displayName:
+          type: string
+        name:
           type: string
         userAgent:
           type: string
