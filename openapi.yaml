@@ -4155,6 +4155,10 @@ components:
           type: integer
         twoFactorTrustIdTimeToLiveInSeconds:
           type: integer
+        webAuthnAuthenticationChallenge:
+          type: integer
+        webAuthnRegistrationChallenge:
+          type: integer
     LoginRecordExportRequest:
       description: ''
       type: object
@@ -5967,7 +5971,9 @@ components:
       description: 'TODO : WebAuthn : Daniel Review : Do we need this Enableable'
       type: object
       properties:
-        reauthenticationWorkflowConfiguration:
+        bootstrapWorkflow:
+          "$ref": "#/components/schemas/TenantWebAuthnWorkflowConfiguration"
+        reauthenticationWorkflow:
           "$ref": "#/components/schemas/TenantWebAuthnWorkflowConfiguration"
         relyingPartyId:
           type: string
@@ -7348,6 +7354,10 @@ components:
         oauth2Wait:
           type: string
         oauth2WebAuthn:
+          type: string
+        oauth2WebAuthnReauth:
+          type: string
+        oauth2WebAuthnReauthEnable:
           type: string
         passwordChange:
           type: string
