@@ -3575,9 +3575,8 @@ components:
         assertion
       type: object
       properties:
-        credentialId:
-          type: string
-          format: uuid
+        credential:
+          "$ref": "#/components/schemas/WebAuthnCredential"
     FormType:
       description: ''
       type: string
