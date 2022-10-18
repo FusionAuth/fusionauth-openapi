@@ -360,6 +360,8 @@ components:
           type: boolean
         credentialId:
           type: string
+        discoverable:
+          type: boolean
         displayName:
           type: string
         id:
@@ -367,8 +369,6 @@ components:
           format: uuid
         insertInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
-        isDiscoverableCredential:
-          type: boolean
         lastUseInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         name:
