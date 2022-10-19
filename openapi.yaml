@@ -360,6 +360,10 @@ components:
           type: boolean
         credentialId:
           type: string
+        data:
+          type: object
+          additionalProperties:
+            type: object
         discoverable:
           type: boolean
         displayName:
@@ -1209,11 +1213,15 @@ components:
           type: string
           format: uuid
     WebAuthnImportRequest:
-      description: API request to import an existing WebAuthn credential
+      description: API request to import an existing WebAuthn credential(s)
       type: object
       properties:
-        credential:
-          "$ref": "#/components/schemas/WebAuthnCredential"
+        credentials:
+          type: array
+          items:
+            "$ref": "#/components/schemas/WebAuthnCredential"
+        validateDbConstraints:
+          type: boolean
     TimeBasedDeletePolicy:
       description: A policy for deleting Users.
       type: object
@@ -6702,9 +6710,9 @@ components:
       description: WebAuthn Credential API response
       type: object
       properties:
-        webauthnCredential:
+        credential:
           "$ref": "#/components/schemas/WebAuthnCredential"
-        webauthnCredentials:
+        credentials:
           type: array
           items:
             "$ref": "#/components/schemas/WebAuthnCredential"
