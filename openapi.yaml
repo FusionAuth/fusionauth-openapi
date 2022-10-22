@@ -13029,9 +13029,10 @@ paths:
       description: Exchanges an OAuth authorization code and code_verifier for an
         access token. Makes a request to the Token endpoint to exchange the authorization
         code returned from the Authorize endpoint and a code_verifier for an access
-        token. OR Exchange a Refresh Token for an Access Token. If you will be using
-        the Refresh Token Grant, you will make a request to the Token endpoint to
-        exchange the user’s refresh token for an access token. OR Exchange User Credentials
+        token. OR Make a Client Credentials grant request to obtain an access token.
+        OR Exchange a Refresh Token for an Access Token. If you will be using the
+        Refresh Token Grant, you will make a request to the Token endpoint to exchange
+        the user’s refresh token for an access token. OR Exchange User Credentials
         for a Token. If you will be using the Resource Owner Password Credential Grant,
         you will make a request to the Token endpoint to exchange the user’s email
         and password for an access token. OR Exchanges an OAuth authorization code
