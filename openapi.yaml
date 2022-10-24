@@ -4162,9 +4162,9 @@ components:
           type: integer
         twoFactorTrustIdTimeToLiveInSeconds:
           type: integer
-        webAuthnAuthenticationChallenge:
+        webAuthnAuthenticationChallengeTimeToLiveInSeconds:
           type: integer
-        webAuthnRegistrationChallenge:
+        webAuthnRegistrationChallengeTimeToLiveInSeconds:
           type: integer
     LoginRecordExportRequest:
       description: ''
@@ -14238,7 +14238,7 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
-  "/api/webauthn/assertion":
+  "/api/webauthn/assert":
     post:
       description: Complete a WebAuthn authentication ceremony by validating the signature
         against the previously generated challenge without logging the user in
@@ -14281,7 +14281,7 @@ paths:
                 "$ref": "#/components/schemas/ValidateResponse"
         default:
           description: Error
-  "/api/webauthn/complete":
+  "/api/webauthn/register/complete":
     post:
       description: Complete a WebAuthn registration ceremony by validating the client
         request and saving the new credential
@@ -14440,7 +14440,7 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
-  "/api/webauthn/register":
+  "/api/webauthn/register/start":
     post:
       description: Start a WebAuthn registration ceremony by generating a new challenge
         for the user
