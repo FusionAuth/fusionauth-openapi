@@ -1985,7 +1985,7 @@ components:
         used for credential creation  and request based on the Tenant configuration.
       type: string
       enum:
-      - reAuthentication
+      - reauthentication
       - bootstrap
       - twoFactor
       - general
