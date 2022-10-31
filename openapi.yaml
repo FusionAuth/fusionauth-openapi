@@ -3765,7 +3765,8 @@ components:
         type:
           "$ref": "#/components/schemas/EventType"
     CoseKeyType:
-      description: COSE key type
+      description: 'TODO : WebAuthnDomain - this type is only used internally, but
+        it is referenced in CoseAlgorithmIdentifier which is required in public domain'
       type: string
       enum:
       - Reserved
@@ -5599,20 +5600,6 @@ components:
           type: string
         type:
           "$ref": "#/components/schemas/LambdaType"
-    CoseEllipticCurve:
-      description: COSE Elliptic Curve identifier to determine which elliptic curve
-        to use with a given key
-      type: string
-      enum:
-      - Reserved
-      - P256
-      - P384
-      - P521
-      - X25519
-      - X448
-      - Ed25519
-      - Ed448
-      - Secp256k1
     SonyPSNIdentityProvider:
       description: SonyPSN gaming login provider.
       type: object
