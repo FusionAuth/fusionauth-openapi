@@ -389,7 +389,7 @@ components:
         transports:
           type: array
           items:
-            "$ref": "#/components/schemas/AuthenticatorTransport"
+            type: string
         userAgent:
           type: string
         userId:
@@ -1051,16 +1051,6 @@ components:
           format: uuid
         type:
           "$ref": "#/components/schemas/EventType"
-    AuthenticatorTransport:
-      description: Describes how the authenticator communicates with a client. This
-        can be used by the client as a hint to locate the  appropriate authenticator.
-      type: string
-      enum:
-      - usb
-      - nfc
-      - ble
-      - platform
-      - cable
     ConnectorPolicy:
       description: ''
       type: object
@@ -2809,7 +2799,7 @@ components:
         transports:
           type: array
           items:
-            "$ref": "#/components/schemas/AuthenticatorTransport"
+            type: string
         type:
           type: string
     AuthenticationThreats:
@@ -2986,7 +2976,7 @@ components:
             "$ref": "#/components/schemas/PublicKeyCredentialDescriptor"
         challenge:
           type: string
-        relyingPartyId:
+        rpId:
           type: string
         timeout:
           type: integer
@@ -4670,7 +4660,7 @@ components:
         transports:
           type: array
           items:
-            "$ref": "#/components/schemas/AuthenticatorTransport"
+            type: string
         type:
           "$ref": "#/components/schemas/PublicKeyCredentialType"
     IdentityProviderLoginRequest:
