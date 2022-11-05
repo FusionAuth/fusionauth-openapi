@@ -5971,6 +5971,8 @@ components:
       properties:
         bootstrapWorkflow:
           "$ref": "#/components/schemas/TenantWebAuthnWorkflowConfiguration"
+        debug:
+          type: boolean
         reauthenticationWorkflow:
           "$ref": "#/components/schemas/TenantWebAuthnWorkflowConfiguration"
         relyingPartyId:
