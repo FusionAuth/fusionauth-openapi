@@ -1975,10 +1975,9 @@ components:
         used for credential creation  and request based on the Tenant configuration.
       type: string
       enum:
-      - reauthentication
       - bootstrap
-      - twoFactor
       - general
+      - reauthentication
     ThemeResponse:
       description: Theme API response object.
       type: object
@@ -2857,8 +2856,7 @@ components:
         createRegistration:
           type: boolean
     TenantWebAuthnWorkflowConfiguration:
-      description: 'TODO : WebAuthn : Daniel Review : If this also ends up living
-        in the Application, we should rename to WebAuthnWorkflowConfiguration'
+      description: ''
       type: object
       properties:
         authenticatorAttachmentPreference:
@@ -3755,8 +3753,7 @@ components:
         type:
           "$ref": "#/components/schemas/EventType"
     CoseKeyType:
-      description: 'TODO : WebAuthnDomain - this type is only used internally, but
-        it is referenced in CoseAlgorithmIdentifier which is required in public domain'
+      description: COSE key type
       type: string
       enum:
       - Reserved
