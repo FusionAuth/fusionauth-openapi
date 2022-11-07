@@ -136,6 +136,14 @@ components:
       properties:
         userComment:
           "$ref": "#/components/schemas/UserComment"
+    SAMLv2IdPInitiatedLoginConfiguration:
+      description: IdP Initiated login configuration
+      type: object
+      properties:
+        nameIdFormat:
+          type: string
+        enabled:
+          type: boolean
     DeleteConfiguration:
       type: object
       properties:
@@ -1921,6 +1929,8 @@ components:
         defaultVerificationKeyId:
           type: string
           format: uuid
+        initiatedLogin:
+          "$ref": "#/components/schemas/SAMLv2IdPInitiatedLoginConfiguration"
         issuer:
           type: string
         keyId:
@@ -3291,6 +3301,8 @@ components:
           "$ref": "#/components/schemas/VerificationStrategy"
         verifyRegistration:
           type: boolean
+        webAuthnConfiguration:
+          "$ref": "#/components/schemas/ApplicationWebAuthnConfiguration"
     SortField:
       description: ''
       type: object
@@ -6611,6 +6623,12 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         startInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
+    ApplicationWebAuthnConfiguration:
+      description: Application-level configuration for WebAuthn
+      type: object
+      properties:
+        enabled:
+          type: boolean
     GenericConnectorConfiguration:
       description: Models a generic connector.
       type: object
