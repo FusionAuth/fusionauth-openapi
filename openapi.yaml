@@ -1749,11 +1749,15 @@ components:
         us protect against brute force password attacks.
       type: object
       properties:
+        actionCancelPolicy:
+          "$ref": "#/components/schemas/FailedAuthenticationActionCancelPolicy"
         actionDuration:
           type: integer
           format: int64
         actionDurationUnit:
           "$ref": "#/components/schemas/ExpiryUnit"
+        emailUser:
+          type: boolean
         resetCountInSeconds:
           type: integer
         tooManyAttempts:
@@ -3715,6 +3719,8 @@ components:
       properties:
         onLoginPrevented:
           type: boolean
+        onMultiFactorEnable:
+          type: boolean
         onPasswordChanged:
           type: boolean
     MinimumPasswordAge:
@@ -4085,6 +4091,7 @@ components:
       enum:
       - Disabled
       - Enabled
+      - Required
     PasswordlessStartRequest:
       description: ''
       type: object
@@ -4722,6 +4729,12 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/Group"
+    FailedAuthenticationActionCancelPolicy:
+      description: ''
+      type: object
+      properties:
+        onPasswordReset:
+          type: boolean
     UnverifiedBehavior:
       description: ''
       type: string
@@ -7416,7 +7429,11 @@ components:
           type: string
         oauth2TwoFactor:
           type: string
+        oauth2TwoFactorEnable:
+          type: string
         oauth2TwoFactorMethods:
+          type: string
+        oauth2TwoFactorRecoveryCodes:
           type: string
         oauth2Wait:
           type: string
