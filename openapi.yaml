@@ -3613,6 +3613,8 @@ components:
           type: string
         secretBase32Encoded:
           type: string
+        twoFactorId:
+          type: string
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
     UserActionReasonRequest:
@@ -6103,6 +6105,8 @@ components:
       description: ''
       type: object
       properties:
+        code:
+          type: string
         recoveryCodes:
           type: array
           items:
@@ -7431,9 +7435,9 @@ components:
           type: string
         oauth2TwoFactorEnable:
           type: string
-        oauth2TwoFactorMethods:
+        oauth2TwoFactorEnableComplete:
           type: string
-        oauth2TwoFactorRecoveryCodes:
+        oauth2TwoFactorMethods:
           type: string
         oauth2Wait:
           type: string
@@ -7577,6 +7581,10 @@ components:
           type: string
         changePasswordReason:
           "$ref": "#/components/schemas/ChangePasswordReason"
+        configurableMethods:
+          type: array
+          items:
+            type: string
         emailVerificationId:
           type: string
         methods:
@@ -11354,7 +11362,7 @@ paths:
           description: Error
   "/api/user/two-factor/{userId}":
     post:
-      description: Enable Two Factor authentication for a user.
+      description: Enable two-factor authentication for a user.
       operationId: enableTwoFactorWithId
       parameters:
       - name: userId
@@ -11362,7 +11370,7 @@ paths:
         schema:
           type: string
         required: true
-        description: The Id of the user to enable Two Factor authentication.
+        description: The Id of the user to enable two-factor authentication.
       requestBody:
         content:
           application/json:
@@ -11382,8 +11390,8 @@ paths:
               schema:
                 "$ref": "#/components/schemas/Errors"
     delete:
-      description: Disable Two Factor authentication for a user using a JSON body
-        rather than URL parameters. OR Disable Two Factor authentication for a user.
+      description: Disable two-factor authentication for a user using a JSON body
+        rather than URL parameters. OR Disable two-factor authentication for a user.
       operationId: deleteUserTwoFactorWithId
       parameters:
       - name: userId
@@ -11391,7 +11399,7 @@ paths:
         schema:
           type: string
         required: true
-        description: The Id of the User for which you're disabling Two Factor authentication.
+        description: The Id of the User for which you're disabling two-factor authentication.
       - name: methodId
         in: query
         schema:
@@ -11401,8 +11409,8 @@ paths:
         in: query
         schema:
           type: string
-        description: The Two Factor code used verify the the caller knows the Two
-          Factor secret.
+        description: The two-factor code used verify the the caller knows the two-factor
+          secret.
       requestBody:
         content:
           application/json:
