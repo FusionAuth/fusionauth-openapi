@@ -82,7 +82,7 @@ Here's our [Postman profile](https://www.postman.com/fusionauth) and [public wor
 * Rename the API and collection with the correct API version
 * Copy over the description from a previously imported API (easiest to do it in two tabs)
 * Copy the new collection into the workspace.
-
+* Go to the [FusionAuth Postman homepage](https://www.postman.com/fusionauth) and edit the new collection and put the date on it.
 
 
 ## Known issues
