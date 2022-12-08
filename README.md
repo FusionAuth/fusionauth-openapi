@@ -1,4 +1,15 @@
-## FusionAuth OpenAPI
+# FusionAuth OpenAPI
+
+## [Generate libraries](#generate-libraries)
+### [Java](#java)
+### [Ruby](#ruby)
+## [Test the YAML](#test-the-yaml)
+## [Postman Collection](#postman-collection)
+## [Known issues](#known-issues)
+## [Next steps](#next-steps)
+## [Questions and support](#contributions-and-support)
+## [Contributing](#contributing)
+## [License](#license)
 
 This is an OpenAPI specification for the FusionAuth API.
 
@@ -10,16 +21,13 @@ It can be used in a variety of contexts, including generating client libraries, 
 
 Use this file to do all your OpenAPI related actions. For additional information and documentation on FusionAuth refer to [https://fusionauth.io](https://fusionauth.io).
 
-To repeat, this is currently **experimental** and we make no promises about backwards compatibility.
-
-
-### Generate libraries
+## Generate libraries
 
 Install either Swagger: https://github.com/swagger-api/swagger-codegen/ or openapi: https://github.com/OpenAPITools/openapi-generator
 
 These instructions will be for openapi.
 
-#### Java
+### Java
 
 ```
 npx @openapitools/openapi-generator-cli generate -i openapi.yaml  -g java -o java
@@ -28,7 +36,7 @@ mvn package
 # use jar
 ```
 
-#### Ruby
+### Ruby
 
 To build the ruby client libraries:
 
@@ -54,7 +62,7 @@ npx @openapitools/openapi-generator-cli generate  --enable-post-process-file  -i
 
 More docs here: https://openapi-generator.tech/docs/generators/ruby
 
-### Test the YAML
+## Test the YAML
 
 ```
 pip3 install schemathesis # one time
