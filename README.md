@@ -61,18 +61,6 @@ pip3 install schemathesis # one time
 schemathesis run -vvvv --checks not_a_server_error openapi.yaml --base-url http://localhost:9011 -H "Authorization: bf69486b-4733-4470-a592-f1bfce7af580" 
 ```
 
-## Known issues
-
-While the specification is valid, the generated client libraries haven't been fully exercised.
-
-* FusionAuth uses polymorphic responses for some API calls, particularly Identity Providers. The support for that in client library generation code is problematic, based on our testing. I'm not sure if there are workarounds, but it seems like some work is being done. See https://github.com/swagger-api/swagger-codegen/issues/10011 and https://github.com/OpenAPITools/openapi-generator/issues/10880#issuecomment-995243186 for an openapi workaround.
-* This spec is built using the [fusionauth-client-builder](https://github.com/fusionauth/fusionauth-client-builder) project JSON files. This covers almost all of the API, but not everything. A few calls may be missing. If you find one that you need, please open a bug report.
-* Deprecated API endpoints are not included.
-* There's no information about what parameters are required or not, because that is not part of the API JSON files.
-* There are certain operations, status codes and security mechanisms (JWT auth, cookies for auth) that are not currently supported because they are not included in the API JSON files.
-* OAuth grant actions aren't currently supported (the /oauth2/ endpoints).
-* There is an issue generating the ruby client libraries. https://github.com/OpenAPITools/openapi-generator/issues/11350 has the repro steps. The `RUBY_POST_PROCESS_FILE` environment variable is a workaround.
-
 ## Postman Collection
 
 You can also explore around with our API in postman.
@@ -88,6 +76,19 @@ Here's our [Postman profile](https://www.postman.com/fusionauth) and [public wor
 * Copy over the description from a previously imported API (easiest to do it in two tabs)
 * Copy the new collection into the workspace.
 
+
+
+## Known issues
+
+While the specification is valid, the generated client libraries haven't been fully exercised.
+
+* FusionAuth uses polymorphic responses for some API calls, particularly Identity Providers. The support for that in client library generation code is problematic, based on our testing. I'm not sure if there are workarounds, but it seems like some work is being done. See https://github.com/swagger-api/swagger-codegen/issues/10011 and https://github.com/OpenAPITools/openapi-generator/issues/10880#issuecomment-995243186 for an openapi workaround.
+* This spec is built using the [fusionauth-client-builder](https://github.com/fusionauth/fusionauth-client-builder) project JSON files. This covers almost all of the API, but not everything. A few calls may be missing. If you find one that you need, please open a bug report.
+* Deprecated API endpoints are not included.
+* There's no information about what parameters are required or not, because that is not part of the API JSON files.
+* There are certain operations, status codes and security mechanisms (JWT auth, cookies for auth) that are not currently supported because they are not included in the API JSON files.
+* OAuth grant actions aren't currently supported (the /oauth2/ endpoints).
+* There is an issue generating the ruby client libraries. https://github.com/OpenAPITools/openapi-generator/issues/11350 has the repro steps. The `RUBY_POST_PROCESS_FILE` environment variable is a workaround.
 
 ## Next steps
 
