@@ -1,6 +1,6 @@
 ## FusionAuth OpenAPI
 
-This is an **experimental** OpenAPI specification for the FusionAuth API.
+This is an OpenAPI specification for the FusionAuth API.
 
 You can find the file here:
 
@@ -72,6 +72,22 @@ While the specification is valid, the generated client libraries haven't been fu
 * There are certain operations, status codes and security mechanisms (JWT auth, cookies for auth) that are not currently supported because they are not included in the API JSON files.
 * OAuth grant actions aren't currently supported (the /oauth2/ endpoints).
 * There is an issue generating the ruby client libraries. https://github.com/OpenAPITools/openapi-generator/issues/11350 has the repro steps. The `RUBY_POST_PROCESS_FILE` environment variable is a workaround.
+
+## Postman Collection
+
+You can also explore around with our API in postman.
+
+Here's our [Postman profile](https://www.postman.com/fusionauth) and [public workspace](https://www.postman.com/fusionauth/workspace).
+
+### Import Postman Collection
+
+* Log into the FusionAuth Postman team 
+* Click the `Import` button on the left hand nav, toward the top
+* Import the API definition. This should also create a new collection
+* Rename the API and collection with the correct API version
+* Copy over the description from a previously imported API (easiest to do it in two tabs)
+* Copy the new collection into the workspace.
+
 
 ## Next steps
 
