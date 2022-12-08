@@ -1,25 +1,24 @@
 # FusionAuth OpenAPI
 
-## [Generate libraries](#generate-libraries)
-### [Java](#java)
-### [Ruby](#ruby)
-## [Test the YAML](#test-the-yaml)
-## [Postman Collection](#postman-collection)
-## [Known issues](#known-issues)
-## [Next steps](#next-steps)
-## [Questions and support](#contributions-and-support)
-## [Contributing](#contributing)
-## [License](#license)
-
 This is an OpenAPI specification for the FusionAuth API.
 
-You can find the file here:
-
-[openapi.yaml](https://github.com/FusionAuth/fusionauth-openapi/blob/main/openapi.yaml)
+[Here's the openapi specification YAML file](https://github.com/FusionAuth/fusionauth-openapi/blob/main/openapi.yaml).
 
 It can be used in a variety of contexts, including generating client libraries, tracking API changes over time and testing. More here: https://openapi.tools/
 
 Use this file to do all your OpenAPI related actions. For additional information and documentation on FusionAuth refer to [https://fusionauth.io](https://fusionauth.io).
+
+* [Generate libraries](#generate-libraries)
+* [Java](#java)
+* [Ruby](#ruby)
+* [Test the YAML](#test-the-yaml)
+* [Postman Collection](#postman-collection)
+* [Known issues](#known-issues)
+* [Next steps](#next-steps)
+* [Questions and support](#contributions-and-support)
+* [Contributing](#contributing)
+* [License](#license)
+
 
 ## Generate libraries
 
