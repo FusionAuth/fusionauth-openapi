@@ -2692,6 +2692,8 @@ components:
         keyId:
           type: string
           format: uuid
+        loginHintConfiguration:
+          "$ref": "#/components/schemas/LoginHintConfiguration"
         nameIdFormat:
           type: string
         postRequest:
@@ -7874,6 +7876,14 @@ components:
       - SendPasswordless
       - SendRegistrationVerification
       - SendTwoFactor
+    LoginHintConfiguration:
+      description: ''
+      type: object
+      properties:
+        parameterName:
+          type: string
+        enabled:
+          type: boolean
     FamilyRequest:
       description: API request for managing families and members.
       type: object
