@@ -417,6 +417,9 @@ components:
         samlv2PopulateId:
           type: string
           format: uuid
+        selfServiceRegistrationValidationId:
+          type: string
+          format: uuid
     RegistrationUnverifiedOptions:
       description: ''
       type: object
@@ -715,6 +718,8 @@ components:
         userId:
           type: string
           format: uuid
+        maxHitCount:
+          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -1866,6 +1871,8 @@ components:
         userId:
           type: string
           format: uuid
+        maxHitCount:
+          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -2444,6 +2451,7 @@ components:
       - SCIMServerGroupResponseConverter
       - SCIMServerUserRequestConverter
       - SCIMServerUserResponseConverter
+      - SelfServiceRegistrationValidation
     SecureGeneratorConfiguration:
       description: ''
       type: object
@@ -2864,6 +2872,8 @@ components:
       properties:
         name:
           type: string
+        maxHitCount:
+          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -2874,6 +2884,8 @@ components:
       description: ''
       type: object
       properties:
+        bundleId:
+          type: string
         buttonText:
           type: string
         keyId:
@@ -3389,6 +3401,8 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         type:
           "$ref": "#/components/schemas/EventLogType"
+        maxHitCount:
+          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -3857,6 +3871,8 @@ components:
       description: ''
       type: object
       properties:
+        bundleId:
+          type: string
         buttonText:
           type: string
         keyId:
@@ -4458,6 +4474,8 @@ components:
         tenantId:
           type: string
           format: uuid
+        maxHitCount:
+          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -5401,6 +5419,8 @@ components:
       description: ''
       type: object
       properties:
+        maxHitCount:
+          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -5761,6 +5781,8 @@ components:
         userId:
           type: string
           format: uuid
+        maxHitCount:
+          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -5971,6 +5993,8 @@ components:
       properties:
         name:
           type: string
+        maxHitCount:
+          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -6104,6 +6128,9 @@ components:
           "$ref": "#/components/schemas/Application"
         role:
           "$ref": "#/components/schemas/ApplicationRole"
+        sourceApplicationId:
+          type: string
+          format: uuid
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
     TwoFactorResponse:
@@ -6601,6 +6628,8 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/SortField"
+        maxHitCount:
+          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -6750,6 +6779,8 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         user:
           type: string
+        maxHitCount:
+          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -7652,6 +7683,8 @@ components:
       description: ''
       type: object
       properties:
+        includeArchived:
+          type: boolean
         lastNBytes:
           type: integer
         dateTimeSecondsFormat:
