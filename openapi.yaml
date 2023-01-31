@@ -126,6 +126,16 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         name:
           type: string
+    SAMLv2DestinationAssertionConfiguration:
+      description: ''
+      type: object
+      properties:
+        alternates:
+          type: array
+          items:
+            type: string
+        policy:
+          "$ref": "#/components/schemas/SAMLv2DestinationAssertionPolicy"
     FormRequest:
       description: Form response.
       type: object
@@ -718,8 +728,6 @@ components:
         userId:
           type: string
           format: uuid
-        maxHitCount:
-          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -1871,8 +1879,6 @@ components:
         userId:
           type: string
           format: uuid
-        maxHitCount:
-          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -2008,6 +2014,13 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/UserAction"
+    SAMLv2DestinationAssertionPolicy:
+      description: ''
+      type: string
+      enum:
+      - Enabled
+      - Disabled
+      - AllowAlternates
     WebAuthnStartResponse:
       description: API response for starting a WebAuthn authentication ceremony
       type: object
@@ -2685,21 +2698,20 @@ components:
           type: array
           uniqueItems: true
           items: {}
+        assertionConfiguration:
+          "$ref": "#/components/schemas/SAMLv2AssertionConfiguration"
         buttonImageURL:
           type: string
           format: URI
         buttonText:
           type: string
-        emailClaim:
-          type: string
         idpEndpoint:
           type: string
           format: URI
+        idpInitiatedConfiguration:
+          "$ref": "#/components/schemas/SAMLv2IdpInitiatedConfiguration"
         issuer:
           type: string
-        keyId:
-          type: string
-          format: uuid
         loginHintConfiguration:
           "$ref": "#/components/schemas/LoginHintConfiguration"
         nameIdFormat:
@@ -2711,43 +2723,19 @@ components:
           format: uuid
         signRequest:
           type: boolean
+        xmlSignatureC14nMethod:
+          "$ref": "#/components/schemas/CanonicalizationMethod"
+        emailClaim:
+          type: string
+        keyId:
+          type: string
+          format: uuid
         uniqueIdClaim:
           type: string
         useNameIdForEmail:
           type: boolean
         usernameClaim:
           type: string
-        xmlSignatureC14nMethod:
-          "$ref": "#/components/schemas/CanonicalizationMethod"
-        data:
-          type: object
-          additionalProperties:
-            type: object
-        applicationConfiguration:
-          type: object
-          additionalProperties:
-            "$ref": "#/components/schemas/SAMLv2ApplicationConfiguration"
-        debug:
-          type: boolean
-        id:
-          type: string
-          format: uuid
-        insertInstant:
-          "$ref": "#/components/schemas/ZonedDateTime"
-        lambdaConfiguration:
-          "$ref": "#/components/schemas/ProviderLambdaConfiguration"
-        lastUpdateInstant:
-          "$ref": "#/components/schemas/ZonedDateTime"
-        linkingStrategy:
-          "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
-        name:
-          type: string
-        tenantConfiguration:
-          type: object
-          additionalProperties:
-            "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
-        type:
-          "$ref": "#/components/schemas/IdentityProviderType"
     FacebookIdentityProvider:
       description: Facebook social login provider.
       type: object
@@ -2872,8 +2860,6 @@ components:
       properties:
         name:
           type: string
-        maxHitCount:
-          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -3347,9 +3333,9 @@ components:
       description: SAML v2 IdP Initiated identity provider configuration.
       type: object
       properties:
-        emailClaim:
-          type: string
         issuer:
+          type: string
+        emailClaim:
           type: string
         keyId:
           type: string
@@ -3360,35 +3346,6 @@ components:
           type: boolean
         usernameClaim:
           type: string
-        data:
-          type: object
-          additionalProperties:
-            type: object
-        applicationConfiguration:
-          type: object
-          additionalProperties:
-            "$ref": "#/components/schemas/SAMLv2IdPInitiatedApplicationConfiguration"
-        debug:
-          type: boolean
-        id:
-          type: string
-          format: uuid
-        insertInstant:
-          "$ref": "#/components/schemas/ZonedDateTime"
-        lambdaConfiguration:
-          "$ref": "#/components/schemas/ProviderLambdaConfiguration"
-        lastUpdateInstant:
-          "$ref": "#/components/schemas/ZonedDateTime"
-        linkingStrategy:
-          "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
-        name:
-          type: string
-        tenantConfiguration:
-          type: object
-          additionalProperties:
-            "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
-        type:
-          "$ref": "#/components/schemas/IdentityProviderType"
     EventLogSearchCriteria:
       description: Search criteria for the event log.
       type: object
@@ -3401,8 +3358,6 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         type:
           "$ref": "#/components/schemas/EventLogType"
-        maxHitCount:
-          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -3488,6 +3443,8 @@ components:
           items:
             type: string
             format: URI
+        authorizedURLValidationPolicy:
+          "$ref": "#/components/schemas/Oauth2AuthorizedURLValidationPolicy"
         clientAuthenticationPolicy:
           "$ref": "#/components/schemas/ClientAuthenticationPolicy"
         clientId:
@@ -4474,8 +4431,6 @@ components:
         tenantId:
           type: string
           format: uuid
-        maxHitCount:
-          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -5331,6 +5286,12 @@ components:
         tenantId:
           type: string
           format: uuid
+    SAMLv2AssertionConfiguration:
+      description: ''
+      type: object
+      properties:
+        destination:
+          "$ref": "#/components/schemas/SAMLv2DestinationAssertionConfiguration"
     WebAuthnRegisterCompleteRequest:
       description: Request to complete the WebAuthn registration ceremony for a new
         credential,.
@@ -5419,8 +5380,6 @@ components:
       description: ''
       type: object
       properties:
-        maxHitCount:
-          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -5781,8 +5740,6 @@ components:
         userId:
           type: string
           format: uuid
-        maxHitCount:
-          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -5993,8 +5950,6 @@ components:
       properties:
         name:
           type: string
-        maxHitCount:
-          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -6628,8 +6583,6 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/SortField"
-        maxHitCount:
-          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -6779,8 +6732,6 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         user:
           type: string
-        maxHitCount:
-          type: integer
         numberOfResults:
           type: integer
         orderBy:
@@ -6898,6 +6849,50 @@ components:
         total:
           type: integer
           format: int64
+    BaseSAMLv2IdentityProvider:
+      description: ''
+      type: object
+      properties:
+        emailClaim:
+          type: string
+        keyId:
+          type: string
+          format: uuid
+        uniqueIdClaim:
+          type: string
+        useNameIdForEmail:
+          type: boolean
+        usernameClaim:
+          type: string
+        data:
+          type: object
+          additionalProperties:
+            type: object
+        applicationConfiguration:
+          type: object
+          additionalProperties:
+            "$ref": "#/components/schemas/BaseSAMLv2ApplicationConfiguration"
+        debug:
+          type: boolean
+        id:
+          type: string
+          format: uuid
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        lambdaConfiguration:
+          "$ref": "#/components/schemas/ProviderLambdaConfiguration"
+        lastUpdateInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        linkingStrategy:
+          "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
+        name:
+          type: string
+        tenantConfiguration:
+          type: object
+          additionalProperties:
+            "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        type:
+          "$ref": "#/components/schemas/IdentityProviderType"
     LinkedInApplicationConfiguration:
       description: ''
       type: object
@@ -8004,6 +7999,12 @@ components:
             type: object
         createRegistration:
           type: boolean
+    Oauth2AuthorizedURLValidationPolicy:
+      description: ''
+      type: string
+      enum:
+      - AllowWildcards
+      - ExactMatch
     UserActionOption:
       description: Models content user action options.
       type: object
@@ -8508,6 +8509,15 @@ components:
         totalRegistrations:
           type: integer
           format: int64
+    SAMLv2IdpInitiatedConfiguration:
+      description: Config for regular SAML IDP configurations that support IDP-initiated
+        requests
+      type: object
+      properties:
+        issuer:
+          type: string
+        enabled:
+          type: boolean
     SystemConfigurationRequest:
       description: Request for the system configuration API.
       type: object
@@ -8656,9 +8666,7 @@ components:
       - "$ref": "#/components/schemas/XboxIdentityProvider"
       - "$ref": "#/components/schemas/LinkedInIdentityProvider"
       - "$ref": "#/components/schemas/ExternalJWTIdentityProvider"
-      - "$ref": "#/components/schemas/SAMLv2IdentityProvider"
       - "$ref": "#/components/schemas/FacebookIdentityProvider"
-      - "$ref": "#/components/schemas/SAMLv2IdPInitiatedIdentityProvider"
       - "$ref": "#/components/schemas/AppleIdentityProvider"
       - "$ref": "#/components/schemas/OpenIdConnectIdentityProvider"
       - "$ref": "#/components/schemas/GoogleIdentityProvider"
@@ -8666,6 +8674,7 @@ components:
       - "$ref": "#/components/schemas/TwitchIdentityProvider"
       - "$ref": "#/components/schemas/EpicGamesIdentityProvider"
       - "$ref": "#/components/schemas/NintendoIdentityProvider"
+      - "$ref": "#/components/schemas/BaseSAMLv2IdentityProvider"
       - "$ref": "#/components/schemas/TwitterIdentityProvider"
       - "$ref": "#/components/schemas/HYPRIdentityProvider"
   securitySchemes:
