@@ -2423,18 +2423,10 @@ components:
       description: ''
       type: object
       properties:
-        displayName:
-          type: string
-        identityProviderId:
-          type: string
-          format: uuid
-        identityProviderUserId:
-          type: string
+        identityProviderLink:
+          "$ref": "#/components/schemas/IdentityProviderLink"
         pendingIdPLinkId:
           type: string
-        userId:
-          type: string
-          format: uuid
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
     LambdaType:
