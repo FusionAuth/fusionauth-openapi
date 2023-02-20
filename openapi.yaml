@@ -8502,7 +8502,7 @@ components:
           type: integer
           format: int64
     SAMLv2IdpInitiatedConfiguration:
-      description: Config for regular SAML IDP configurations that support IDP-initiated
+      description: Config for regular SAML IDP configurations that support IdP initiated
         requests
       type: object
       properties:
