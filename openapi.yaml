@@ -843,6 +843,8 @@ components:
       description: Steam gaming login provider.
       type: object
       properties:
+        apiMode:
+          "$ref": "#/components/schemas/SteamAPIMode"
         buttonText:
           type: string
         client_id:
@@ -1369,6 +1371,8 @@ components:
       description: ''
       type: object
       properties:
+        apiMode:
+          "$ref": "#/components/schemas/SteamAPIMode"
         buttonText:
           type: string
         client_id:
@@ -1624,6 +1628,14 @@ components:
           type: string
         zoneId:
           "$ref": "#/components/schemas/ZoneId"
+    GoogleIdentityProviderProperties:
+      description: Google social login provider parameters.
+      type: object
+      properties:
+        api:
+          type: string
+        button:
+          type: string
     OAuthError:
       description: ''
       type: object
@@ -4906,6 +4918,8 @@ components:
           type: string
         loginMethod:
           "$ref": "#/components/schemas/IdentityProviderLoginMethod"
+        properties:
+          "$ref": "#/components/schemas/GoogleIdentityProviderProperties"
         scope:
           type: string
         data:
@@ -5567,6 +5581,8 @@ components:
           type: string
         loginMethod:
           "$ref": "#/components/schemas/IdentityProviderLoginMethod"
+        properties:
+          "$ref": "#/components/schemas/GoogleIdentityProviderProperties"
         scope:
           type: string
         data:
@@ -6792,6 +6808,12 @@ components:
           type: array
           items:
             type: string
+    SteamAPIMode:
+      description: Steam API modes.
+      type: string
+      enum:
+      - Public
+      - Partner
     LogoutRequest:
       description: Request for the Logout API that can be used as an alternative to
         URL parameters.
@@ -8562,6 +8584,7 @@ components:
       enum:
       - UsePopup
       - UseRedirect
+      - UseVendorJavaScript
     MessengerRequest:
       description: ''
       type: object
