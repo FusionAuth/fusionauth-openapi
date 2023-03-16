@@ -24,4 +24,4 @@ jobs:
         uses: openapi-generators/openapitools-generator-action@v1
         with:
           generator: java
-          config-file: openapi.yaml
+          openapi-file: openapi.yaml
