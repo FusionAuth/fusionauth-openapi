@@ -18,14 +18,9 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      # Use the action to generate a client package
+      # This uses the default path for the openapi document and thus assumes there is an openapi.json in the current workspace.
+      - name: Generate Java Client
+        uses: openapi-generators/openapitools-generator-action@v1
         with:
-          node-version: 18
-      - name: Install the tools
-        run: |
-          npm install @openapitools/openapi-generator-cli
-        shell: bash
-      - name: Validate the openapi file
-        run: |
-          openapi-generator-cli validate -i openapi.yaml 
-        shell: bash
+          generator: java
