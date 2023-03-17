@@ -173,6 +173,17 @@ components:
       - email
       - number
       - string
+    KeySearchResponse:
+      description: Key search response
+      type: object
+      properties:
+        keys:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Key"
+        total:
+          type: integer
+          format: int64
     ApplicationRegistrationDeletePolicy:
       description: A Application-level policy for deleting Users.
       type: object
@@ -271,6 +282,17 @@ components:
           format: uuid
         type:
           "$ref": "#/components/schemas/EventType"
+    EmailTemplateSearchResponse:
+      description: Email template search response
+      type: object
+      properties:
+        emailTemplates:
+          type: array
+          items:
+            "$ref": "#/components/schemas/EmailTemplate"
+        total:
+          type: integer
+          format: int64
     InstanceEvent:
       description: A marker interface indicating this event is not scoped to a tenant
         and will be sent to all webhooks.
@@ -583,6 +605,12 @@ components:
           type: string
         y:
           type: string
+    ConsentSearchRequest:
+      description: Search request for Consents
+      type: object
+      properties:
+        search:
+          "$ref": "#/components/schemas/ConsentSearchCriteria"
     UserReactivateEvent:
       description: Models the User Reactivate Event.
       type: object
@@ -807,6 +835,17 @@ components:
           format: uuid
         type:
           "$ref": "#/components/schemas/EventType"
+    ApplicationSearchResponse:
+      description: Application search response
+      type: object
+      properties:
+        applications:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Application"
+        total:
+          type: integer
+          format: int64
     OAuthConfigurationResponse:
       description: ''
       type: object
@@ -1264,6 +1303,22 @@ components:
           type: integer
         enabled:
           type: boolean
+    KeySearchCriteria:
+      description: Search criteria for Keys
+      type: object
+      properties:
+        algorithm:
+          "$ref": "#/components/schemas/KeyAlgorithm"
+        name:
+          type: string
+        type:
+          "$ref": "#/components/schemas/KeyType"
+        numberOfResults:
+          type: integer
+        orderBy:
+          type: string
+        startRow:
+          type: integer
     ReactorFeatureStatus:
       description: ''
       type: string
@@ -1483,6 +1538,27 @@ components:
       enum:
       - Assertion
       - Response
+    UserCommentSearchCriteria:
+      description: Search criteria for user comments.
+      type: object
+      properties:
+        comment:
+          type: string
+        commenterId:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        numberOfResults:
+          type: integer
+        orderBy:
+          type: string
+        startRow:
+          type: integer
     LinkedInIdentityProvider:
       description: ''
       type: object
@@ -1698,6 +1774,22 @@ components:
         reconcileId:
           type: string
           format: uuid
+    LambdaSearchCriteria:
+      description: Search criteria for Lambdas
+      type: object
+      properties:
+        body:
+          type: string
+        name:
+          type: string
+        type:
+          "$ref": "#/components/schemas/LambdaType"
+        numberOfResults:
+          type: integer
+        orderBy:
+          type: string
+        startRow:
+          type: integer
     SystemConfiguration:
       description: ''
       type: object
@@ -1792,6 +1884,18 @@ components:
         userActionId:
           type: string
           format: uuid
+    TenantSearchCriteria:
+      description: Search criteria for Tenants
+      type: object
+      properties:
+        name:
+          type: string
+        numberOfResults:
+          type: integer
+        orderBy:
+          type: string
+        startRow:
+          type: integer
     TenantSCIMServerConfiguration:
       description: ''
       type: object
@@ -2975,6 +3079,18 @@ components:
           type: boolean
         noJWT:
           type: boolean
+    ConsentSearchCriteria:
+      description: Search criteria for Consents
+      type: object
+      properties:
+        name:
+          type: string
+        numberOfResults:
+          type: integer
+        orderBy:
+          type: string
+        startRow:
+          type: integer
     JWTConfiguration:
       description: JWT Configuration. A JWT Configuration for an Application may not
         be active if it is using the global configuration, the configuration  may
@@ -3243,6 +3359,17 @@ components:
         userId:
           type: string
           format: uuid
+    UserCommentSearchResponse:
+      description: User comment search response
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int64
+        userComments:
+          type: array
+          items:
+            "$ref": "#/components/schemas/UserComment"
     CaptchaMethod:
       description: ''
       type: string
@@ -3492,6 +3619,23 @@ components:
         userId:
           type: string
           format: uuid
+    ApplicationSearchCriteria:
+      description: Search criteria for Applications
+      type: object
+      properties:
+        name:
+          type: string
+        state:
+          "$ref": "#/components/schemas/ObjectState"
+        tenantId:
+          type: string
+          format: uuid
+        numberOfResults:
+          type: integer
+        orderBy:
+          type: string
+        startRow:
+          type: integer
     UserRegistrationVerifiedEvent:
       description: Models the User Registration Verified Event.
       type: object
@@ -3828,6 +3972,17 @@ components:
       properties:
         search:
           "$ref": "#/components/schemas/EntityGrantSearchCriteria"
+    WebhookSearchResponse:
+      description: Webhook search response
+      type: object
+      properties:
+        total:
+          type: integer
+          format: int64
+        webhooks:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Webhook"
     AppleIdentityProvider:
       description: ''
       type: object
@@ -4046,6 +4201,12 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/IdentityProviderField"
+    WebhookSearchRequest:
+      description: Search request for webhooks
+      type: object
+      properties:
+        search:
+          "$ref": "#/components/schemas/WebhookSearchCriteria"
     GroupMemberAddCompleteEvent:
       description: Models the Group Member Add Complete Event.
       type: object
@@ -4984,6 +5145,12 @@ components:
             type: object
         createRegistration:
           type: boolean
+    KeySearchRequest:
+      description: Search request for Keys
+      type: object
+      properties:
+        search:
+          "$ref": "#/components/schemas/KeySearchCriteria"
     LambdaEngineType:
       description: ''
       type: string
@@ -5099,6 +5266,12 @@ components:
       - authorization_pending
       - expired_token
       - unsupported_token_type
+    TenantSearchRequest:
+      description: Search request for Tenants
+      type: object
+      properties:
+        search:
+          "$ref": "#/components/schemas/TenantSearchCriteria"
     PublicKeyResponse:
       description: JWT Public Key Response Object
       type: object
@@ -5138,6 +5311,17 @@ components:
           type: string
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
+    IdentityProviderSearchResponse:
+      description: Identity Provider response.
+      type: object
+      properties:
+        identityProviders:
+          type: array
+          items:
+            "$ref": "#/components/schemas/IdentityProviderField"
+        total:
+          type: integer
+          format: int64
     MetaData:
       type: object
       properties:
@@ -6134,6 +6318,21 @@ components:
           "$ref": "#/components/schemas/SAMLv2SingleLogout"
         xmlSignatureC14nMethod:
           "$ref": "#/components/schemas/CanonicalizationMethod"
+    IdentityProviderSearchCriteria:
+      description: Search criteria for Identity Providers.
+      type: object
+      properties:
+        applicationId:
+          type: string
+          format: uuid
+        name:
+          type: string
+        numberOfResults:
+          type: integer
+        orderBy:
+          type: string
+        startRow:
+          type: integer
     JWTVendRequest:
       description: ''
       type: object
@@ -6274,6 +6473,12 @@ components:
       - RS384
       - RS512
       - none
+    IdentityProviderSearchRequest:
+      description: Search request for Identity Providers
+      type: object
+      properties:
+        search:
+          "$ref": "#/components/schemas/IdentityProviderSearchCriteria"
     KeyUse:
       description: The use type of a key.
       type: string
@@ -6537,6 +6742,17 @@ components:
           format: uuid
         type:
           "$ref": "#/components/schemas/EventType"
+    ThemeSearchResponse:
+      description: Search response for Themes
+      type: object
+      properties:
+        themes:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Theme"
+        total:
+          type: integer
+          format: int64
     UserVerificationRequirement:
       description: Used to express whether the Relying Party requires <a href="https:www.w3.orgTRwebauthn-2#user-verification">user
         verification<a> for the  current operation.
@@ -6563,6 +6779,18 @@ components:
         verification_uri_complete:
           type: string
           format: URI
+    EmailTemplateSearchCriteria:
+      description: Search criteria for Email templates
+      type: object
+      properties:
+        name:
+          type: string
+        numberOfResults:
+          type: integer
+        orderBy:
+          type: string
+        startRow:
+          type: integer
     APIKeyPermissions:
       type: object
       properties:
@@ -6863,50 +7091,6 @@ components:
         total:
           type: integer
           format: int64
-    BaseSAMLv2IdentityProvider:
-      description: ''
-      type: object
-      properties:
-        emailClaim:
-          type: string
-        keyId:
-          type: string
-          format: uuid
-        uniqueIdClaim:
-          type: string
-        useNameIdForEmail:
-          type: boolean
-        usernameClaim:
-          type: string
-        data:
-          type: object
-          additionalProperties:
-            type: object
-        applicationConfiguration:
-          type: object
-          additionalProperties:
-            "$ref": "#/components/schemas/BaseSAMLv2ApplicationConfiguration"
-        debug:
-          type: boolean
-        id:
-          type: string
-          format: uuid
-        insertInstant:
-          "$ref": "#/components/schemas/ZonedDateTime"
-        lambdaConfiguration:
-          "$ref": "#/components/schemas/ProviderLambdaConfiguration"
-        lastUpdateInstant:
-          "$ref": "#/components/schemas/ZonedDateTime"
-        linkingStrategy:
-          "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
-        name:
-          type: string
-        tenantConfiguration:
-          type: object
-          additionalProperties:
-            "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
-        type:
-          "$ref": "#/components/schemas/IdentityProviderType"
     LinkedInApplicationConfiguration:
       description: ''
       type: object
@@ -6962,6 +7146,12 @@ components:
       properties:
         enabled:
           type: boolean
+    EmailTemplateSearchRequest:
+      description: Search request for email templates
+      type: object
+      properties:
+        search:
+          "$ref": "#/components/schemas/EmailTemplateSearchCriteria"
     ApplicationUnverifiedConfiguration:
       description: ''
       type: object
@@ -7097,6 +7287,12 @@ components:
       - Generic
       - Kafka
       - Twilio
+    ThemeSearchRequest:
+      description: Search request for Themes.
+      type: object
+      properties:
+        search:
+          "$ref": "#/components/schemas/ThemeSearchCriteria"
     PasswordValidationRulesResponse:
       description: ''
       type: object
@@ -7167,6 +7363,17 @@ components:
             "$ref": "#/components/schemas/TwoFactorTrust"
         twoFactorTrustId:
           type: string
+    ConsentSearchResponse:
+      description: Consent search response
+      type: object
+      properties:
+        consents:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Consent"
+        total:
+          type: integer
+          format: int64
     RefreshResponse:
       description: ''
       type: object
@@ -7415,12 +7622,34 @@ components:
       - UserUpdate
       - UserUpdateComplete
       - Test
+    TenantSearchResponse:
+      description: Tenant search response
+      type: object
+      properties:
+        tenants:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Tenant"
+        total:
+          type: integer
+          format: int64
     SearchRequest:
       description: Search API request.
       type: object
       properties:
         search:
           "$ref": "#/components/schemas/UserSearchCriteria"
+    LambdaSearchResponse:
+      description: Lambda search response
+      type: object
+      properties:
+        lambdas:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Lambda"
+        total:
+          type: integer
+          format: int64
     Templates:
       type: object
       properties:
@@ -7516,6 +7745,12 @@ components:
           type: string
         registrationSend:
           type: string
+    LambdaSearchRequest:
+      description: Search request for Lambdas
+      type: object
+      properties:
+        search:
+          "$ref": "#/components/schemas/LambdaSearchCriteria"
     UserPasswordResetSendEvent:
       description: Models the User Password Reset Send Event.
       type: object
@@ -7908,6 +8143,18 @@ components:
       - exclusive_with_comments
       - inclusive
       - inclusive_with_comments
+    ThemeSearchCriteria:
+      description: Search criteria for themes
+      type: object
+      properties:
+        name:
+          type: string
+        numberOfResults:
+          type: integer
+        orderBy:
+          type: string
+        startRow:
+          type: integer
     RateLimitedRequestType:
       description: ''
       type: string
@@ -7985,6 +8232,12 @@ components:
           format: uuid
         type:
           "$ref": "#/components/schemas/EventType"
+    ApplicationSearchRequest:
+      description: Search request for Applications
+      type: object
+      properties:
+        search:
+          "$ref": "#/components/schemas/ApplicationSearchCriteria"
     ConsentRequest:
       description: API request for User consent types.
       type: object
@@ -8298,6 +8551,12 @@ components:
           type: array
           items:
             type: string
+    UserCommentSearchRequest:
+      description: Search request for user comments
+      type: object
+      properties:
+        search:
+          "$ref": "#/components/schemas/UserCommentSearchCriteria"
     WebAuthnLoginRequest:
       description: Request to complete the WebAuthn registration ceremony
       type: object
@@ -8346,6 +8605,21 @@ components:
         tenantId:
           type: string
           format: uuid
+    WebhookSearchCriteria:
+      description: Search criteria for webhooks.
+      type: object
+      properties:
+        description:
+          type: string
+        tenantId:
+          type: string
+          format: uuid
+        numberOfResults:
+          type: integer
+        orderBy:
+          type: string
+        startRow:
+          type: integer
     UserPasswordResetStartEvent:
       description: Models the User Password Reset Start Event.
       type: object
@@ -8681,7 +8955,9 @@ components:
       - "$ref": "#/components/schemas/XboxIdentityProvider"
       - "$ref": "#/components/schemas/LinkedInIdentityProvider"
       - "$ref": "#/components/schemas/ExternalJWTIdentityProvider"
+      - "$ref": "#/components/schemas/SAMLv2IdentityProvider"
       - "$ref": "#/components/schemas/FacebookIdentityProvider"
+      - "$ref": "#/components/schemas/SAMLv2IdPInitiatedIdentityProvider"
       - "$ref": "#/components/schemas/AppleIdentityProvider"
       - "$ref": "#/components/schemas/OpenIdConnectIdentityProvider"
       - "$ref": "#/components/schemas/GoogleIdentityProvider"
@@ -8689,7 +8965,6 @@ components:
       - "$ref": "#/components/schemas/TwitchIdentityProvider"
       - "$ref": "#/components/schemas/EpicGamesIdentityProvider"
       - "$ref": "#/components/schemas/NintendoIdentityProvider"
-      - "$ref": "#/components/schemas/BaseSAMLv2IdentityProvider"
       - "$ref": "#/components/schemas/TwitterIdentityProvider"
       - "$ref": "#/components/schemas/HYPRIdentityProvider"
   securitySchemes:
@@ -11542,6 +11817,29 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/OAuthError"
+  "/api/application/search":
+    post:
+      description: Searches applications with the specified criteria and pagination.
+      operationId: searchApplicationsWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ApplicationSearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ApplicationSearchResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/application/{applicationId}":
     delete:
       description: Hard deletes an application. This is a dangerous operation and
@@ -13031,6 +13329,29 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/tenant/search":
+    post:
+      description: Searches tenants with the specified criteria and pagination.
+      operationId: searchTenantsWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TenantSearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TenantSearchResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/user/registration/{userId}":
     put:
       description: Updates the registration for the user with the given id and the
@@ -14363,6 +14684,52 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/email/template/search":
+    post:
+      description: Searches email templates with the specified criteria and pagination.
+      operationId: searchEmailTemplatesWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/EmailTemplateSearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/EmailTemplateSearchResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/webhook/search":
+    post:
+      description: Searches webhooks with the specified criteria and pagination.
+      operationId: searchWebhooksWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/WebhookSearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/WebhookSearchResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/webauthn/assert":
     post:
       description: Complete a WebAuthn authentication ceremony by validating the signature
@@ -14424,6 +14791,29 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/WebAuthnRegisterCompleteResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/lambda/search":
+    post:
+      description: Searches lambdas with the specified criteria and pagination.
+      operationId: searchLambdasWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/LambdaSearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/LambdaSearchResponse"
         default:
           description: Error
           content:
@@ -14589,6 +14979,29 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/user/comment/search":
+    post:
+      description: Searches user comments with the specified criteria and pagination.
+      operationId: searchUserCommentsWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UserCommentSearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UserCommentSearchResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/jwt/vend":
     post:
       description: It's a JWT vending machine!  Issue a new access token (JWT) with
@@ -14613,6 +15026,29 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/JWTVendResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/key/search":
+    post:
+      description: Searches keys with the specified criteria and pagination.
+      operationId: searchKeysWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/KeySearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/KeySearchResponse"
         default:
           description: Error
           content:
@@ -14813,6 +15249,29 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/IdentityProviderResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/consent/search":
+    post:
+      description: Searches consents with the specified criteria and pagination.
+      operationId: searchConsentsWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ConsentSearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ConsentSearchResponse"
         default:
           description: Error
           content:
@@ -15351,6 +15810,29 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/identity-provider/search":
+    post:
+      description: Searches identity providers with the specified criteria and pagination.
+      operationId: searchIdentityProvidersWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/IdentityProviderSearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/IdentityProviderSearchResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/user-action-reason":
     post:
       description: Creates a user reason. This user action reason cannot be used when
@@ -15407,6 +15889,29 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/EventLogSearchResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/theme/search":
+    post:
+      description: Searches themes with the specified criteria and pagination.
+      operationId: searchThemesWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ThemeSearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ThemeSearchResponse"
         default:
           description: Error
           content:
