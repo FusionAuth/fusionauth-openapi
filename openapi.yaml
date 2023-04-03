@@ -1292,6 +1292,8 @@ components:
         adminRegistrationFormId:
           type: string
           format: uuid
+        selfServiceFormConfiguration:
+          "$ref": "#/components/schemas/SelfServiceFormConfiguration"
         selfServiceFormId:
           type: string
           format: uuid
@@ -2017,6 +2019,8 @@ components:
         applicationId:
           type: string
           format: uuid
+        currentPassword:
+          type: string
         disableDomainBlock:
           type: boolean
         sendSetPasswordEmail:
@@ -2419,6 +2423,12 @@ components:
       - PS256
       - PS384
       - PS512
+    SelfServiceFormConfiguration:
+      description: ''
+      type: object
+      properties:
+        requireCurrentPasswordOnPasswordChange:
+          type: boolean
     RememberPreviousPasswords:
       description: ''
       type: object
