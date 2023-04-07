@@ -6337,6 +6337,8 @@ components:
           format: uuid
         name:
           type: string
+        type:
+          type: string
         numberOfResults:
           type: integer
         orderBy:
@@ -8624,6 +8626,8 @@ components:
         tenantId:
           type: string
           format: uuid
+        url:
+          type: string
         numberOfResults:
           type: integer
         orderBy:
