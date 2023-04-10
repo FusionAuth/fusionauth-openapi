@@ -6338,7 +6338,7 @@ components:
         name:
           type: string
         type:
-          type: string
+          "$ref": "#/components/schemas/IdentityProviderType"
         numberOfResults:
           type: integer
         orderBy:
