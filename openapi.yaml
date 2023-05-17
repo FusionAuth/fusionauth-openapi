@@ -3117,6 +3117,8 @@ components:
           "$ref": "#/components/schemas/RefreshTokenExpirationPolicy"
         refreshTokenRevocationPolicy:
           "$ref": "#/components/schemas/RefreshTokenRevocationPolicy"
+        refreshTokenSlidingWindowConfiguration:
+          "$ref": "#/components/schemas/RefreshTokenSlidingWindowConfiguration"
         refreshTokenTimeToLiveInMinutes:
           type: integer
         refreshTokenUsagePolicy:
@@ -4846,6 +4848,7 @@ components:
       enum:
       - Fixed
       - SlidingWindow
+      - SlidingWindowWithMaximumLifetime
     IdentityProviderLoginRequest:
       description: Login API request object used for login to third-party systems
         (i.e. Login with Facebook).
@@ -6328,6 +6331,12 @@ components:
           "$ref": "#/components/schemas/SAMLv2SingleLogout"
         xmlSignatureC14nMethod:
           "$ref": "#/components/schemas/CanonicalizationMethod"
+    RefreshTokenSlidingWindowConfiguration:
+      description: ''
+      type: object
+      properties:
+        maximumTimeToLiveInMinutes:
+          type: integer
     IdentityProviderSearchCriteria:
       description: Search criteria for Identity Providers.
       type: object
