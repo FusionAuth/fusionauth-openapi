@@ -25,3 +25,4 @@ jobs:
         with:
           generator: java
           openapi-file: openapi.yaml
+          generator-tag: v6.6.0
