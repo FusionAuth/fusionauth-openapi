@@ -2749,6 +2749,22 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/RefreshToken"
+    DeviceApprovalResponse:
+      description: ''
+      type: object
+      properties:
+        deviceGrantStatus:
+          type: string
+        deviceInfo:
+          "$ref": "#/components/schemas/DeviceInfo"
+        identityProviderLink:
+          "$ref": "#/components/schemas/IdentityProviderLink"
+        tenantId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
     JWT:
       description: 'JSON Web Token (JWT) as defined by RFC 7519.  <pre>  From RFC
         7519 Section 1. Introduction:     The suggested pronunciation of JWT is the
@@ -3620,6 +3636,9 @@ components:
       description: ''
       type: object
       properties:
+        applicationId:
+          type: string
+          format: uuid
         email:
           type: string
         method:
@@ -4397,7 +4416,7 @@ components:
         name:
           type: string
         type:
-          "$ref": "#/components/schemas/DeviceType"
+          type: string
     SMSMessageTemplate:
       description: ''
       type: object
@@ -6001,6 +6020,8 @@ components:
         identityProviderId:
           type: string
           format: uuid
+        identityProviderType:
+          "$ref": "#/components/schemas/IdentityProviderType"
         identityProviderUserId:
           type: string
         insertInstant:
@@ -7439,6 +7460,23 @@ components:
           format: uuid
         type:
           "$ref": "#/components/schemas/EventType"
+    DeviceUserCodeResponse:
+      description: ''
+      type: object
+      properties:
+        client_id:
+          type: string
+        deviceInfo:
+          "$ref": "#/components/schemas/DeviceInfo"
+        expires_in:
+          type: integer
+        pendingIdPLink:
+          "$ref": "#/components/schemas/PendingIdPLink"
+        tenantId:
+          type: string
+          format: uuid
+        user_code:
+          type: string
     EntityType:
       description: Models an entity type that has a specific set of permissions. These
         are global objects and can be used across tenants.
@@ -7492,7 +7530,7 @@ components:
         errors:
           "$ref": "#/components/schemas/Errors"
     KickstartSuccessEvent:
-      description: Event event to indicate kickstart has been successfully completed.
+      description: Event to indicate kickstart has been successfully completed.
       type: object
       properties:
         instanceId:
@@ -8693,6 +8731,7 @@ components:
       - access_token_expired
       - access_token_unavailable_for_processing
       - access_token_failed_processing
+      - access_token_invalid
       - refresh_token_not_found
       - refresh_token_type_not_supported
       - invalid_client_id
@@ -8713,6 +8752,7 @@ components:
       - invalid_additional_client_id
       - invalid_target_entity_scope
       - invalid_entity_permission_scope
+      - invalid_user_id
       - grant_type_disabled
       - missing_client_id
       - missing_client_secret
@@ -8726,6 +8766,7 @@ components:
       - missing_response_type
       - missing_token
       - missing_user_code
+      - missing_user_id
       - missing_verification_uri
       - login_prevented
       - not_licensed
@@ -8788,6 +8829,16 @@ components:
           format: uuid
         type:
           "$ref": "#/components/schemas/EventType"
+    IdentityProviderPendingLinkResponse:
+      description: ''
+      type: object
+      properties:
+        identityProviderTenantConfiguration:
+          "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        linkCount:
+          type: integer
+        pendingIdPLink:
+          "$ref": "#/components/schemas/PendingIdPLink"
     ChangePasswordResponse:
       description: Change password response object.
       type: object
@@ -9539,7 +9590,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
     get:
       description: Retrieves the user action for the given Id. If you pass in null
-        for the id, this will return all of the user actions.
+        for the id, this will return all the user actions.
       operationId: retrieveUserActionWithId
       parameters:
       - name: userActionId
@@ -9604,6 +9655,21 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/oauth2/device/user-code":
+    get:
+      description: Retrieve a user_code that is part of an in-progress Device Authorization
+        Grant.  This API is useful if you want to build your own login workflow to
+        complete a device grant.  This request will require an API key. OR Retrieve
+        a user_code that is part of an in-progress Device Authorization Grant.  This
+        API is useful if you want to build your own login workflow to complete a device
+        grant.
+      operationId: retrieveDeviceUserCode
+      parameters: []
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
   "/api/ip-acl/{accessControlListId}":
     post:
       description: Creates an IP Access Control List. You can optionally specify an
@@ -10376,7 +10442,7 @@ paths:
         in: query
         schema:
           type: string
-        description: When this value is set to true all of the refresh tokens issued
+        description: When this value is set to true all the refresh tokens issued
           to the owner of the provided token will be revoked.
       - name: refreshToken
         in: query
@@ -10853,7 +10919,7 @@ paths:
       description: Retrieve a single Identity Provider user (link). OR Retrieve all
         Identity Provider users (links) for the user. Specify the optional identityProviderId
         to retrieve links for a particular IdP.
-      operationId: retrieveIdentityProvider
+      operationId: retrieveIdentityProviderLink
       parameters:
       - name: identityProviderId
         in: query
@@ -11295,7 +11361,7 @@ paths:
         upon the programming language.  See also: (method names may vary by language...
         but you''ll figure it out)   - revokeRefreshTokenById  - revokeRefreshTokenByToken  -
         revokeRefreshTokensByUserId  - revokeRefreshTokensByApplicationId  - revokeRefreshTokensByUserIdForApplication'
-      operationId: deleteJwt
+      operationId: deleteJwtRefresh
       parameters:
       - name: userId
         in: query
@@ -11432,6 +11498,28 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/oauth2/introspect":
+    post:
+      description: Inspect an access token issued as the result of the User based
+        grant such as the Authorization Code Grant, Implicit Grant, the User Credentials
+        Grant or the Refresh Grant. OR Inspect an access token issued as the result
+        of the Client Credentials Grant.
+      operationId: createIntrospect
+      security: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/IntrospectResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OAuthError"
   "/api/user/search":
     post:
       description: Retrieves the users for the given search criteria and pagination.
@@ -11821,25 +11909,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
-  "/oauth2/introspect":
-    post:
-      description: Inspect an access token issued by FusionAuth.
-      operationId: introspectAccessTokenWithId
-      security: []
-      parameters: []
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/IntrospectResponse"
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/OAuthError"
   "/api/application/search":
     post:
       description: Searches applications with the specified criteria and pagination.
@@ -12017,7 +12086,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/Errors"
     get:
-      description: Retrieves the application for the given id or all of the applications
+      description: Retrieves the application for the given id or all the applications
         if the id is null.
       operationId: retrieveApplicationWithId
       parameters:
@@ -12438,7 +12507,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
     get:
       description: Retrieves the user action reason for the given Id. If you pass
-        in null for the id, this will return all of the user action reasons.
+        in null for the id, this will return all the user action reasons.
       operationId: retrieveUserActionReasonWithId
       parameters:
       - name: userActionReasonId
@@ -12478,7 +12547,7 @@ paths:
   "/api/email/template/{emailTemplateId}":
     get:
       description: Retrieves the email template for the given Id. If you don't specify
-        the id, this will return all of the email templates.
+        the id, this will return all the email templates.
       operationId: retrieveEmailTemplateWithId
       parameters:
       - name: emailTemplateId
@@ -12644,7 +12713,7 @@ paths:
   "/api/email/template":
     get:
       description: Retrieves the email template for the given Id. If you don't specify
-        the id, this will return all of the email templates.
+        the id, this will return all the email templates.
       operationId: retrieveEmailTemplate
       parameters:
       - in: header
@@ -13312,7 +13381,7 @@ paths:
         for that application. OR Retrieves the login report between the two instants
         for a particular user by login Id. If you specify an application id, it will
         only return the login counts for that application.
-      operationId: retrieveReport
+      operationId: retrieveReportLogin
       parameters:
       - name: applicationId
         in: query
@@ -13932,7 +14001,7 @@ paths:
   "/api/message/template/{messageTemplateId}":
     get:
       description: Retrieves the message template for the given Id. If you don't specify
-        the id, this will return all of the message templates.
+        the id, this will return all the message templates.
       operationId: retrieveMessageTemplateWithId
       parameters:
       - name: messageTemplateId
@@ -14058,7 +14127,7 @@ paths:
   "/api/message/template":
     get:
       description: Retrieves the message template for the given Id. If you don't specify
-        the id, this will return all of the message templates.
+        the id, this will return all the message templates.
       operationId: retrieveMessageTemplate
       parameters: []
       responses:
@@ -14294,8 +14363,8 @@ paths:
               schema:
                 "$ref": "#/components/schemas/Errors"
     get:
-      description: Retrieves the identity provider for the given id or all of the
-        identity providers if the id is null.
+      description: Retrieves the identity provider for the given id or all the identity
+        providers if the id is null.
       operationId: retrieveIdentityProviderWithId
       parameters:
       - name: identityProviderId
@@ -14492,6 +14561,37 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/identity-provider/link/pending/{pendingLinkId}":
+    get:
+      description: Retrieve a pending identity provider link. This is useful to validate
+        a pending link and retrieve meta-data about the identity provider link.
+      operationId: retrievePendingLinkWithId
+      parameters:
+      - name: userId
+        in: query
+        schema:
+          type: string
+        description: The optional userId. When provided additional meta-data will
+          be provided to identify how many links if any the user already has.
+      - name: pendingLinkId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The pending link Id.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/IdentityProviderPendingLinkResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/user/change-password/{changePasswordId}":
     get:
       description: Check to see if the user must obtain a Trust Token Id in order
@@ -14600,7 +14700,7 @@ paths:
       description: Retrieves the Public Key configured for verifying JSON Web Tokens
         (JWT) by the key Id (kid). OR Retrieves the Public Key configured for verifying
         the JSON Web Tokens (JWT) issued by the Login API by the Application Id.
-      operationId: retrieveJwt
+      operationId: retrieveJwtPublicKey
       security: []
       parameters:
       - name: keyId
@@ -14651,7 +14751,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
   "/api/application":
     get:
-      description: Retrieves the application for the given id or all of the applications
+      description: Retrieves the application for the given id or all the applications
         if the id is null. OR Retrieves all the applications that are currently inactive.
       operationId: retrieveApplication
       parameters:
@@ -14847,7 +14947,7 @@ paths:
     get:
       description: Retrieves all the user actions that are currently inactive. OR
         Retrieves the user action for the given Id. If you pass in null for the id,
-        this will return all of the user actions.
+        this will return all the user actions.
       operationId: retrieveUserAction
       parameters:
       - name: inactive
@@ -15883,7 +15983,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
     get:
       description: Retrieves the user action reason for the given Id. If you pass
-        in null for the id, this will return all of the user action reasons.
+        in null for the id, this will return all the user action reasons.
       operationId: retrieveUserActionReason
       parameters: []
       responses:
@@ -16024,6 +16124,24 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/GroupResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/oauth2/device/approve":
+    post:
+      description: Approve a device grant.
+      operationId: approveDeviceWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/DeviceApprovalResponse"
         default:
           description: Error
           content:
@@ -16247,7 +16365,7 @@ paths:
         code returned  to send the code out-of-band. The Two-Factor login is completed
         by making a request to the Two-Factor Login  API (/api/two-factor/login).
         with the two-factor identifier and the one-time use code.  This API is intended
-        to allow you to begin a Two-Factor login outside of a normal login that originated
+        to allow you to begin a Two-Factor login outside a normal login that originated
         from the Login API (/api/login).
       operationId: startTwoFactorLoginWithId
       parameters: []
@@ -16840,3 +16958,113 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/.well-known/openid-configuration":
+    get:
+      description: Returns the well known OpenID Configuration JSON document
+      operationId: retrieveOpenIdConfigurationWithId
+      security: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/OpenIdConfiguration"
+        default:
+          description: Error
+  "/api/reactor/metrics":
+    get:
+      description: Retrieves the FusionAuth Reactor metrics.
+      operationId: retrieveReactorMetricsWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ReactorMetricsResponse"
+        default:
+          description: Error
+  "/api/system/version":
+    get:
+      description: Retrieves the FusionAuth version string.
+      operationId: retrieveVersionWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/VersionResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/.well-known/jwks.json":
+    get:
+      description: Returns public keys used by FusionAuth to cryptographically verify
+        JWTs using the JSON Web Key format.
+      operationId: retrieveJsonWebKeySetWithId
+      security: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/JWKSResponse"
+        default:
+          description: Error
+  "/api/report/totals":
+    get:
+      description: Retrieves the totals report. This contains all the total counts
+        for each application and the global registration count.
+      operationId: retrieveTotalReportWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TotalsReportResponse"
+        default:
+          description: Error
+  "/api/tenant/password-validation-rules":
+    get:
+      description: Retrieves the password validation rules for a specific tenant.
+        This method requires a tenantId to be provided  through the use of a Tenant
+        scoped API key or an HTTP header X-FusionAuth-TenantId to specify the Tenant
+        Id.  This API does not require an API key.
+      operationId: retrievePasswordValidationRulesWithId
+      security: []
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PasswordValidationRulesResponse"
+        default:
+          description: Error
+  "/api/key":
+    get:
+      description: Retrieves all the keys.
+      operationId: retrieveKeysWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/KeyResponse"
+        default:
+          description: Error
