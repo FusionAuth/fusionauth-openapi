@@ -36,6 +36,24 @@ components:
         scimUserResponseConverterId:
           type: string
           format: uuid
+    SAMLv2AssertionEncryptionConfiguration:
+      type: object
+      properties:
+        digestAlgorithm:
+          type: string
+        encryptionAlgorithm:
+          type: string
+        keyLocation:
+          type: string
+        keyTransportAlgorithm:
+          type: string
+        keyTransportEncryptionKeyId:
+          type: string
+          format: uuid
+        maskGenerationFunction:
+          type: string
+        enabled:
+          type: boolean
     UserActionReason:
       description: Models action reasons.
       type: object
@@ -2071,6 +2089,8 @@ components:
     SAMLv2Configuration:
       type: object
       properties:
+        assertionEncryptionConfiguration:
+          "$ref": "#/components/schemas/SAMLv2AssertionEncryptionConfiguration"
         audience:
           type: string
         authorizedRedirectURLs:
@@ -3578,6 +3598,8 @@ components:
         middleName:
           "$ref": "#/components/schemas/Requirable"
         mobilePhone:
+          "$ref": "#/components/schemas/Requirable"
+        preferredLanguages:
           "$ref": "#/components/schemas/Requirable"
         type:
           "$ref": "#/components/schemas/RegistrationType"
@@ -6020,6 +6042,8 @@ components:
         identityProviderId:
           type: string
           format: uuid
+        identityProviderName:
+          type: string
         identityProviderType:
           "$ref": "#/components/schemas/IdentityProviderType"
         identityProviderUserId:
@@ -8949,7 +8973,7 @@ components:
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
     EventLogCreateEvent:
-      description: Event event to an event log was created.
+      description: An Event "event" to indicate an event log was created.
       type: object
       properties:
         eventLog:
