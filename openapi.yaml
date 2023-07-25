@@ -2110,6 +2110,8 @@ components:
         keyId:
           type: string
           format: uuid
+        loginHintConfiguration:
+          "$ref": "#/components/schemas/LoginHintConfiguration"
         logout:
           "$ref": "#/components/schemas/SAMLv2Logout"
         logoutURL:
