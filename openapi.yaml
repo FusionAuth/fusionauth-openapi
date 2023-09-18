@@ -3874,6 +3874,8 @@ components:
           type: string
         emailClaim:
           type: string
+        emailVerifiedClaim:
+          type: string
         issuer:
           type: string
           format: URI
