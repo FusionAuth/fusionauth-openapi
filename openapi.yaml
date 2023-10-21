@@ -718,6 +718,8 @@ components:
           items:
             type: string
             format: uuid
+        nextResults:
+          type: string
         query:
           type: string
         queryString:
@@ -1061,6 +1063,8 @@ components:
           items:
             type: string
             format: uuid
+        nextResults:
+          type: string
         query:
           type: string
         queryString:
@@ -1316,9 +1320,11 @@ components:
           type: string
           format: uuid
     TimeBasedDeletePolicy:
-      description: A policy for deleting Users.
+      description: A policy for deleting Users based upon some external criteria.
       type: object
       properties:
+        enabledInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
         numberOfDaysToRetain:
           type: integer
         enabled:
@@ -1553,6 +1559,15 @@ components:
         total:
           type: integer
           format: int64
+    WebhookSignatureConfiguration:
+      description: Configuration for signing webhooks.
+      type: object
+      properties:
+        signingKeyId:
+          type: string
+          format: uuid
+        enabled:
+          type: boolean
     XMLSignatureLocation:
       type: string
       enum:
@@ -1654,8 +1669,13 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         readTimeout:
           type: integer
+        signatureConfiguration:
+          "$ref": "#/components/schemas/WebhookSignatureConfiguration"
         sslCertificate:
           type: string
+        sslCertificateKeyId:
+          type: string
+          format: uuid
         tenantIds:
           type: array
           items:
@@ -2063,6 +2083,7 @@ components:
           type: array
           items:
             type: string
+            format: uuid
     ChangePasswordRequest:
       description: Change password request object.
       type: object
@@ -2937,6 +2958,14 @@ components:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
+    ExpandableRequest:
+      description: An expandable API request.
+      type: object
+      properties:
+        expand:
+          type: array
+          items:
+            type: string
     LocalizedIntegers:
       description: Models a set of localized Integers that can be stored as JSON.
       type: object
@@ -4131,6 +4160,8 @@ components:
           "$ref": "#/components/schemas/ContentStatus"
         verified:
           type: boolean
+        verifiedInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
     SecureIdentity:
       description: ''
       type: object
@@ -4169,6 +4200,8 @@ components:
           "$ref": "#/components/schemas/ContentStatus"
         verified:
           type: boolean
+        verifiedInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
     ApplicationExternalIdentifierConfiguration:
       description: ''
       type: object
@@ -6198,6 +6231,8 @@ components:
           "$ref": "#/components/schemas/ContentStatus"
         verified:
           type: boolean
+        verifiedInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
     EntityTypeSearchCriteria:
       description: Search criteria for entity types.
       type: object
@@ -6881,6 +6916,8 @@ components:
           items:
             type: string
             format: uuid
+        nextResults:
+          type: string
         query:
           type: string
         queryString:
@@ -7357,6 +7394,14 @@ components:
       - Generic
       - Kafka
       - Twilio
+    ExpandableResponse:
+      description: An expandable API response.
+      type: object
+      properties:
+        expandable:
+          type: array
+          items:
+            type: string
     ThemeSearchRequest:
       description: Search request for Themes.
       type: object
@@ -7726,6 +7771,10 @@ components:
       properties:
         search:
           "$ref": "#/components/schemas/UserSearchCriteria"
+        expand:
+          type: array
+          items:
+            type: string
     LambdaSearchResponse:
       description: Lambda search response
       type: object
@@ -7882,6 +7931,8 @@ components:
           type: boolean
         hardDelete:
           type: boolean
+        limit:
+          type: integer
         query:
           type: string
         queryString:
@@ -7994,10 +8045,16 @@ components:
         total:
           type: integer
           format: int64
+        nextResults:
+          type: string
         users:
           type: array
           items:
             "$ref": "#/components/schemas/User"
+        expandable:
+          type: array
+          items:
+            type: string
     SendResponse:
       description: ''
       type: object
@@ -8462,6 +8519,8 @@ components:
       description: Search results.
       type: object
       properties:
+        nextResults:
+          type: string
         results:
           type: array
           items:
@@ -8483,6 +8542,8 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/Entity"
+        nextResults:
+          type: string
         total:
           type: integer
           format: int64
