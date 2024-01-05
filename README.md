@@ -28,6 +28,8 @@ These instructions will be for openapi.
 
 ### Java
 
+To build the java client libraries:
+
 ```
 bin/java/build.sh
 ```
@@ -38,26 +40,8 @@ This will produce a jar you can use.
 
 To build the ruby client libraries:
 
-Create a file called `postprocess.sh`. Put this in the file (make sure to update with the correct `sed` path):
-
 ```
-/path/to/sed -i "" 's/END = "end".freeze/END_ENUM = "end".freeze/' $1
-```
-
-Make sure it is executable.
-
-Set an environment variable with the full path of this script:
-
-```
-export RUBY_POST_PROCESS_FILE=/path/to/postprocess.sh
-```
-
-Copy the `openapi.yaml` file to your current directory.
-
-Then generate the library:
-
-```
-npx @openapitools/openapi-generator-cli generate  --enable-post-process-file  -i openapi.yaml  -g ruby -o ruby
+bin/ruby/build.sh
 ```
 
 Read the readme in `ruby/README.md` for installation and usage instructions.
