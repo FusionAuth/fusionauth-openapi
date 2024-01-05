@@ -44,7 +44,7 @@ To build the ruby client libraries:
 bin/ruby/build.sh
 ```
 
-Read the readme in `ruby/README.md` for installation and usage instructions.
+Read the readme in `ruby/README.md` for installation and usage instructions. To install it as a gem locally using --dev, I had to build it and then install a couple of rspec dependencies by hand.
 
 More docs here: https://openapi-generator.tech/docs/generators/ruby
 
