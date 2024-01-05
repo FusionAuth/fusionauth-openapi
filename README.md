@@ -29,11 +29,10 @@ These instructions will be for openapi.
 ### Java
 
 ```
-npx @openapitools/openapi-generator-cli generate -i openapi.yaml  -g java -o java
-cd java
-mvn package
-# use jar
+bin/java/build.sh
 ```
+
+This will produce a jar you can use.
 
 ### Ruby
 
