@@ -45,6 +45,8 @@ Create a file called `postprocess.sh`. Put this in the file (make sure to update
 /path/to/sed -i "" 's/END = "end".freeze/END_ENUM = "end".freeze/' $1
 ```
 
+Make sure it is executable.
+
 Set an environment variable with the full path of this script:
 
 ```
@@ -58,6 +60,8 @@ Then generate the library:
 ```
 npx @openapitools/openapi-generator-cli generate  --enable-post-process-file  -i openapi.yaml  -g ruby -o ruby
 ```
+
+Read the readme in `ruby/README.md` for installation and usage instructions.
 
 More docs here: https://openapi-generator.tech/docs/generators/ruby
 
