@@ -28,36 +28,23 @@ These instructions will be for openapi.
 
 ### Java
 
+To build the java client libraries:
+
 ```
-npx @openapitools/openapi-generator-cli generate -i openapi.yaml  -g java -o java
-cd java
-mvn package
-# use jar
+bin/java/build.sh
 ```
+
+This will produce a jar you can use.
 
 ### Ruby
 
 To build the ruby client libraries:
 
-Create a file called `postprocess.sh`. Put this in the file (make sure to update with the correct `sed` path):
-
 ```
-/path/to/sed -i "" 's/END = "end".freeze/END_ENUM = "end".freeze/' $1
+bin/ruby/build.sh
 ```
 
-Set an environment variable with the full path of this script:
-
-```
-export RUBY_POST_PROCESS_FILE=/path/to/postprocess.sh
-```
-
-Copy the `openapi.yaml` file to your current directory.
-
-Then generate the library:
-
-```
-npx @openapitools/openapi-generator-cli generate  --enable-post-process-file  -i openapi.yaml  -g ruby -o ruby
-```
+Read the readme in `ruby/README.md` for installation and usage instructions. To install it as a gem locally using --dev, I had to build it and then install a couple of rspec dependencies by hand.
 
 More docs here: https://openapi-generator.tech/docs/generators/ruby
 
