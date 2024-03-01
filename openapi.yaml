@@ -9130,6 +9130,25 @@ components:
       - "$ref": "#/components/schemas/NintendoIdentityProvider"
       - "$ref": "#/components/schemas/TwitterIdentityProvider"
       - "$ref": "#/components/schemas/HYPRIdentityProvider"
+      discriminator:
+        propertyName: type
+        mapping:
+          Steam: "#/components/schemas/SteamIdentityProvider"
+          Xbox: "#/components/schemas/XboxIdentityProvider"
+          LinkedIn: "#/components/schemas/LinkedInIdentityProvider"
+          ExternalJWT: "#/components/schemas/ExternalJWTIdentityProvider"
+          SAMLv2: "#/components/schemas/SAMLv2IdentityProvider"
+          Facebook: "#/components/schemas/FacebookIdentityProvider"
+          SAMLv2IdPInitiated: "#/components/schemas/SAMLv2IdPInitiatedIdentityProvider"
+          Apple: "#/components/schemas/AppleIdentityProvider"
+          OpenIDConnect: "#/components/schemas/OpenIdConnectIdentityProvider"
+          Google: "#/components/schemas/GoogleIdentityProvider"
+          SonyPSN: "#/components/schemas/SonyPSNIdentityProvider"
+          Twitch: "#/components/schemas/TwitchIdentityProvider"
+          EpicGames: "#/components/schemas/EpicGamesIdentityProvider"
+          Nintendo: "#/components/schemas/NintendoIdentityProvider"
+          Twitter: "#/components/schemas/TwitterIdentityProvider"
+          HYPR: "#/components/schemas/HYPRIdentityProvider"
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
