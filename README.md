@@ -48,6 +48,16 @@ Read the readme in `ruby/README.md` for installation and usage instructions. To 
 
 More docs here: https://openapi-generator.tech/docs/generators/ruby
 
+### Dart
+
+To build the dart client libraries:
+
+```
+bin/dart/build.sh
+```
+
+This will produce a dart package you can import.
+
 ## Test the YAML
 
 ```
