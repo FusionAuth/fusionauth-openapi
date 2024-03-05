@@ -1,1 +1,5 @@
 .savant/cache
+dart/*
+java/*
+ruby/*
+openapitools.json
