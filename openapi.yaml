@@ -283,6 +283,10 @@ components:
             "$ref": "#/components/schemas/ApplicationRole"
         samlv2Configuration:
           "$ref": "#/components/schemas/SAMLv2Configuration"
+        scopes:
+          type: array
+          items:
+            "$ref": "#/components/schemas/ApplicationOAuthScope"
         state:
           "$ref": "#/components/schemas/ObjectState"
         tenantId:
@@ -395,6 +399,46 @@ components:
       - Any
       - This
       - None
+    ApplicationOAuthScope:
+      description: A custom OAuth scope for a specific application.
+      type: object
+      properties:
+        applicationId:
+          type: string
+          format: uuid
+        data:
+          type: object
+          additionalProperties:
+            type: object
+        defaultConsentDetail:
+          type: string
+        defaultConsentMessage:
+          type: string
+        description:
+          type: string
+        id:
+          type: string
+          format: uuid
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        lastUpdateInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        name:
+          type: string
+        required:
+          type: boolean
+    ApplicationOAuthScopeRequest:
+      description: The Application Scope API request object.
+      type: object
+      properties:
+        scope:
+          "$ref": "#/components/schemas/ApplicationOAuthScope"
+    ApplicationOAuthScopeResponse:
+      description: The Application Scope API response.
+      type: object
+      properties:
+        scope:
+          "$ref": "#/components/schemas/ApplicationOAuthScope"
     ApplicationRegistrationDeletePolicy:
       description: A Application-level policy for deleting Users.
       type: object
@@ -468,6 +512,10 @@ components:
       properties:
         search:
           "$ref": "#/components/schemas/ApplicationSearchCriteria"
+        expand:
+          type: array
+          items:
+            type: string
     ApplicationSearchResponse:
       description: Application search response
       type: object
@@ -479,16 +527,10 @@ components:
         total:
           type: integer
           format: int64
-    ApplicationUnverifiedConfiguration:
-      description: ''
-      type: object
-      properties:
-        registration:
-          "$ref": "#/components/schemas/UnverifiedBehavior"
-        verificationStrategy:
-          "$ref": "#/components/schemas/VerificationStrategy"
-        whenGated:
-          "$ref": "#/components/schemas/RegistrationUnverifiedOptions"
+        expandable:
+          type: array
+          items:
+            type: string
     ApplicationWebAuthnConfiguration:
       description: Application-level configuration for WebAuthn
       type: object
@@ -1299,6 +1341,8 @@ components:
           type: integer
         pendingIdPLink:
           "$ref": "#/components/schemas/PendingIdPLink"
+        scope:
+          type: string
         tenantId:
           type: string
           format: uuid
@@ -2162,6 +2206,8 @@ components:
           type: integer
         registrationVerificationOneTimeCodeGenerator:
           "$ref": "#/components/schemas/SecureGeneratorConfiguration"
+        rememberOAuthScopeConsentChoiceTimeToLiveInSeconds:
+          type: integer
         samlv2AuthNRequestIdTimeToLiveInSeconds:
           type: integer
         setupPasswordIdGenerator:
@@ -4185,6 +4231,9 @@ components:
         selfServiceRegistrationValidationId:
           type: string
           format: uuid
+        userinfoPopulateId:
+          type: string
+          format: uuid
     LambdaEngineType:
       description: ''
       type: string
@@ -4268,6 +4317,7 @@ components:
       - SCIMServerUserRequestConverter
       - SCIMServerUserResponseConverter
       - SelfServiceRegistrationValidation
+      - UserInfoPopulate
     LinkedInApplicationConfiguration:
       description: ''
       type: object
@@ -4900,6 +4950,8 @@ components:
           type: string
         clientSecret:
           type: string
+        consentMode:
+          "$ref": "#/components/schemas/OAuthScopeConsentMode"
         debug:
           type: boolean
         deviceVerificationURL:
@@ -4918,10 +4970,26 @@ components:
           format: URI
         proofKeyForCodeExchangePolicy:
           "$ref": "#/components/schemas/ProofKeyForCodeExchangePolicy"
+        providedScopePolicy:
+          "$ref": "#/components/schemas/ProvidedScopePolicy"
+        relationship:
+          "$ref": "#/components/schemas/OAuthApplicationRelationship"
         requireClientAuthentication:
           type: boolean
         requireRegistration:
           type: boolean
+        scopeHandlingPolicy:
+          "$ref": "#/components/schemas/OAuthScopeHandlingPolicy"
+        unknownScopePolicy:
+          "$ref": "#/components/schemas/UnknownScopePolicy"
+    OAuthApplicationRelationship:
+      description: The application's relationship to the authorization server. First-party
+        applications will be granted implicit permission for requested scopes.  Third-party
+        applications will use the {@link OAuthScopeConsentMode} policy.
+      type: string
+      enum:
+      - FirstParty
+      - ThirdParty
     OAuthConfigurationResponse:
       description: ''
       type: object
@@ -4962,6 +5030,7 @@ components:
       - access_token_unavailable_for_processing
       - access_token_failed_processing
       - access_token_invalid
+      - access_token_required
       - refresh_token_not_found
       - refresh_token_type_not_supported
       - invalid_client_id
@@ -5013,6 +5082,9 @@ components:
       - change_password_expired
       - change_password_validation
       - unknown
+      - missing_required_scope
+      - unknown_scope
+      - consent_canceled
     OAuthErrorType:
       type: string
       enum:
@@ -5025,6 +5097,7 @@ components:
       - server_error
       - unsupported_grant_type
       - unsupported_response_type
+      - access_denied
       - change_password_required
       - not_licensed
       - two_factor_required
@@ -5035,6 +5108,22 @@ components:
       description: ''
       type: object
       properties: {}
+    OAuthScopeConsentMode:
+      description: Controls the policy for requesting user permission to grant access
+        to requested scopes during an OAuth workflow  for a third-party application.
+      type: string
+      enum:
+      - AlwaysPrompt
+      - RememberDecision
+      - NeverPrompt
+    OAuthScopeHandlingPolicy:
+      description: Controls the policy for whether OAuth workflows will more strictly
+        adhere to the OAuth and OIDC specification  or run in backwards compatibility
+        mode.
+      type: string
+      enum:
+      - Compatibility
+      - Strict
     Oauth2AuthorizedURLValidationPolicy:
       description: ''
       type: string
@@ -5356,6 +5445,18 @@ components:
       - Required
       - NotRequired
       - NotRequiredWhenUsingClientAuthentication
+    ProvidedScopePolicy:
+      description: The handling policy for scopes provided by FusionAuth
+      type: object
+      properties:
+        address:
+          "$ref": "#/components/schemas/Requirable"
+        email:
+          "$ref": "#/components/schemas/Requirable"
+        phone:
+          "$ref": "#/components/schemas/Requirable"
+        profile:
+          "$ref": "#/components/schemas/Requirable"
     ProviderLambdaConfiguration:
       type: object
       properties:
@@ -5552,6 +5653,12 @@ components:
         advancedLambdas:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         advancedMultiFactorAuthentication:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
+        advancedOAuthScopes:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
+        advancedOAuthScopesCustomScopes:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
+        advancedOAuthScopesThirdPartyApplications:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         advancedRegistration:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
@@ -5772,6 +5879,8 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         registrationVerificationId:
           type: string
+        registrationVerificationOneTimeCode:
+          type: string
         token:
           type: string
         tokenExpirationInstant:
@@ -5813,7 +5922,7 @@ components:
           type: boolean
     Requirable:
       description: Something that can be required and thus also optional. This currently
-        extends Enableable because anything that is  requireoptional is almost always
+        extends Enableable because anything that is  requiredoptional is almost always
         enableable as well.
       type: object
       properties:
@@ -6491,6 +6600,8 @@ components:
         oauth2ChildRegistrationNotAllowedComplete:
           type: string
         oauth2CompleteRegistration:
+          type: string
+        oauth2Consent:
           type: string
         oauth2Device:
           type: string
@@ -7364,6 +7475,13 @@ components:
       enum:
       - Always
       - OnCollision
+    UnknownScopePolicy:
+      description: Policy for handling unknown OAuth scopes in the request
+      type: string
+      enum:
+      - Allow
+      - Remove
+      - Reject
     UnverifiedBehavior:
       description: ''
       type: string
@@ -8539,6 +8657,10 @@ components:
         emailVerificationOneTimeCode:
           type: string
         registrationVerificationIds:
+          type: object
+          additionalProperties:
+            type: string
+        registrationVerificationOneTimeCodes:
           type: object
           additionalProperties:
             type: string
@@ -10409,7 +10531,7 @@ paths:
         schema:
           type: string
         required: true
-        description: The Id of the application to deactivate.
+        description: The Id of the application that the role belongs to.
       - name: roleId
         in: path
         schema:
@@ -10552,6 +10674,210 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ApplicationResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/application/{applicationId}/scope/{scopeId}":
+    get:
+      description: Retrieves a custom OAuth scope.
+      operationId: retrieveOAuthScopeWithId
+      parameters:
+      - name: applicationId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the application that the OAuth scope belongs to.
+      - name: scopeId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the OAuth scope to retrieve.
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ApplicationOAuthScopeResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    patch:
+      description: Updates, via PATCH, the custom OAuth scope with the given Id for
+        the application.
+      operationId: patchOAuthScopeWithId
+      parameters:
+      - name: applicationId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the application that the OAuth scope belongs to.
+      - name: scopeId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the OAuth scope to update.
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ApplicationOAuthScopeRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ApplicationOAuthScopeResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    delete:
+      description: Hard deletes a custom OAuth scope. OAuth workflows that are still
+        requesting the deleted OAuth scope may fail depending on the application's
+        unknown scope policy.
+      operationId: deleteOAuthScopeWithId
+      parameters:
+      - name: applicationId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the application that the OAuth scope belongs to.
+      - name: scopeId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the OAuth scope to delete.
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    put:
+      description: Updates the OAuth scope with the given Id for the application.
+      operationId: updateOAuthScopeWithId
+      parameters:
+      - name: applicationId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the application that the OAuth scope belongs to.
+      - name: scopeId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the OAuth scope to update.
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ApplicationOAuthScopeRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ApplicationOAuthScopeResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    post:
+      description: Creates a new custom OAuth scope for an application. You must specify
+        the Id of the application you are creating the scope for. You can optionally
+        specify an Id for the OAuth scope on the URL, if not provided one will be
+        generated.
+      operationId: createOAuthScopeWithId
+      parameters:
+      - name: applicationId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the application to create the OAuth scope on.
+      - name: scopeId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the OAuth scope. If not provided a secure random UUID
+          will be generated.
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ApplicationOAuthScopeRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ApplicationOAuthScopeResponse"
         default:
           description: Error
           content:
@@ -15871,6 +16197,46 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/EntityTypeResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/application/{applicationId}/scope":
+    post:
+      description: Creates a new custom OAuth scope for an application. You must specify
+        the Id of the application you are creating the scope for. You can optionally
+        specify an Id for the OAuth scope on the URL, if not provided one will be
+        generated.
+      operationId: createOAuthScope
+      parameters:
+      - name: applicationId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the application to create the OAuth scope on.
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ApplicationOAuthScopeRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ApplicationOAuthScopeResponse"
         default:
           description: Error
           content:
