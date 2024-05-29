@@ -6337,6 +6337,74 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/EmailTemplateErrors"
+    SimpleThemeVariables:
+      description: Theme object for values used in the css variables for simple themes.
+      type: object
+      properties:
+        alertBackgroundColor:
+          type: string
+        alertFontColor:
+          type: string
+        backgroundImageUrl:
+          type: string
+        backgroundSize:
+          type: string
+        borderRadius:
+          type: string
+        deleteButtonColor:
+          type: string
+        deleteButtonFocusColor:
+          type: string
+        deleteButtonTextColor:
+          type: string
+        deleteButtonTextFocusColor:
+          type: string
+        errorFontColor:
+          type: string
+        errorIconColor:
+          type: string
+        fontColor:
+          type: string
+        fontFamily:
+          type: string
+        footerDisplay:
+          type: boolean
+        iconBackgroundColor:
+          type: string
+        iconColor:
+          type: string
+        infoIconColor:
+          type: string
+        inputBackgroundColor:
+          type: string
+        inputIconColor:
+          type: string
+        inputTextColor:
+          type: string
+        linkTextColor:
+          type: string
+        linkTextFocusColor:
+          type: string
+        logoImageSize:
+          type: string
+        logoImageUrl:
+          type: string
+        monoFontColor:
+          type: string
+        monoFontFamily:
+          type: string
+        pageBackgroundColor:
+          type: string
+        panelBackgroundColor:
+          type: string
+        primaryButtonColor:
+          type: string
+        primaryButtonFocusColor:
+          type: string
+        primaryButtonTextColor:
+          type: string
+        primaryButtonTextFocusColor:
+          type: string
     SonyPSNApplicationConfiguration:
       description: ''
       type: object
@@ -7018,6 +7086,10 @@ components:
           type: string
         templates:
           "$ref": "#/components/schemas/Templates"
+        type:
+          "$ref": "#/components/schemas/ThemeType"
+        variables:
+          "$ref": "#/components/schemas/SimpleThemeVariables"
     ThemeRequest:
       description: Theme API request object.
       type: object
@@ -7043,6 +7115,8 @@ components:
       properties:
         name:
           type: string
+        type:
+          "$ref": "#/components/schemas/ThemeType"
         numberOfResults:
           type: integer
         orderBy:
@@ -7066,6 +7140,11 @@ components:
         total:
           type: integer
           format: int64
+    ThemeType:
+      type: string
+      enum:
+      - advanced
+      - simple
     TimeBasedDeletePolicy:
       description: A policy for deleting Users based upon some external criteria.
       type: object
