@@ -6347,6 +6347,7 @@ components:
           type: string
         backgroundImageURL:
           type: string
+          format: URI
         backgroundSize:
           type: string
         borderRadius:
@@ -6389,6 +6390,7 @@ components:
           type: string
         logoImageURL:
           type: string
+          format: URI
         monoFontColor:
           type: string
         monoFontFamily:
