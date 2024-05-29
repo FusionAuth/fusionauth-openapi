@@ -6345,7 +6345,7 @@ components:
           type: string
         alertFontColor:
           type: string
-        backgroundImageUrl:
+        backgroundImageURL:
           type: string
         backgroundSize:
           type: string
@@ -6387,7 +6387,7 @@ components:
           type: string
         logoImageSize:
           type: string
-        logoImageUrl:
+        logoImageURL:
           type: string
         monoFontColor:
           type: string
