@@ -6482,6 +6482,10 @@ components:
           type: string
         order:
           "$ref": "#/components/schemas/Sort"
+    StatusResponse:
+      description: The public Status API response
+      type: object
+      properties: {}
     SteamAPIMode:
       description: Steam API modes.
       type: string
@@ -17542,6 +17546,36 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/OpenIdConfiguration"
+        default:
+          description: Error
+  "/api/status":
+    get:
+      description: Retrieves the FusionAuth system status. This request is anonymous
+        and does not require an API key. When an API key is not provided the response
+        will contain a single value in the JSON response indicating the current health
+        check. OR Retrieves the FusionAuth system status using an API key. Using an
+        API key will cause the response to include the product version, health checks
+        and various runtime metrics.
+      operationId: retrieveStatus
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/StatusResponse"
+        default:
+          description: Error
+  "/api/health":
+    get:
+      description: Retrieves the FusionAuth system health. This API will return 200
+        if the system is healthy, and 500 if the system is un-healthy.
+      operationId: retrieveSystemHealthWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
         default:
           description: Error
   "/api/reactor/metrics":
