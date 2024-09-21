@@ -287,6 +287,8 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/ApplicationOAuthScope"
+        smsConfiguration:
+          "$ref": "#/components/schemas/SMSConfiguration"
         state:
           "$ref": "#/components/schemas/ObjectState"
         tenantId:
@@ -1098,6 +1100,11 @@ components:
       - Required
       - NotRequired
       - NotRequiredWhenUsingPKCE
+    CodeTypes:
+      type: string
+      enum:
+      - clickable
+      - shortCode
     ConnectorLambdaConfiguration:
       type: object
       properties:
@@ -2154,6 +2161,7 @@ components:
       - UserDeleteComplete
       - UserEmailUpdate
       - UserEmailVerified
+      - UserPhoneVerified
       - UserIdentityProviderLink
       - UserIdentityProviderUnlink
       - UserLoginIdDuplicateOnCreate
@@ -2236,6 +2244,10 @@ components:
           "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         passwordlessLoginTimeToLiveInSeconds:
           type: integer
+        passwordlessShortCodeLoginGenerator:
+          "$ref": "#/components/schemas/SecureGeneratorConfiguration"
+        passwordlessShortCodeLoginTimeToLiveInSeconds:
+          type: integer
         pendingAccountLinkTimeToLiveInSeconds:
           type: integer
         registrationVerificationIdGenerator:
@@ -2251,6 +2263,12 @@ components:
         setupPasswordIdGenerator:
           "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         setupPasswordIdTimeToLiveInSeconds:
+          type: integer
+        smsVerificationIdGenerator:
+          "$ref": "#/components/schemas/SecureGeneratorConfiguration"
+        smsVerificationOneTimeCodeGenerator:
+          "$ref": "#/components/schemas/SecureGeneratorConfiguration"
+        smsVerificationTimeToLiveInSeconds:
           type: integer
         trustTokenTimeToLiveInSeconds:
           type: integer
@@ -3587,6 +3605,12 @@ components:
       - Twitch
       - Twitter
       - Xbox
+    IdentityTypes:
+      type: string
+      enum:
+      - email
+      - phoneNumber
+      - username
     ImportRequest:
       description: Import request.
       type: object
@@ -3662,7 +3686,7 @@ components:
           type: string
         kty:
           "$ref": "#/components/schemas/KeyType"
-        "n":
+        n:
           type: string
         other:
           type: object
@@ -3686,7 +3710,7 @@ components:
           type: string
         x5t#S256:
           type: string
-        "y":
+        y:
           type: string
     JSONWebKeyInfoProvider:
       description: Interface for any object that can provide JSON Web key Information.
@@ -4465,6 +4489,10 @@ components:
           type: string
         twoFactorTrustId:
           type: string
+        types:
+          type: array
+          items:
+            type: string
         applicationId:
           type: string
           format: uuid
@@ -5224,6 +5252,8 @@ components:
       properties:
         code:
           type: string
+        oneTimeCode:
+          type: string
         twoFactorTrustId:
           type: string
         applicationId:
@@ -5252,6 +5282,8 @@ components:
           type: object
           additionalProperties:
             type: object
+        transport:
+          type: string
     PasswordlessStartRequest:
       description: ''
       type: object
@@ -5259,7 +5291,11 @@ components:
         applicationId:
           type: string
           format: uuid
+        codeType:
+          type: string
         loginId:
+          type: string
+        loginType:
           type: string
         state:
           type: object
@@ -5270,6 +5306,8 @@ components:
       type: object
       properties:
         code:
+          type: string
+        oneTimeCode:
           type: string
     PendingIdPLink:
       description: ''
@@ -6065,6 +6103,17 @@ components:
           "$ref": "#/components/schemas/CanonicalizationMethod"
         enabled:
           type: boolean
+    SMSConfiguration:
+      type: object
+      properties:
+        messengerId:
+          type: string
+          format: uuid
+        verifyPhoneNumber:
+          type: boolean
+        verificationTemplateId:
+          type: string
+          format: uuid
     SMSMessage:
       description: ''
       type: object
@@ -6695,6 +6744,8 @@ components:
           "$ref": "#/components/schemas/TenantOAuth2Configuration"
         passwordEncryptionConfiguration:
           "$ref": "#/components/schemas/PasswordEncryptionConfiguration"
+        passwordlessSMSMethod:
+          "$ref": "#/components/schemas/TenantPasswordlessSMSMethod"
         passwordValidationRules:
           "$ref": "#/components/schemas/PasswordValidationRules"
         rateLimitConfiguration:
@@ -6703,6 +6754,8 @@ components:
           "$ref": "#/components/schemas/TenantRegistrationConfiguration"
         scimServerConfiguration:
           "$ref": "#/components/schemas/TenantSCIMServerConfiguration"
+        smsConfiguration:
+          "$ref": "#/components/schemas/SMSConfiguration"
         ssoConfiguration:
           "$ref": "#/components/schemas/TenantSSOConfiguration"
         state:
@@ -6803,6 +6856,17 @@ components:
         clientCredentialsAccessTokenPopulateLambdaId:
           type: string
           format: uuid
+    TenantPasswordlessSMSMethod:
+      type: object
+      properties:
+        messengerId:
+          type: string
+          format: uuid
+        templateId:
+          type: string
+          format: uuid
+        enabled:
+          type: boolean
     TenantRateLimitConfiguration:
       description: ''
       type: object
@@ -8190,6 +8254,12 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
+    UserPhoneVerifiedEvent:
+      description: Models the User Phone Verify Event.
+      type: object
+      properties:
+        user:
+          "$ref": "#/components/schemas/User"
     UserReactivateEvent:
       description: Models the User Reactivate Event.
       type: object
@@ -8516,6 +8586,34 @@ components:
         oneTimeCode:
           type: string
         verificationId:
+          type: string
+    VerifySendCompleteRequest:
+      type: object
+      properties:
+        verificationId:
+          type: string
+        oneTimeCode:
+          type: string
+        eventInfo:
+          "$ref": "#/components/schemas/EventInfo"
+    VerifyStartRequest:
+      type: object
+      properties:
+        loginId:
+          type: string
+        loginType:
+          type: string
+        applicationId:
+          type: string
+          format: uuid
+        codeType:
+          type: string
+    VerifyStartResponse:
+      type: object
+      properties:
+        verificationId:
+          type: string
+        oneTimeCode:
           type: string
     VersionResponse:
       description: ''
