@@ -287,8 +287,6 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/ApplicationOAuthScope"
-        smsConfiguration:
-          "$ref": "#/components/schemas/SMSConfiguration"
         state:
           "$ref": "#/components/schemas/ObjectState"
         tenantId:
@@ -1100,11 +1098,6 @@ components:
       - Required
       - NotRequired
       - NotRequiredWhenUsingPKCE
-    CodeTypes:
-      type: string
-      enum:
-      - clickable
-      - shortCode
     ConnectorLambdaConfiguration:
       type: object
       properties:
@@ -2161,7 +2154,7 @@ components:
       - UserDeleteComplete
       - UserEmailUpdate
       - UserEmailVerified
-      - UserPhoneVerified
+      - IdentityVerified
       - UserIdentityProviderLink
       - UserIdentityProviderUnlink
       - UserLoginIdDuplicateOnCreate
@@ -2264,10 +2257,6 @@ components:
           "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         setupPasswordIdTimeToLiveInSeconds:
           type: integer
-        smsVerificationIdGenerator:
-          "$ref": "#/components/schemas/SecureGeneratorConfiguration"
-        smsVerificationOneTimeCodeGenerator:
-          "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         smsVerificationTimeToLiveInSeconds:
           type: integer
         trustTokenTimeToLiveInSeconds:
@@ -3611,6 +3600,16 @@ components:
       - email
       - phoneNumber
       - username
+    IdentityVerifiedEvent:
+      description: Models the identity verified event
+      type: object
+      properties:
+        loginId:
+          type: string
+        loginIdType:
+          type: string
+        user:
+          "$ref": "#/components/schemas/User"
     ImportRequest:
       description: Import request.
       type: object
@@ -4363,6 +4362,7 @@ components:
         enabled:
           type: boolean
     LoginIdType:
+      description: 'TODO : ENG-1 : Brady - this overlaps with the IdentityType enumeration'
       type: string
       enum:
       - email
@@ -4483,16 +4483,16 @@ components:
       properties:
         loginId:
           type: string
+        loginIdTypes:
+          type: array
+          items:
+            type: string
         oneTimePassword:
           type: string
         password:
           type: string
         twoFactorTrustId:
           type: string
-        types:
-          type: array
-          items:
-            type: string
         applicationId:
           type: string
           format: uuid
@@ -4957,6 +4957,7 @@ components:
       - refresh_token_not_found
       - refresh_token_type_not_supported
       - invalid_client_id
+      - invalid_expires_in
       - invalid_user_credentials
       - invalid_grant_type
       - invalid_origin
@@ -5282,8 +5283,6 @@ components:
           type: object
           additionalProperties:
             type: object
-        transport:
-          type: string
     PasswordlessStartRequest:
       description: ''
       type: object
@@ -5291,11 +5290,11 @@ components:
         applicationId:
           type: string
           format: uuid
-        codeType:
+        loginStrategy:
           type: string
         loginId:
           type: string
-        loginType:
+        loginIdType:
           type: string
         state:
           type: object
@@ -5309,6 +5308,12 @@ components:
           type: string
         oneTimeCode:
           type: string
+    PasswordlessStrategy:
+      description: ''
+      type: string
+      enum:
+      - ClickableLink
+      - FormField
     PendingIdPLink:
       description: ''
       type: object
@@ -5642,6 +5647,8 @@ components:
       properties:
         refreshToken:
           type: string
+        timeToLiveInSeconds:
+          type: integer
         token:
           type: string
         eventInfo:
@@ -6103,17 +6110,6 @@ components:
           "$ref": "#/components/schemas/CanonicalizationMethod"
         enabled:
           type: boolean
-    SMSConfiguration:
-      type: object
-      properties:
-        messengerId:
-          type: string
-          format: uuid
-        verifyPhoneNumber:
-          type: boolean
-        verificationTemplateId:
-          type: string
-          format: uuid
     SMSMessage:
       description: ''
       type: object
@@ -6744,8 +6740,6 @@ components:
           "$ref": "#/components/schemas/TenantOAuth2Configuration"
         passwordEncryptionConfiguration:
           "$ref": "#/components/schemas/PasswordEncryptionConfiguration"
-        passwordlessSMSMethod:
-          "$ref": "#/components/schemas/TenantPasswordlessSMSMethod"
         passwordValidationRules:
           "$ref": "#/components/schemas/PasswordValidationRules"
         rateLimitConfiguration:
@@ -6755,7 +6749,7 @@ components:
         scimServerConfiguration:
           "$ref": "#/components/schemas/TenantSCIMServerConfiguration"
         smsConfiguration:
-          "$ref": "#/components/schemas/SMSConfiguration"
+          "$ref": "#/components/schemas/TenantSMSConfiguration"
         ssoConfiguration:
           "$ref": "#/components/schemas/TenantSSOConfiguration"
         state:
@@ -6856,17 +6850,6 @@ components:
         clientCredentialsAccessTokenPopulateLambdaId:
           type: string
           format: uuid
-    TenantPasswordlessSMSMethod:
-      type: object
-      properties:
-        messengerId:
-          type: string
-          format: uuid
-        templateId:
-          type: string
-          format: uuid
-        enabled:
-          type: boolean
     TenantRateLimitConfiguration:
       description: ''
       type: object
@@ -6932,6 +6915,23 @@ components:
           type: string
           format: uuid
         enabled:
+          type: boolean
+    TenantSMSConfiguration:
+      description: Hold SMS configuration for passwordless and verification cases.
+      type: object
+      properties:
+        messengerId:
+          type: string
+          format: uuid
+        passwordlessTemplateId:
+          type: string
+          format: uuid
+        verificationStrategy:
+          "$ref": "#/components/schemas/VerificationStrategy"
+        verificationTemplateId:
+          type: string
+          format: uuid
+        verifyPhoneNumber:
           type: boolean
     TenantSSOConfiguration:
       description: ''
@@ -8254,12 +8254,6 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
-    UserPhoneVerifiedEvent:
-      description: Models the User Phone Verify Event.
-      type: object
-      properties:
-        user:
-          "$ref": "#/components/schemas/User"
     UserReactivateEvent:
       description: Models the User Reactivate Event.
       type: object
@@ -8417,6 +8411,10 @@ components:
           type: boolean
         user:
           "$ref": "#/components/schemas/User"
+        verificationIds:
+          type: array
+          items:
+            type: string
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
     UserResponse:
@@ -8601,12 +8599,12 @@ components:
       properties:
         loginId:
           type: string
-        loginType:
+        loginIdType:
           type: string
         applicationId:
           type: string
           format: uuid
-        codeType:
+        verificationStrategy:
           type: string
     VerifyStartResponse:
       type: object
