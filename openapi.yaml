@@ -6486,6 +6486,8 @@ components:
           "$ref": "#/components/schemas/SystemTrustedProxyConfiguration"
         uiConfiguration:
           "$ref": "#/components/schemas/UIConfiguration"
+        usageDataConfiguration:
+          "$ref": "#/components/schemas/UsageDataConfiguration"
         webhookEventLogConfiguration:
           "$ref": "#/components/schemas/WebhookEventLogConfiguration"
     SystemConfigurationRequest:
@@ -7478,6 +7480,14 @@ components:
       enum:
       - Allow
       - Gated
+    UsageDataConfiguration:
+      description: Config for Usage Data  Stats
+      type: object
+      properties:
+        numberOfDaysToRetain:
+          type: integer
+        enabled:
+          type: boolean
     User:
       description: The global view of a User. This object contains all global information
         about the user including birthdate, registration information  preferred languages,
