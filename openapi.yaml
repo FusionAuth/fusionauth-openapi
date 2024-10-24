@@ -1395,6 +1395,8 @@ components:
           "$ref": "#/components/schemas/Location"
         loginId:
           type: string
+        loginIdType:
+          "$ref": "#/components/schemas/IdentityType"
     DomainBasedIdentityProvider:
       description: Interface for all identity providers that can be domain based.
       type: object
@@ -3594,12 +3596,12 @@ components:
       - Twitch
       - Twitter
       - Xbox
-    IdentityTypes:
-      type: string
-      enum:
-      - email
-      - phoneNumber
-      - username
+    IdentityType:
+      description: ''
+      type: object
+      properties:
+        name:
+          type: string
     IdentityVerifiedEvent:
       description: Models the identity verified event
       type: object
@@ -3685,7 +3687,7 @@ components:
           type: string
         kty:
           "$ref": "#/components/schemas/KeyType"
-        n:
+        "n":
           type: string
         other:
           type: object
@@ -3709,7 +3711,7 @@ components:
           type: string
         x5t#S256:
           type: string
-        y:
+        "y":
           type: string
     JSONWebKeyInfoProvider:
       description: Interface for any object that can provide JSON Web key Information.
@@ -4362,7 +4364,7 @@ components:
         enabled:
           type: boolean
     LoginIdType:
-      description: 'TODO : ENG-1 : Brady - this overlaps with the IdentityType enumeration'
+      description: This is separate from IdentityType.
       type: string
       enum:
       - email
@@ -6196,6 +6198,10 @@ components:
       description: ''
       type: object
       properties:
+        identities:
+          type: array
+          items:
+            "$ref": "#/components/schemas/UserIdentity"
         breachedPasswordLastCheckedInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         breachedPasswordStatus:
@@ -6715,6 +6721,8 @@ components:
         id:
           type: string
           format: uuid
+        identityConfiguration:
+          "$ref": "#/components/schemas/TenantIdentityConfiguration"
         insertInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         issuer:
@@ -6803,6 +6811,22 @@ components:
         adminUserFormId:
           type: string
           format: uuid
+    TenantIdentityConfiguration:
+      description: ''
+      type: object
+      properties:
+        enabledTypes:
+          type: array
+          uniqueItems: true
+          items: {}
+        mode:
+          "$ref": "#/components/schemas/TenantIdentityConfigurationMode"
+    TenantIdentityConfigurationMode:
+      description: ''
+      type: string
+      enum:
+      - Compatible
+      - Discrete
     TenantLambdaConfiguration:
       description: ''
       type: object
@@ -7611,6 +7635,10 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/UserRegistration"
+        identities:
+          type: array
+          items:
+            "$ref": "#/components/schemas/UserIdentity"
         breachedPasswordLastCheckedInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         breachedPasswordStatus:
@@ -8101,6 +8129,30 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
+    UserIdentity:
+      description: ''
+      type: object
+      properties:
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        lastLoginInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        lastUpdateInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        moderationStatus:
+          "$ref": "#/components/schemas/ContentStatus"
+        primary:
+          type: boolean
+        type:
+          "$ref": "#/components/schemas/IdentityType"
+        uniqueValue:
+          type: string
+        value:
+          type: string
+        verified:
+          type: boolean
+        verifiedInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
     UserIdentityProviderLinkEvent:
       description: Models the User Identity Provider Link Event.
       type: object
@@ -8596,32 +8648,37 @@ components:
         verificationId:
           type: string
     VerifySendCompleteRequest:
+      description: ''
       type: object
       properties:
-        verificationId:
-          type: string
         oneTimeCode:
+          type: string
+        verificationId:
           type: string
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
     VerifyStartRequest:
+      description: ''
       type: object
       properties:
+        applicationId:
+          type: string
+          format: uuid
         loginId:
           type: string
         loginIdType:
           type: string
-        applicationId:
-          type: string
-          format: uuid
         verificationStrategy:
           type: string
+        eventInfo:
+          "$ref": "#/components/schemas/EventInfo"
     VerifyStartResponse:
+      description: ''
       type: object
       properties:
-        verificationId:
-          type: string
         oneTimeCode:
+          type: string
+        verificationId:
           type: string
     VersionResponse:
       description: ''
@@ -8847,6 +8904,10 @@ components:
           format: uuid
         loginId:
           type: string
+        loginIdTypes:
+          type: array
+          items:
+            type: string
         state:
           type: object
           additionalProperties:
@@ -8981,7 +9042,9 @@ components:
           additionalProperties:
             type: object
         event:
-          "$ref": "#/components/schemas/EventRequest"
+          type: object
+          additionalProperties:
+            type: object
         eventResult:
           "$ref": "#/components/schemas/WebhookEventResult"
         eventType:
