@@ -6815,10 +6815,6 @@ components:
       description: ''
       type: object
       properties:
-        enabledTypes:
-          type: array
-          uniqueItems: true
-          items: {}
         mode:
           "$ref": "#/components/schemas/TenantIdentityConfigurationMode"
     TenantIdentityConfigurationMode:
