@@ -3612,6 +3612,19 @@ components:
           type: string
         user:
           "$ref": "#/components/schemas/User"
+    IdentityVerifiedReason:
+      description: Models the reason that {@link UserIdentity#verified} was set to
+        true or false.
+      type: string
+      enum:
+      - Unknown
+      - Skipped
+      - Trusted
+      - Unverifiable
+      - Implicit
+      - Pending
+      - Completed
+      - Disabled
     ImportRequest:
       description: Import request.
       type: object
@@ -6752,14 +6765,14 @@ components:
           "$ref": "#/components/schemas/PasswordEncryptionConfiguration"
         passwordValidationRules:
           "$ref": "#/components/schemas/PasswordValidationRules"
+        phoneConfiguration:
+          "$ref": "#/components/schemas/TenantPhoneConfiguration"
         rateLimitConfiguration:
           "$ref": "#/components/schemas/TenantRateLimitConfiguration"
         registrationConfiguration:
           "$ref": "#/components/schemas/TenantRegistrationConfiguration"
         scimServerConfiguration:
           "$ref": "#/components/schemas/TenantSCIMServerConfiguration"
-        smsConfiguration:
-          "$ref": "#/components/schemas/TenantSMSConfiguration"
         ssoConfiguration:
           "$ref": "#/components/schemas/TenantSSOConfiguration"
         state:
@@ -6872,6 +6885,24 @@ components:
         clientCredentialsAccessTokenPopulateLambdaId:
           type: string
           format: uuid
+    TenantPhoneConfiguration:
+      description: Hold tenant phone configuration for passwordless and verification
+        cases.
+      type: object
+      properties:
+        messengerId:
+          type: string
+          format: uuid
+        passwordlessTemplateId:
+          type: string
+          format: uuid
+        verificationStrategy:
+          "$ref": "#/components/schemas/VerificationStrategy"
+        verificationTemplateId:
+          type: string
+          format: uuid
+        verifyPhoneNumber:
+          type: boolean
     TenantRateLimitConfiguration:
       description: ''
       type: object
@@ -6937,23 +6968,6 @@ components:
           type: string
           format: uuid
         enabled:
-          type: boolean
-    TenantSMSConfiguration:
-      description: Hold SMS configuration for passwordless and verification cases.
-      type: object
-      properties:
-        messengerId:
-          type: string
-          format: uuid
-        passwordlessTemplateId:
-          type: string
-          format: uuid
-        verificationStrategy:
-          "$ref": "#/components/schemas/VerificationStrategy"
-        verificationTemplateId:
-          type: string
-          format: uuid
-        verifyPhoneNumber:
           type: boolean
     TenantSSOConfiguration:
       description: ''
@@ -8149,6 +8163,8 @@ components:
           type: boolean
         verifiedInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
+        verifiedReason:
+          "$ref": "#/components/schemas/IdentityVerifiedReason"
     UserIdentityProviderLinkEvent:
       description: Models the User Identity Provider Link Event.
       type: object
