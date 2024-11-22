@@ -2591,6 +2591,7 @@ components:
       - date
       - email
       - number
+      - phoneNumber
       - string
     FormField:
       description: ''
