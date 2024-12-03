@@ -5775,6 +5775,9 @@ components:
       properties:
         refreshToken:
           type: string
+        refreshTokenId:
+          type: string
+          format: uuid
         registration:
           "$ref": "#/components/schemas/UserRegistration"
         registrationVerificationId:
