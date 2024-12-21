@@ -71,6 +71,11 @@ components:
       properties:
         apiKey:
           "$ref": "#/components/schemas/APIKey"
+    APIVersion:
+      type: string
+      enum:
+      - V1
+      - V2
     AccessToken:
       description: ''
       type: object
@@ -2156,7 +2161,6 @@ components:
       - UserDeleteComplete
       - UserEmailUpdate
       - UserEmailVerified
-      - IdentityVerified
       - UserIdentityProviderLink
       - UserIdentityProviderUnlink
       - UserLoginIdDuplicateOnCreate
@@ -2183,6 +2187,7 @@ components:
       - UserUpdate
       - UserUpdateComplete
       - Test
+      - IdentityVerified
     ExpandableRequest:
       description: An expandable API request.
       type: object
@@ -3279,6 +3284,13 @@ components:
         total:
           type: integer
           format: int64
+    IdentityInfo:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: string
     IdentityProviderDetails:
       type: object
       properties:
@@ -3618,7 +3630,6 @@ components:
         true or false.
       type: string
       enum:
-      - Unknown
       - Skipped
       - Trusted
       - Unverifiable
@@ -3701,7 +3712,7 @@ components:
           type: string
         kty:
           "$ref": "#/components/schemas/KeyType"
-        "n":
+        n:
           type: string
         other:
           type: object
@@ -3725,7 +3736,7 @@ components:
           type: string
         x5t#S256:
           type: string
-        "y":
+        y:
           type: string
     JSONWebKeyInfoProvider:
       description: Interface for any object that can provide JSON Web key Information.
@@ -5836,6 +5847,9 @@ components:
       properties:
         refreshToken:
           type: string
+        refreshTokenId:
+          type: string
+          format: uuid
         registration:
           "$ref": "#/components/schemas/UserRegistration"
         registrationVerificationId:
@@ -6531,6 +6545,8 @@ components:
       properties:
         auditLogConfiguration:
           "$ref": "#/components/schemas/AuditLogConfiguration"
+        cookieEncryptionKey:
+          type: string
         corsConfiguration:
           "$ref": "#/components/schemas/CORSConfiguration"
         data:
@@ -6735,8 +6751,6 @@ components:
         id:
           type: string
           format: uuid
-        identityConfiguration:
-          "$ref": "#/components/schemas/TenantIdentityConfiguration"
         insertInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         issuer:
@@ -6825,18 +6839,6 @@ components:
         adminUserFormId:
           type: string
           format: uuid
-    TenantIdentityConfiguration:
-      description: ''
-      type: object
-      properties:
-        mode:
-          "$ref": "#/components/schemas/TenantIdentityConfigurationMode"
-    TenantIdentityConfigurationMode:
-      description: ''
-      type: string
-      enum:
-      - Compatible
-      - Discrete
     TenantLambdaConfiguration:
       description: ''
       type: object
@@ -7588,9 +7590,9 @@ components:
         enabled:
           type: boolean
     User:
-      description: The global view of a User. This object contains all global information
-        about the user including birthdate, registration information  preferred languages,
-        global attributes, etc.
+      description: The public, global view of a User. This object contains all global
+        information about the user including birthdate, registration information  preferred
+        languages, global attributes, etc.
       type: object
       properties:
         preferredLanguages:
@@ -8214,11 +8216,15 @@ components:
       properties: {}
     UserLoginIdDuplicateOnCreateEvent:
       description: Models an event where a user is being created with an "in-use"
-        login Id (email or username).
+        login Id (email, username, or other identities).
       type: object
       properties:
         duplicateEmail:
           type: string
+        duplicateIdentities:
+          type: array
+          items:
+            "$ref": "#/components/schemas/IdentityInfo"
         duplicateUsername:
           type: string
         existing:
@@ -8232,6 +8238,10 @@ components:
       properties:
         duplicateEmail:
           type: string
+        duplicateIdentities:
+          type: array
+          items:
+            "$ref": "#/components/schemas/IdentityInfo"
         duplicateUsername:
           type: string
         existing:
@@ -11665,6 +11675,32 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/FormResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/identity/verify/start":
+    post:
+      description: Start a verification of an identity by generating a code. This
+        code can be sent to the User using the Verify Send API Verification Code API
+        or using a mechanism outside of FusionAuth. The verification is completed
+        by using the Verify Complete API with this code.
+      operationId: startVerifyIdentityWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VerifyStartRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/VerifyStartResponse"
         default:
           description: Error
           content:
@@ -15703,6 +15739,26 @@ paths:
                 "$ref": "#/components/schemas/FormFieldResponse"
         default:
           description: Error
+  "/api/identity/verify/send":
+    post:
+      description: Send a verification code using the appropriate transport for the
+        identity type being verified.
+      operationId: sendVerifyIdentityWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VerifySendCompleteRequest"
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/key/import/{keyId}":
     post:
       description: Import an existing RSA or EC key pair or an HMAC secret.
@@ -15995,6 +16051,26 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/TwoFactorRecoveryCodeResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/identity/verify/complete":
+    post:
+      description: Completes verification of an identity using verification codes
+        from the Verify Start API.
+      operationId: completeVerifyIdentityWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VerifySendCompleteRequest"
+      responses:
+        '200':
+          description: Success
         default:
           description: Error
           content:
