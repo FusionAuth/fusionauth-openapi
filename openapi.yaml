@@ -71,11 +71,6 @@ components:
       properties:
         apiKey:
           "$ref": "#/components/schemas/APIKey"
-    APIVersion:
-      type: string
-      enum:
-      - V1
-      - V2
     AccessToken:
       description: ''
       type: object
