@@ -3553,6 +3553,10 @@ components:
           format: uuid
         loginId:
           type: string
+        loginIdTypes:
+          type: array
+          items:
+            type: string
         state:
           type: object
           additionalProperties:
@@ -3864,6 +3868,8 @@ components:
         a single token, a user  or an entire application.
       type: object
       properties:
+        user:
+          "$ref": "#/components/schemas/User"
         applicationId:
           type: string
           format: uuid
@@ -3873,8 +3879,6 @@ components:
             type: integer
         refreshToken:
           "$ref": "#/components/schemas/RefreshToken"
-        user:
-          "$ref": "#/components/schemas/User"
         userId:
           type: string
           format: uuid
