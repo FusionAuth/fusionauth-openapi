@@ -6544,8 +6544,6 @@ components:
       properties:
         auditLogConfiguration:
           "$ref": "#/components/schemas/AuditLogConfiguration"
-        cookieEncryptionKey:
-          type: string
         corsConfiguration:
           "$ref": "#/components/schemas/CORSConfiguration"
         data:
