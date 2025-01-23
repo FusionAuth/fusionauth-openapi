@@ -8216,6 +8216,8 @@ components:
         login Id (email, username, or other identities).
       type: object
       properties:
+        existing:
+          "$ref": "#/components/schemas/User"
         duplicateEmail:
           type: string
         duplicateIdentities:
@@ -8224,8 +8226,6 @@ components:
             "$ref": "#/components/schemas/IdentityInfo"
         duplicateUsername:
           type: string
-        existing:
-          "$ref": "#/components/schemas/User"
         user:
           "$ref": "#/components/schemas/User"
     UserLoginIdDuplicateOnUpdateEvent:
@@ -8233,6 +8233,8 @@ components:
         an "in-use" login Id (email or username).
       type: object
       properties:
+        existing:
+          "$ref": "#/components/schemas/User"
         duplicateEmail:
           type: string
         duplicateIdentities:
@@ -8241,8 +8243,6 @@ components:
             "$ref": "#/components/schemas/IdentityInfo"
         duplicateUsername:
           type: string
-        existing:
-          "$ref": "#/components/schemas/User"
     UserLoginNewDeviceEvent:
       description: Models the User Login event for a new device (un-recognized)
       type: object
