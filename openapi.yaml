@@ -7630,6 +7630,8 @@ components:
           type: string
         parentEmail:
           type: string
+        phoneNumber:
+          type: string
         tenantId:
           type: string
           format: uuid
