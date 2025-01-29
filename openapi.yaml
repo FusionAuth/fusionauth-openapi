@@ -6192,6 +6192,21 @@ components:
           type: string
         localizedTemplates:
           "$ref": "#/components/schemas/LocalizedStrings"
+        data:
+          type: object
+          additionalProperties:
+            type: object
+        id:
+          type: string
+          format: uuid
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        lastUpdateInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        name:
+          type: string
+        type:
+          "$ref": "#/components/schemas/MessageType"
     SearchRequest:
       description: Search API request.
       type: object
