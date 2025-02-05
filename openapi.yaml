@@ -8744,8 +8744,6 @@ components:
           type: string
         verificationStrategy:
           type: string
-        eventInfo:
-          "$ref": "#/components/schemas/EventInfo"
     VerifyStartResponse:
       description: ''
       type: object
