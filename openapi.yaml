@@ -4410,6 +4410,7 @@ components:
       type: string
       enum:
       - email
+      - phoneNumber
       - username
     LoginPingRequest:
       description: Login Ping API request object.
