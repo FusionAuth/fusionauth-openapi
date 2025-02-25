@@ -2247,6 +2247,12 @@ components:
           "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         externalAuthenticationIdTimeToLiveInSeconds:
           type: integer
+        identityVerificationIdGenerator:
+          "$ref": "#/components/schemas/SecureGeneratorConfiguration"
+        identityVerificationIdTimeToLiveInSeconds:
+          type: integer
+        identityVerificationOneTimeCodeGenerator:
+          "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         loginIntentTimeToLiveInSeconds:
           type: integer
         oneTimePasswordTimeToLiveInSeconds:
@@ -2274,8 +2280,6 @@ components:
         setupPasswordIdGenerator:
           "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         setupPasswordIdTimeToLiveInSeconds:
-          type: integer
-        smsVerificationTimeToLiveInSeconds:
           type: integer
         trustTokenTimeToLiveInSeconds:
           type: integer
