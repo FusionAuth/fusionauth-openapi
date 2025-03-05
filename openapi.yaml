@@ -3731,7 +3731,7 @@ components:
           type: string
         kty:
           "$ref": "#/components/schemas/KeyType"
-        n:
+        "n":
           type: string
         other:
           type: object
@@ -3755,7 +3755,7 @@ components:
           type: string
         x5t#S256:
           type: string
-        y:
+        "y":
           type: string
     JSONWebKeyInfoProvider:
       description: Interface for any object that can provide JSON Web key Information.
@@ -5398,6 +5398,12 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/User"
+    PhoneUnverifiedOptions:
+      description: Configuration for unverified phone number identities.
+      type: object
+      properties:
+        behavior:
+          "$ref": "#/components/schemas/UnverifiedBehavior"
     PreviewMessageTemplateRequest:
       description: ''
       type: object
@@ -6955,6 +6961,11 @@ components:
           type: string
           format: uuid
         passwordlessTemplateId:
+          type: string
+          format: uuid
+        unverified:
+          "$ref": "#/components/schemas/PhoneUnverifiedOptions"
+        verificationCompleteTemplateId:
           type: string
           format: uuid
         verificationStrategy:
