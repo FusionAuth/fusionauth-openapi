@@ -37,8 +37,12 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         metaData:
           "$ref": "#/components/schemas/APIKeyMetaData"
+        name:
+          type: string
         permissions:
           "$ref": "#/components/schemas/APIKeyPermissions"
+        retrievable:
+          type: boolean
         tenantId:
           type: string
           format: uuid
@@ -6915,6 +6919,8 @@ components:
       description: ''
       type: object
       properties:
+        allowAccessTokenBootstrap:
+          type: boolean
         deviceTrustTimeToLiveInSeconds:
           type: integer
     TenantSearchCriteria:
