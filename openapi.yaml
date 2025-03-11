@@ -8783,8 +8783,6 @@ components:
           type: string
         verificationId:
           type: string
-        eventInfo:
-          "$ref": "#/components/schemas/EventInfo"
     VerifyStartRequest:
       description: ''
       type: object
