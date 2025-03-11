@@ -6765,7 +6765,7 @@ components:
           type: string
         passwordSent:
           type: string
-        phoneNumberVerificationRequired:
+        phoneVerificationRequired:
           type: string
         registrationComplete:
           type: string
@@ -8726,6 +8726,16 @@ components:
       enum:
       - ClickableLink
       - FormField
+    VerifyCompleteRequest:
+      description: Verify Complete API request object.
+      type: object
+      properties:
+        oneTimeCode:
+          type: string
+        verificationId:
+          type: string
+        eventInfo:
+          "$ref": "#/components/schemas/EventInfo"
     VerifyEmailRequest:
       description: ''
       type: object
@@ -8765,8 +8775,8 @@ components:
           type: string
         verificationId:
           type: string
-    VerifySendCompleteRequest:
-      description: ''
+    VerifySendRequest:
+      description: Verify Send API request object.
       type: object
       properties:
         oneTimeCode:
@@ -15842,7 +15852,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/VerifySendCompleteRequest"
+              "$ref": "#/components/schemas/VerifySendRequest"
       responses:
         '200':
           description: Success
@@ -16160,7 +16170,7 @@ paths:
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/VerifySendCompleteRequest"
+              "$ref": "#/components/schemas/VerifyCompleteRequest"
       responses:
         '200':
           description: Success
