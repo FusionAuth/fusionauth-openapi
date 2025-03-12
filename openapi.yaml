@@ -3731,7 +3731,7 @@ components:
           type: string
         kty:
           "$ref": "#/components/schemas/KeyType"
-        n:
+        "n":
           type: string
         other:
           type: object
@@ -3755,7 +3755,7 @@ components:
           type: string
         x5t#S256:
           type: string
-        y:
+        "y":
           type: string
     JSONWebKeyInfoProvider:
       description: Interface for any object that can provide JSON Web key Information.
@@ -11567,33 +11567,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
-  "/api/identity/verify/start":
-    post:
-      description: Start a verification of an identity by generating a code. This
-        code can be sent to the User using the Verify Send API Verification Code API
-        or using a mechanism outside of FusionAuth. The verification is completed
-        by using the Verify Complete API with this code.
-      operationId: startVerifyIdentityWithId
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/VerifyStartRequest"
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/VerifyStartResponse"
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
-  "/api/user/action/{actionId}":
     delete:
       description: Deletes the API key for the given Id.
       operationId: deleteAPIKeyWithId
@@ -13261,6 +13234,26 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/identity/verify/send":
+    post:
+      description: Send a verification code using the appropriate transport for the
+        identity type being verified.
+      operationId: sendVerifyIdentityWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VerifySendRequest"
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/system/event-log/{eventLogId}":
     get:
       description: Retrieves a single event log for the given Id.
@@ -14404,6 +14397,32 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/identity/verify/start":
+    post:
+      description: Start a verification of an identity by generating a code. This
+        code can be sent to the User using the Verify Send API Verification Code API
+        or using a mechanism outside of FusionAuth. The verification is completed
+        by using the Verify Complete API with this code.
+      operationId: startVerifyIdentityWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VerifyStartRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/VerifyStartResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/entity/type/{entityTypeId}/permission/{permissionId}":
     post:
       description: Creates a new permission for an entity type. You must specify the
@@ -15401,27 +15420,6 @@ paths:
                 "$ref": "#/components/schemas/MessageTemplateResponse"
         default:
           description: Error
-  "/api/identity/verify/send":
-    post:
-      description: Send a verification code using the appropriate transport for the
-        identity type being verified.
-      operationId: sendVerifyIdentityWithId
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/VerifySendRequest"
-      responses:
-        '200':
-          description: Success
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
-  "/api/key/import/{keyId}":
     post:
       description: Creates an message template. You can optionally specify an Id for
         the template, if not provided one will be generated.
@@ -15715,26 +15713,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/FormResponse"
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
-  "/api/identity/verify/complete":
-    post:
-      description: Completes verification of an identity using verification codes
-        from the Verify Start API.
-      operationId: completeVerifyIdentityWithId
-      parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/VerifyCompleteRequest"
-      responses:
-        '200':
-          description: Success
         default:
           description: Error
           content:
@@ -17098,6 +17076,26 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/WebAuthnAssertResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/identity/verify/complete":
+    post:
+      description: Completes verification of an identity using verification codes
+        from the Verify Start API.
+      operationId: completeVerifyIdentityWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VerifyCompleteRequest"
+      responses:
+        '200':
+          description: Success
         default:
           description: Error
           content:
