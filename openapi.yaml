@@ -5591,7 +5591,7 @@ components:
       - SendPasswordless
       - SendRegistrationVerification
       - SendTwoFactor
-      - SendPhoneNumberVerification
+      - SendPhoneVerification
     RawLogin:
       description: Raw login information for each time a user logs into an application.
       type: object
@@ -6990,7 +6990,7 @@ components:
           "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
         sendPasswordless:
           "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
-        sendPhoneNumberVerification:
+        sendPhoneVerification:
           "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
         sendRegistrationVerification:
           "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
