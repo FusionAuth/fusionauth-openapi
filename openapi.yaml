@@ -4571,6 +4571,8 @@ components:
             type: string
         emailVerificationId:
           type: string
+        identityVerificationId:
+          type: string
         methods:
           type: array
           items:
