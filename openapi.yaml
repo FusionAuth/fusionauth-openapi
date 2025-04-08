@@ -1401,6 +1401,8 @@ components:
           "$ref": "#/components/schemas/Location"
         loginId:
           type: string
+        loginIdType:
+          "$ref": "#/components/schemas/IdentityType"
         applicationId:
           type: string
           format: uuid
@@ -2196,6 +2198,7 @@ components:
       - UserUpdate
       - UserUpdateComplete
       - Test
+      - IdentityVerified
     ExpandableRequest:
       description: An expandable API request.
       type: object
@@ -2252,8 +2255,18 @@ components:
           "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         passwordlessLoginTimeToLiveInSeconds:
           type: integer
+        passwordlessShortCodeLoginGenerator:
+          "$ref": "#/components/schemas/SecureGeneratorConfiguration"
+        passwordlessShortCodeLoginTimeToLiveInSeconds:
+          type: integer
         pendingAccountLinkTimeToLiveInSeconds:
           type: integer
+        phoneVerificationIdGenerator:
+          "$ref": "#/components/schemas/SecureGeneratorConfiguration"
+        phoneVerificationIdTimeToLiveInSeconds:
+          type: integer
+        phoneVerificationOneTimeCodeGenerator:
+          "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         registrationVerificationIdGenerator:
           "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         registrationVerificationIdTimeToLiveInSeconds:
@@ -2598,6 +2611,7 @@ components:
       - date
       - email
       - number
+      - phoneNumber
       - string
     FormField:
       description: ''
@@ -3285,6 +3299,13 @@ components:
         total:
           type: integer
           format: int64
+    IdentityInfo:
+      type: object
+      properties:
+        type:
+          type: string
+        value:
+          type: string
     IdentityProviderDetails:
       type: object
       properties:
@@ -3552,6 +3573,10 @@ components:
           format: uuid
         loginId:
           type: string
+        loginIdTypes:
+          type: array
+          items:
+            type: string
         state:
           type: object
           additionalProperties:
@@ -3603,6 +3628,34 @@ components:
       - Twitch
       - Twitter
       - Xbox
+    IdentityType:
+      description: ''
+      type: object
+      properties:
+        name:
+          type: string
+    IdentityVerifiedEvent:
+      description: Models the identity verified event
+      type: object
+      properties:
+        loginId:
+          type: string
+        loginIdType:
+          type: string
+        user:
+          "$ref": "#/components/schemas/User"
+    IdentityVerifiedReason:
+      description: Models the reason that {@link UserIdentity#verified} was set to
+        true or false.
+      type: string
+      enum:
+      - Skipped
+      - Trusted
+      - Unverifiable
+      - Implicit
+      - Pending
+      - Completed
+      - Disabled
     ImportRequest:
       description: Import request.
       type: object
@@ -3837,6 +3890,8 @@ components:
         a single token, a user  or an entire application.
       type: object
       properties:
+        user:
+          "$ref": "#/components/schemas/User"
         applicationId:
           type: string
           format: uuid
@@ -3846,8 +3901,6 @@ components:
             type: integer
         refreshToken:
           "$ref": "#/components/schemas/RefreshToken"
-        user:
-          "$ref": "#/components/schemas/User"
         userId:
           type: string
           format: uuid
@@ -4357,9 +4410,11 @@ components:
         enabled:
           type: boolean
     LoginIdType:
+      description: This is separate from IdentityType.
       type: string
       enum:
       - email
+      - phoneNumber
       - username
     LoginPingRequest:
       description: Login Ping API request object.
@@ -4477,6 +4532,10 @@ components:
       properties:
         loginId:
           type: string
+        loginIdTypes:
+          type: array
+          items:
+            type: string
         oneTimePassword:
           type: string
         password:
@@ -4511,6 +4570,8 @@ components:
           items:
             type: string
         emailVerificationId:
+          type: string
+        identityVerificationId:
           type: string
         methods:
           type: array
@@ -4947,6 +5008,7 @@ components:
       - refresh_token_not_found
       - refresh_token_type_not_supported
       - invalid_client_id
+      - invalid_expires_in
       - invalid_user_credentials
       - invalid_grant_type
       - invalid_origin
@@ -5242,6 +5304,8 @@ components:
       properties:
         code:
           type: string
+        oneTimeCode:
+          type: string
         twoFactorTrustId:
           type: string
         applicationId:
@@ -5279,6 +5343,10 @@ components:
           format: uuid
         loginId:
           type: string
+        loginIdType:
+          type: string
+        loginStrategy:
+          type: string
         state:
           type: object
           additionalProperties:
@@ -5289,6 +5357,14 @@ components:
       properties:
         code:
           type: string
+        oneTimeCode:
+          type: string
+    PasswordlessStrategy:
+      description: ''
+      type: string
+      enum:
+      - ClickableLink
+      - FormField
     PendingIdPLink:
       description: ''
       type: object
@@ -5324,6 +5400,12 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/User"
+    PhoneUnverifiedOptions:
+      description: Configuration for unverified phone number identities.
+      type: object
+      properties:
+        behavior:
+          "$ref": "#/components/schemas/UnverifiedBehavior"
     PreviewMessageTemplateRequest:
       description: ''
       type: object
@@ -5511,6 +5593,7 @@ components:
       - SendPasswordless
       - SendRegistrationVerification
       - SendTwoFactor
+      - SendPhoneVerification
     RawLogin:
       description: Raw login information for each time a user logs into an application.
       type: object
@@ -5622,6 +5705,8 @@ components:
       properties:
         refreshToken:
           type: string
+        timeToLiveInSeconds:
+          type: integer
         token:
           type: string
         eventInfo:
@@ -5755,6 +5840,8 @@ components:
           "$ref": "#/components/schemas/Requirable"
         preferredLanguages:
           "$ref": "#/components/schemas/Requirable"
+        requirePassword:
+          type: boolean
         type:
           "$ref": "#/components/schemas/RegistrationType"
         enabled:
@@ -6210,6 +6297,10 @@ components:
       description: ''
       type: object
       properties:
+        identities:
+          type: array
+          items:
+            "$ref": "#/components/schemas/UserIdentity"
         breachedPasswordLastCheckedInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         breachedPasswordStatus:
@@ -6678,6 +6769,14 @@ components:
           type: string
         passwordSent:
           type: string
+        phoneComplete:
+          type: string
+        phoneSent:
+          type: string
+        phoneVerificationRequired:
+          type: string
+        phoneVerify:
+          type: string
         registrationComplete:
           type: string
         registrationSent:
@@ -6758,6 +6857,8 @@ components:
           "$ref": "#/components/schemas/PasswordEncryptionConfiguration"
         passwordValidationRules:
           "$ref": "#/components/schemas/PasswordValidationRules"
+        phoneConfiguration:
+          "$ref": "#/components/schemas/TenantPhoneConfiguration"
         rateLimitConfiguration:
           "$ref": "#/components/schemas/TenantRateLimitConfiguration"
         registrationConfiguration:
@@ -6864,6 +6965,29 @@ components:
         clientCredentialsAccessTokenPopulateLambdaId:
           type: string
           format: uuid
+    TenantPhoneConfiguration:
+      description: Hold tenant phone configuration for passwordless and verification
+        cases.
+      type: object
+      properties:
+        messengerId:
+          type: string
+          format: uuid
+        passwordlessTemplateId:
+          type: string
+          format: uuid
+        unverified:
+          "$ref": "#/components/schemas/PhoneUnverifiedOptions"
+        verificationCompleteTemplateId:
+          type: string
+          format: uuid
+        verificationStrategy:
+          "$ref": "#/components/schemas/VerificationStrategy"
+        verificationTemplateId:
+          type: string
+          format: uuid
+        verifyPhoneNumber:
+          type: boolean
     TenantRateLimitConfiguration:
       description: ''
       type: object
@@ -6875,6 +6999,8 @@ components:
         sendEmailVerification:
           "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
         sendPasswordless:
+          "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
+        sendPhoneVerification:
           "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
         sendRegistrationVerification:
           "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
@@ -7550,9 +7676,9 @@ components:
         enabled:
           type: boolean
     User:
-      description: The global view of a User. This object contains all global information
-        about the user including birthdate, registration information  preferred languages,
-        global attributes, etc.
+      description: The public, global view of a User. This object contains all global
+        information about the user including birthdate, registration information  preferred
+        languages, global attributes, etc.
       type: object
       properties:
         preferredLanguages:
@@ -7593,6 +7719,8 @@ components:
           type: string
         parentEmail:
           type: string
+        phoneNumber:
+          type: string
         tenantId:
           type: string
           format: uuid
@@ -7608,6 +7736,10 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/UserRegistration"
+        identities:
+          type: array
+          items:
+            "$ref": "#/components/schemas/UserIdentity"
         breachedPasswordLastCheckedInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         breachedPasswordStatus:
@@ -8098,6 +8230,32 @@ components:
       properties:
         user:
           "$ref": "#/components/schemas/User"
+    UserIdentity:
+      description: ''
+      type: object
+      properties:
+        displayValue:
+          type: string
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        lastLoginInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        lastUpdateInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        moderationStatus:
+          "$ref": "#/components/schemas/ContentStatus"
+        primary:
+          type: boolean
+        type:
+          "$ref": "#/components/schemas/IdentityType"
+        value:
+          type: string
+        verified:
+          type: boolean
+        verifiedInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        verifiedReason:
+          "$ref": "#/components/schemas/IdentityVerifiedReason"
     UserIdentityProviderLinkEvent:
       description: Models the User Identity Provider Link Event.
       type: object
@@ -8146,15 +8304,21 @@ components:
       properties: {}
     UserLoginIdDuplicateOnCreateEvent:
       description: Models an event where a user is being created with an "in-use"
-        login Id (email or username).
+        login Id (email, username, or other identities).
       type: object
       properties:
+        existing:
+          "$ref": "#/components/schemas/User"
         duplicateEmail:
+          type: string
+        duplicateIdentities:
+          type: array
+          items:
+            "$ref": "#/components/schemas/IdentityInfo"
+        duplicatePhoneNumber:
           type: string
         duplicateUsername:
           type: string
-        existing:
-          "$ref": "#/components/schemas/User"
         user:
           "$ref": "#/components/schemas/User"
     UserLoginIdDuplicateOnUpdateEvent:
@@ -8162,12 +8326,18 @@ components:
         an "in-use" login Id (email or username).
       type: object
       properties:
+        existing:
+          "$ref": "#/components/schemas/User"
         duplicateEmail:
+          type: string
+        duplicateIdentities:
+          type: array
+          items:
+            "$ref": "#/components/schemas/IdentityInfo"
+        duplicatePhoneNumber:
           type: string
         duplicateUsername:
           type: string
-        existing:
-          "$ref": "#/components/schemas/User"
     UserLoginNewDeviceEvent:
       description: Models the User Login event for a new device (un-recognized)
       type: object
@@ -8418,6 +8588,10 @@ components:
           type: boolean
         user:
           "$ref": "#/components/schemas/User"
+        verificationIds:
+          type: array
+          items:
+            type: string
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
     UserResponse:
@@ -8442,6 +8616,10 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         user:
           "$ref": "#/components/schemas/User"
+        verificationIds:
+          type: array
+          items:
+            "$ref": "#/components/schemas/VerificationId"
     UserSearchCriteria:
       description: This class is the user query. It provides a build pattern as well
         as public fields for use on forms and in actions.
@@ -8543,12 +8721,33 @@ components:
       properties:
         jwt:
           "$ref": "#/components/schemas/JWT"
+    VerificationId:
+      type: object
+      properties:
+        id:
+          type: string
+        oneTimeCode:
+          type: string
+        type:
+          "$ref": "#/components/schemas/IdentityType"
+        value:
+          type: string
     VerificationStrategy:
       description: ''
       type: string
       enum:
       - ClickableLink
       - FormField
+    VerifyCompleteRequest:
+      description: Verify Complete API request object.
+      type: object
+      properties:
+        oneTimeCode:
+          type: string
+        verificationId:
+          type: string
+        eventInfo:
+          "$ref": "#/components/schemas/EventInfo"
     VerifyEmailRequest:
       description: ''
       type: object
@@ -8581,6 +8780,35 @@ components:
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
     VerifyRegistrationResponse:
+      description: ''
+      type: object
+      properties:
+        oneTimeCode:
+          type: string
+        verificationId:
+          type: string
+    VerifySendRequest:
+      description: Verify Send API request object.
+      type: object
+      properties:
+        oneTimeCode:
+          type: string
+        verificationId:
+          type: string
+    VerifyStartRequest:
+      description: ''
+      type: object
+      properties:
+        applicationId:
+          type: string
+          format: uuid
+        loginId:
+          type: string
+        loginIdType:
+          type: string
+        verificationStrategy:
+          type: string
+    VerifyStartResponse:
       description: ''
       type: object
       properties:
@@ -8812,6 +9040,10 @@ components:
           format: uuid
         loginId:
           type: string
+        loginIdTypes:
+          type: array
+          items:
+            type: string
         state:
           type: object
           additionalProperties:
@@ -8946,7 +9178,9 @@ components:
           additionalProperties:
             type: object
         event:
-          "$ref": "#/components/schemas/EventRequest"
+          type: object
+          additionalProperties:
+            type: object
         eventResult:
           "$ref": "#/components/schemas/WebhookEventResult"
         eventType:
@@ -11641,6 +11875,32 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/FormResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/identity/verify/start":
+    post:
+      description: Start a verification of an identity by generating a code. This
+        code can be sent to the User using the Verify Send API Verification Code API
+        or using a mechanism outside of FusionAuth. The verification is completed
+        by using the Verify Complete API with this code.
+      operationId: startVerifyIdentityWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VerifyStartRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/VerifyStartResponse"
         default:
           description: Error
           content:
@@ -15743,6 +16003,26 @@ paths:
                 "$ref": "#/components/schemas/FormFieldResponse"
         default:
           description: Error
+  "/api/identity/verify/send":
+    post:
+      description: Send a verification code using the appropriate transport for the
+        identity type being verified.
+      operationId: sendVerifyIdentityWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VerifySendRequest"
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/key/import/{keyId}":
     post:
       description: Import an existing RSA or EC key pair or an HMAC secret.
@@ -16069,6 +16349,26 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/TwoFactorRecoveryCodeResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/identity/verify/complete":
+    post:
+      description: Completes verification of an identity using verification codes
+        from the Verify Start API.
+      operationId: completeVerifyIdentityWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VerifyCompleteRequest"
+      responses:
+        '200':
+          description: Success
         default:
           description: Error
           content:
