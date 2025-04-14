@@ -7588,6 +7588,10 @@ components:
           type: string
         loginId:
           type: string
+        loginIdTypes:
+          type: array
+          items:
+            type: string
         state:
           type: object
           additionalProperties:
