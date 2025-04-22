@@ -5343,8 +5343,10 @@ components:
           format: uuid
         loginId:
           type: string
-        loginIdType:
-          type: string
+        loginIdTypes:
+          type: array
+          items:
+            type: string
         loginStrategy:
           type: string
         state:
