@@ -6741,6 +6741,8 @@ components:
           type: string
         oauth2Passwordless:
           type: string
+        oauth2PasswordlessFormField:
+          type: string
         oauth2Register:
           type: string
         oauth2StartIdPLink:
@@ -13865,11 +13867,12 @@ paths:
         the user by a verificationId. The intended use of this API is to retrieve
         a user after the forgot password workflow has been initiated and you may not
         know the user's email or username. OR Retrieves the user for the given username.
-        OR Retrieves the user for the loginId. The loginId can be either the username
-        or the email. OR Retrieves the user for the given email. OR Retrieves the
-        user by a change password Id. The intended use of this API is to retrieve
-        a user after the forgot password workflow has been initiated and you may not
-        know the user's email or username.
+        OR Retrieves the user for the loginId for specific loginIdTypes. OR Retrieves
+        the user for the loginId. The loginId can be either the username or the email.
+        OR Retrieves the user for the given email. OR Retrieves the user by a change
+        password Id. The intended use of this API is to retrieve a user after the
+        forgot password workflow has been initiated and you may not know the user's
+        email or username.
       operationId: retrieveUser
       security:
       - BearerAuth: []
@@ -13897,6 +13900,11 @@ paths:
         schema:
           type: string
         description: The email or username of the user.
+      - name: loginIdTypes
+        in: query
+        schema:
+          type: string
+        description: The identity types that FusionAuth will compare the loginId to.
       - name: email
         in: query
         schema:
@@ -16441,10 +16449,12 @@ paths:
       description: Retrieves the login report between the two instants for a particular
         user by login Id. If you specify an application id, it will only return the
         login counts for that application. OR Retrieves the login report between the
-        two instants for a particular user by Id. If you specify an application id,
-        it will only return the login counts for that application. OR Retrieves the
-        login report between the two instants. If you specify an application id, it
-        will only return the login counts for that application.
+        two instants for a particular user by login Id. If you specify an application
+        id, it will only return the login counts for that application. OR Retrieves
+        the login report between the two instants for a particular user by Id. If
+        you specify an application id, it will only return the login counts for that
+        application. OR Retrieves the login report between the two instants. If you
+        specify an application id, it will only return the login counts for that application.
       operationId: retrieveReportLogin
       parameters:
       - name: applicationId
@@ -16457,6 +16467,11 @@ paths:
         schema:
           type: string
         description: The userId id.
+      - name: loginIdTypes
+        in: query
+        schema:
+          type: string
+        description: The identity types that FusionAuth will compare the loginId to.
       - name: start
         in: query
         schema:
