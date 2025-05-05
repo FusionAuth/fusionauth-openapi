@@ -1053,6 +1053,10 @@ components:
           type: string
         loginId:
           type: string
+        loginIdTypes:
+          type: array
+          items:
+            type: string
         password:
           type: string
         refreshToken:
@@ -2550,7 +2554,13 @@ components:
           type: string
         loginId:
           type: string
+        loginIdTypes:
+          type: array
+          items:
+            type: string
         sendForgotPasswordEmail:
+          type: boolean
+        sendForgotPasswordMessage:
           type: boolean
         state:
           type: object
@@ -6972,6 +6982,9 @@ components:
         cases.
       type: object
       properties:
+        forgotPasswordTemplateId:
+          type: string
+          format: uuid
         messengerId:
           type: string
           format: uuid
