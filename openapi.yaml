@@ -14377,7 +14377,6 @@ paths:
           type: array
           items:
             type: string
-        required: false
         description: the identity types that FusionAuth will compare the loginId to.
           Defaults to [email, username]
       - name: userId
@@ -15491,7 +15490,6 @@ paths:
           type: array
           items:
             type: string
-        required: false
         description: the identity types that FusionAuth will compare the loginId to.
           Defaults to [email, username]
       - name: email
