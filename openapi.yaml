@@ -6741,8 +6741,6 @@ components:
           type: string
         oauth2Passwordless:
           type: string
-        oauth2PasswordlessFormField:
-          type: string
         oauth2Register:
           type: string
         oauth2StartIdPLink:
