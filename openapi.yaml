@@ -14378,7 +14378,6 @@ paths:
           items:
             type: string
         description: the identity types that FusionAuth will compare the loginId to.
-          Defaults to [email, username]
       - name: userId
         in: query
         schema:
@@ -15491,7 +15490,6 @@ paths:
           items:
             type: string
         description: the identity types that FusionAuth will compare the loginId to.
-          Defaults to [email, username]
       - name: email
         in: query
         schema:
