@@ -2253,10 +2253,10 @@ components:
           type: integer
         passwordlessLoginGenerator:
           "$ref": "#/components/schemas/SecureGeneratorConfiguration"
+        passwordlessLoginOneTimeCodeGenerator:
+          "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         passwordlessLoginTimeToLiveInSeconds:
           type: integer
-        passwordlessOneTimeCodeLoginGenerator:
-          "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         pendingAccountLinkTimeToLiveInSeconds:
           type: integer
         phoneVerificationIdGenerator:
