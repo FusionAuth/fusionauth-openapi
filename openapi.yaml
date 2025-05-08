@@ -5885,6 +5885,8 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         sendSetPasswordEmail:
           type: boolean
+        sendSetPasswordPhone:
+          type: boolean
         skipRegistrationVerification:
           type: boolean
         skipVerification:
@@ -6989,6 +6991,9 @@ components:
           type: string
           format: uuid
         passwordlessTemplateId:
+          type: string
+          format: uuid
+        setPasswordTemplateId:
           type: string
           format: uuid
         unverified:
@@ -8602,6 +8607,8 @@ components:
         disableDomainBlock:
           type: boolean
         sendSetPasswordEmail:
+          type: boolean
+        sendSetPasswordPhone:
           type: boolean
         skipVerification:
           type: boolean
