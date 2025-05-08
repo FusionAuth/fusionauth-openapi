@@ -2255,7 +2255,7 @@ components:
           "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         passwordlessLoginTimeToLiveInSeconds:
           type: integer
-        passwordlessShortCodeLoginGenerator:
+        passwordlessOneTimeCodeLoginGenerator:
           "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         passwordlessShortCodeLoginTimeToLiveInSeconds:
           type: integer
