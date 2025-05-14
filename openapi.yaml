@@ -5414,6 +5414,8 @@ components:
       description: Configuration for unverified phone number identities.
       type: object
       properties:
+        allowPhoneNumberChangeWhenGated:
+          type: boolean
         behavior:
           "$ref": "#/components/schemas/UnverifiedBehavior"
     PreviewMessageTemplateRequest:
@@ -6993,13 +6995,42 @@ components:
         forgotPasswordTemplateId:
           type: string
           format: uuid
+        identityUpdateTemplateId:
+          type: string
+          format: uuid
+        implicitPhoneVerificationAllowed:
+          type: boolean
+        loginIdInUseOnCreateTemplateId:
+          type: string
+          format: uuid
+        loginIdInUseOnUpdateTemplateId:
+          type: string
+          format: uuid
+        loginNewDeviceTemplateId:
+          type: string
+          format: uuid
+        loginSuspiciousTemplateId:
+          type: string
+          format: uuid
         messengerId:
+          type: string
+          format: uuid
+        passwordResetSuccessTemplateId:
+          type: string
+          format: uuid
+        passwordUpdateTemplateId:
           type: string
           format: uuid
         passwordlessTemplateId:
           type: string
           format: uuid
         setPasswordTemplateId:
+          type: string
+          format: uuid
+        twoFactorMethodAddTemplateId:
+          type: string
+          format: uuid
+        twoFactorMethodRemoveTemplateId:
           type: string
           format: uuid
         unverified:
