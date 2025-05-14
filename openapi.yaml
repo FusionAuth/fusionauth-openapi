@@ -5883,6 +5883,8 @@ components:
           "$ref": "#/components/schemas/UserRegistration"
         sendSetPasswordEmail:
           type: boolean
+        sendSetPasswordIdentityType:
+          "$ref": "#/components/schemas/SendSetPasswordIdentityType"
         skipRegistrationVerification:
           type: boolean
         skipVerification:
@@ -6395,6 +6397,14 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/EmailTemplateErrors"
+    SendSetPasswordIdentityType:
+      description: Used to indicate which identity type a password "request" might
+        go to. It could be  used for send set passwords or send password resets.
+      type: string
+      enum:
+      - email
+      - phone
+      - doNotSend
     SimpleThemeVariables:
       description: Theme object for values used in the css variables for simple themes.
       type: object
@@ -6987,6 +6997,9 @@ components:
           type: string
           format: uuid
         passwordlessTemplateId:
+          type: string
+          format: uuid
+        setPasswordTemplateId:
           type: string
           format: uuid
         unverified:
@@ -8601,6 +8614,8 @@ components:
           type: boolean
         sendSetPasswordEmail:
           type: boolean
+        sendSetPasswordIdentityType:
+          "$ref": "#/components/schemas/SendSetPasswordIdentityType"
         skipVerification:
           type: boolean
         user:
