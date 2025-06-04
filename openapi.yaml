@@ -3678,7 +3678,7 @@ components:
           type: string
         kty:
           "$ref": "#/components/schemas/KeyType"
-        n:
+        "n":
           type: string
         other:
           type: object
@@ -3702,7 +3702,7 @@ components:
           type: string
         x5t#S256:
           type: string
-        y:
+        "y":
           type: string
     JSONWebKeyInfoProvider:
       description: Interface for any object that can provide JSON Web key Information.
