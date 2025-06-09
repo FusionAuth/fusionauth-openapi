@@ -3664,6 +3664,7 @@ components:
       - Pending
       - Completed
       - Disabled
+      - Administrative
     ImportRequest:
       description: Import request.
       type: object
@@ -8850,6 +8851,18 @@ components:
           type: string
         verificationId:
           type: string
+    VerifyRequest:
+      description: Identity verify request. Used to administratively verify an identity.
+      type: object
+      properties:
+        identityId:
+          type: integer
+          format: int64
+        userId:
+          type: string
+          format: uuid
+        eventInfo:
+          "$ref": "#/components/schemas/EventInfo"
     VerifySendRequest:
       description: Verify Send API request object.
       type: object
@@ -12790,6 +12803,25 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/IdentityProviderResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/identity/verify":
+    post:
+      description: Administratively verify a user identity.
+      operationId: verifyIdentityWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/VerifyRequest"
+      responses:
+        '200':
+          description: Success
         default:
           description: Error
           content:
