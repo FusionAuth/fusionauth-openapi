@@ -8298,9 +8298,6 @@ components:
       properties:
         displayValue:
           type: string
-        id:
-          type: integer
-          format: int64
         insertInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         lastLoginInstant:
