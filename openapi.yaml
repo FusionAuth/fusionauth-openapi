@@ -8855,12 +8855,10 @@ components:
       description: Identity verify request. Used to administratively verify an identity.
       type: object
       properties:
-        identityId:
-          type: integer
-          format: int64
-        userId:
+        loginId:
           type: string
-          format: uuid
+        loginIdType:
+          type: string
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
     VerifySendRequest:
