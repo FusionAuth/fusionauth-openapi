@@ -8812,6 +8812,14 @@ components:
           type: string
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
+    VerifyCompleteResponse:
+      description: Verify Complete API response object.
+      type: object
+      properties:
+        state:
+          type: object
+          additionalProperties:
+            type: object
     VerifyEmailRequest:
       description: ''
       type: object
@@ -8880,6 +8888,10 @@ components:
           type: string
         loginIdType:
           type: string
+        state:
+          type: object
+          additionalProperties:
+            type: object
         verificationStrategy:
           type: string
     VerifyStartResponse:
@@ -12840,6 +12852,10 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/VerifyCompleteResponse"
         default:
           description: Error
           content:
