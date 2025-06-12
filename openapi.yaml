@@ -7046,8 +7046,6 @@ components:
           "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
         sendPasswordless:
           "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
-        sendPasswordlessPhone:
-          "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
         sendPhoneVerification:
           "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
         sendRegistrationVerification:
