@@ -5595,17 +5595,6 @@ components:
           type: integer
         enabled:
           type: boolean
-    RateLimitedRequestType:
-      description: ''
-      type: string
-      enum:
-      - FailedLogin
-      - ForgotPassword
-      - SendEmailVerification
-      - SendPasswordless
-      - SendRegistrationVerification
-      - SendTwoFactor
-      - SendPhoneVerification
     RawLogin:
       description: Raw login information for each time a user logs into an application.
       type: object
@@ -7056,6 +7045,8 @@ components:
         sendEmailVerification:
           "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
         sendPasswordless:
+          "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
+        sendPasswordlessPhone:
           "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
         sendPhoneVerification:
           "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
