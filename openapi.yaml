@@ -8873,8 +8873,6 @@ components:
       description: Verify Send API request object.
       type: object
       properties:
-        oneTimeCode:
-          type: string
         verificationId:
           type: string
     VerifyStartRequest:
