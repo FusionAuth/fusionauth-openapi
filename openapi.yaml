@@ -279,6 +279,8 @@ components:
           "$ref": "#/components/schemas/OAuth2Configuration"
         passwordlessConfiguration:
           "$ref": "#/components/schemas/PasswordlessConfiguration"
+        phoneConfiguration:
+          "$ref": "#/components/schemas/ApplicationPhoneConfiguration"
         registrationConfiguration:
           "$ref": "#/components/schemas/RegistrationConfiguration"
         registrationDeletePolicy:
@@ -445,6 +447,52 @@ components:
       properties:
         scope:
           "$ref": "#/components/schemas/ApplicationOAuthScope"
+    ApplicationPhoneConfiguration:
+      description: Hold application phone configuration for template overrides.
+      type: object
+      properties:
+        forgotPasswordTemplateId:
+          type: string
+          format: uuid
+        identityUpdateTemplateId:
+          type: string
+          format: uuid
+        loginIdInUseOnCreateTemplateId:
+          type: string
+          format: uuid
+        loginIdInUseOnUpdateTemplateId:
+          type: string
+          format: uuid
+        loginNewDeviceTemplateId:
+          type: string
+          format: uuid
+        loginSuspiciousTemplateId:
+          type: string
+          format: uuid
+        passwordResetSuccessTemplateId:
+          type: string
+          format: uuid
+        passwordUpdateTemplateId:
+          type: string
+          format: uuid
+        passwordlessTemplateId:
+          type: string
+          format: uuid
+        setPasswordTemplateId:
+          type: string
+          format: uuid
+        twoFactorMethodAddTemplateId:
+          type: string
+          format: uuid
+        twoFactorMethodRemoveTemplateId:
+          type: string
+          format: uuid
+        verificationCompleteTemplateId:
+          type: string
+          format: uuid
+        verificationTemplateId:
+          type: string
+          format: uuid
     ApplicationRegistrationDeletePolicy:
       description: A Application-level policy for deleting Users.
       type: object
