@@ -7540,16 +7540,31 @@ components:
       description: ''
       type: object
       properties:
+        applicationId:
+          type: string
+          format: uuid
         tenantId:
           type: string
           format: uuid
-    UniversalConfiguration:
+    UniversalApplicationTenantsRequest:
+      description: ''
       type: object
       properties:
         applicationTenants:
           type: array
           items:
             "$ref": "#/components/schemas/UniversalApplicationTenant"
+    UniversalApplicationTenantsResponse:
+      description: ''
+      type: object
+      properties:
+        applicationTenants:
+          type: array
+          items:
+            "$ref": "#/components/schemas/UniversalApplicationTenant"
+    UniversalConfiguration:
+      type: object
+      properties:
         global:
           type: boolean
         universal:
@@ -9625,6 +9640,145 @@ paths:
                 "$ref": "#/components/schemas/ApplicationResponse"
         default:
           description: Error
+  "/api/application/{applicationId}/application-tenant":
+    post:
+      description: Adds the application tenants for universal applications.
+      operationId: createUniversalApplicationTenantsWithId
+      parameters:
+      - name: applicationId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the application that the role belongs to.
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UniversalApplicationTenantsRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UniversalApplicationTenantsResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    delete:
+      description: Removes the specified tenants from the universal application tenants
+        list.
+      operationId: deleteUniversalApplicationTenantsWithId
+      parameters:
+      - name: tenantIds
+        in: query
+        schema:
+          type: string
+        description: The Ids of the tenants to delete from the universal application
+          tenants list.
+      - name: applicationId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the universal application that the tenants are linked
+          to.
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    get:
+      description: Retrieves the application tenants for universal applications.
+      operationId: retrieveUniversalApplicationTenantsWithId
+      parameters:
+      - name: applicationId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the application that the role belongs to.
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UniversalApplicationTenantsResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/application/{applicationId}/application-tenant/{tenantId}":
+    delete:
+      description: Removes the specified tenant from the universal application tenants
+        list.
+      operationId: deleteUniversalApplicationTenantWithId
+      parameters:
+      - name: applicationId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the application that the role belongs to.
+      - name: tenantId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the tenant to delete from the universal application
+          tenants list.
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/application/{applicationId}/oauth-configuration":
     get:
       description: Retrieves the Oauth2 configuration for the application for the
