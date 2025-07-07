@@ -302,7 +302,7 @@ components:
           type: string
           format: uuid
         universalConfiguration:
-          "$ref": "#/components/schemas/UniversalConfiguration"
+          "$ref": "#/components/schemas/UniversalApplicationConfiguration"
         unverified:
           "$ref": "#/components/schemas/RegistrationUnverifiedOptions"
         verificationEmailTemplateId:
@@ -3680,7 +3680,7 @@ components:
           type: string
         kty:
           "$ref": "#/components/schemas/KeyType"
-        n:
+        "n":
           type: string
         other:
           type: object
@@ -3704,7 +3704,7 @@ components:
           type: string
         x5t#S256:
           type: string
-        y:
+        "y":
           type: string
     JSONWebKeyInfoProvider:
       description: Interface for any object that can provide JSON Web key Information.
@@ -7536,24 +7536,85 @@ components:
       enum:
       - Always
       - OnCollision
-    UniversalApplicationTenant:
+    UniversalApplicationConfiguration:
       description: ''
       type: object
       properties:
-        tenantId:
-          type: string
-          format: uuid
-    UniversalConfiguration:
-      type: object
-      properties:
-        applicationTenants:
-          type: array
-          items:
-            "$ref": "#/components/schemas/UniversalApplicationTenant"
         global:
           type: boolean
         universal:
           type: boolean
+    UniversalApplicationTenant:
+      description: An object that represents the mapping between a Universal Application
+        and a Tenant.
+      type: object
+      properties:
+        applicationId:
+          type: string
+          format: uuid
+        data:
+          type: object
+          additionalProperties:
+            type: object
+        id:
+          type: string
+          format: uuid
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        lastUpdateInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        tenantId:
+          type: string
+          format: uuid
+    UniversalApplicationTenantRequest:
+      description: The request object for creating or updating a Universal Application
+        Tenant.
+      type: object
+      properties:
+        universalApplicationTenant:
+          "$ref": "#/components/schemas/UniversalApplicationTenant"
+    UniversalApplicationTenantResponse:
+      description: The response object for a single Universal Application Tenant.
+      type: object
+      properties:
+        universalApplicationTenant:
+          "$ref": "#/components/schemas/UniversalApplicationTenant"
+    UniversalApplicationTenantSearchCriteria:
+      description: ''
+      type: object
+      properties:
+        applicationId:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+        tenantName:
+          type: string
+        numberOfResults:
+          type: integer
+        orderBy:
+          type: string
+        startRow:
+          type: integer
+    UniversalApplicationTenantSearchRequest:
+      description: The request object with the search criteria for Universal Application
+        Tenants.
+      type: object
+      properties:
+        search:
+          "$ref": "#/components/schemas/UniversalApplicationTenantSearchCriteria"
+    UniversalApplicationTenantSearchResponse:
+      description: The response object for Universal Application Tenants search results.
+      type: object
+      properties:
+        universalApplicationTenants:
+          type: array
+          items:
+            "$ref": "#/components/schemas/UniversalApplicationTenant"
+        total:
+          type: integer
+          format: int64
     UnknownScopePolicy:
       description: Policy for handling unknown OAuth scopes in the request
       type: string
@@ -9444,6 +9505,38 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/application/universal-application-tenant/search":
+    post:
+      description: Searches universal application tenants for the specified applicationId
+        and with the specified criteria and pagination.
+      operationId: searchUniversalApplicationTenantsWithId
+      parameters:
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UniversalApplicationTenantSearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UniversalApplicationTenantSearchResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/application/{applicationId}":
     post:
       description: Creates an application. You can optionally specify an Id for the
@@ -9625,6 +9718,80 @@ paths:
                 "$ref": "#/components/schemas/ApplicationResponse"
         default:
           description: Error
+  "/api/application/{applicationId}/application-tenant":
+    delete:
+      description: Removes the specified tenants from the universal application tenants
+        list.
+      operationId: deleteUniversalApplicationTenantsWithId
+      parameters:
+      - name: tenantIds
+        in: query
+        schema:
+          type: string
+        description: The Ids of the tenants to delete from the universal application
+          tenants list.
+      - name: applicationId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the universal application that the tenants are linked
+          to.
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/application/{applicationId}/application-tenant/{universalApplicationTenantId}":
+    get:
+      description: Retrieves the universal application tenant.
+      operationId: retrieveUniversalApplicationTenantWithId
+      parameters:
+      - name: applicationId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the universal application that tenant is mapped to
+      - name: universalApplicationTenantId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the universal application tenant.
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UniversalApplicationTenantResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/application/{applicationId}/oauth-configuration":
     get:
       description: Retrieves the Oauth2 configuration for the application for the
@@ -10103,6 +10270,165 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ApplicationOAuthScopeResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/application/{applicationId}/universal-application-tenant":
+    post:
+      description: Adds the application tenants for universal applications.
+      operationId: createUniversalApplicationTenant
+      parameters:
+      - name: applicationId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the application that the universal application tenant
+          belongs to.
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UniversalApplicationTenantRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UniversalApplicationTenantResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/application/{applicationId}/universal-application-tenant/{universalApplicationTenantId}":
+    post:
+      description: Adds the application tenants for universal applications.
+      operationId: createUniversalApplicationTenantWithId
+      parameters:
+      - name: applicationId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the application that the universal application tenant
+          belongs to.
+      - name: universalApplicationTenantId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the universal application tenant.
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UniversalApplicationTenantRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UniversalApplicationTenantResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    delete:
+      description: Deletes the universal application tenant.
+      operationId: deleteUniversalApplicationTenantWithId
+      parameters:
+      - name: applicationId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the application that the UniversalApplicationTenant
+          belongs to.
+      - name: universalApplicationTenantId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the UniversalApplicationTenant to delete.
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    put:
+      description: Adds the application tenants for universal applications.
+      operationId: updateUniversalApplicationTenantWithId
+      parameters:
+      - name: applicationId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the application that the UniversalApplicationTenant
+          belongs to.
+      - name: universalApplicationTenantId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the universal application tenant.
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UniversalApplicationTenantRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/UniversalApplicationTenantResponse"
         default:
           description: Error
           content:
