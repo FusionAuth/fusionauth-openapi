@@ -2251,6 +2251,7 @@ components:
       - UserUpdateComplete
       - Test
       - IdentityVerified
+      - UserIdentityUpdate
     ExpandableRequest:
       description: An expandable API request.
       type: object
@@ -8371,6 +8372,18 @@ components:
       properties:
         identityProviderLink:
           "$ref": "#/components/schemas/IdentityProviderLink"
+        user:
+          "$ref": "#/components/schemas/User"
+    UserIdentityUpdateEvent:
+      description: Models the user identity update event
+      type: object
+      properties:
+        loginIdType:
+          type: string
+        newLoginId:
+          type: string
+        previousLoginId:
+          type: string
         user:
           "$ref": "#/components/schemas/User"
     UserLoginFailedEvent:
