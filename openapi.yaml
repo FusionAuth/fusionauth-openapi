@@ -9301,9 +9301,7 @@ components:
           additionalProperties:
             type: object
         event:
-          type: object
-          additionalProperties:
-            type: object
+          "$ref": "#/components/schemas/EventRequest"
         eventResult:
           "$ref": "#/components/schemas/WebhookEventResult"
         eventType:
