@@ -302,7 +302,7 @@ components:
           type: string
           format: uuid
         universalConfiguration:
-          "$ref": "#/components/schemas/UniversalConfiguration"
+          "$ref": "#/components/schemas/UniversalApplicationConfiguration"
         unverified:
           "$ref": "#/components/schemas/RegistrationUnverifiedOptions"
         verificationEmailTemplateId:
@@ -7536,6 +7536,12 @@ components:
       enum:
       - Always
       - OnCollision
+    UniversalApplicationConfiguration:
+      description: ''
+      type: object
+      properties:
+        universal:
+          type: boolean
     UniversalApplicationTenant:
       description: ''
       type: object
@@ -7543,17 +7549,6 @@ components:
         tenantId:
           type: string
           format: uuid
-    UniversalConfiguration:
-      type: object
-      properties:
-        applicationTenants:
-          type: array
-          items:
-            "$ref": "#/components/schemas/UniversalApplicationTenant"
-        global:
-          type: boolean
-        universal:
-          type: boolean
     UnknownScopePolicy:
       description: Policy for handling unknown OAuth scopes in the request
       type: string
