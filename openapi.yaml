@@ -7542,13 +7542,6 @@ components:
       properties:
         universal:
           type: boolean
-    UniversalApplicationTenant:
-      description: ''
-      type: object
-      properties:
-        tenantId:
-          type: string
-          format: uuid
     UnknownScopePolicy:
       description: Policy for handling unknown OAuth scopes in the request
       type: string
