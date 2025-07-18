@@ -2250,7 +2250,7 @@ components:
       - UserUpdate
       - UserUpdateComplete
       - Test
-      - IdentityVerified
+      - UserIdentityVerified
       - UserIdentityUpdate
     ExpandableRequest:
       description: An expandable API request.
@@ -3691,16 +3691,6 @@ components:
       properties:
         name:
           type: string
-    IdentityVerifiedEvent:
-      description: Models the identity verified event
-      type: object
-      properties:
-        loginId:
-          type: string
-        loginIdType:
-          type: string
-        user:
-          "$ref": "#/components/schemas/User"
     IdentityVerifiedReason:
       description: Models the reason that {@link UserIdentity#verified} was set to
         true or false.
@@ -8381,6 +8371,16 @@ components:
         newLoginId:
           type: string
         previousLoginId:
+          type: string
+        user:
+          "$ref": "#/components/schemas/User"
+    UserIdentityVerifiedEvent:
+      description: Models the user identity verified event
+      type: object
+      properties:
+        loginId:
+          type: string
+        loginIdType:
           type: string
         user:
           "$ref": "#/components/schemas/User"
