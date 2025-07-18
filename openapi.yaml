@@ -5602,9 +5602,9 @@ components:
             type: string
         licensed:
           type: boolean
-        organizationAdminApplication:
-          "$ref": "#/components/schemas/ReactorFeatureStatus"
         scimServer:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
+        tenantManagerApplication:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         threatDetection:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
