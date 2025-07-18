@@ -6902,8 +6902,6 @@ components:
           type: string
         oauthConfiguration:
           "$ref": "#/components/schemas/TenantOAuth2Configuration"
-        passwordEnabled:
-          type: boolean
         passwordEncryptionConfiguration:
           "$ref": "#/components/schemas/PasswordEncryptionConfiguration"
         passwordValidationRules:
