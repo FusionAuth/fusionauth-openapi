@@ -9244,52 +9244,22 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
-  "/api/api-key/{apiKeyId}":
-    put:
-      description: Updates an API key by given id
-      operationId: updateAPIKeyWithId
-      parameters:
-      - name: apiKeyId
-        in: path
-        schema:
-          type: string
-        required: true
-        description: The Id of the API key to update.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/APIKeyRequest"
-      responses:
-        '200':
-          description: Success
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/APIKeyResponse"
-        default:
-          description: Error
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/Errors"
   "/api/api-key/{keyId}":
     post:
-      description: Updates an authentication API key by given id OR Creates an API
-        key. You can optionally specify a unique Id for the key, if not provided one
-        will be generated. an API key can only be created with equal or lesser authority.
-        An API key cannot create another API key unless it is granted  to that API
-        key.  If an API key is locked to a tenant, it can only create API Keys for
-        that same tenant.
-      operationId: createApiKeyWithId
+      description: Creates an API key. You can optionally specify a unique Id for
+        the key, if not provided one will be generated. an API key can only be created
+        with equal or lesser authority. An API key cannot create another API key unless
+        it is granted  to that API key.  If an API key is locked to a tenant, it can
+        only create API Keys for that same tenant.
+      operationId: createAPIKeyWithId
       parameters:
       - name: keyId
         in: path
         schema:
           type: string
         required: true
-        description: The Id of the authentication key. If not provided a secure random
-          api key will be generated.
+        description: The unique Id of the API key. If not provided a secure random
+          Id will be generated.
       requestBody:
         content:
           application/json:
@@ -9327,8 +9297,37 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    patch:
+      description: Updates an API key with the given Id.
+      operationId: patchAPIKeyWithId
+      parameters:
+      - name: keyId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the API key. If not provided a secure random api key
+          will be generated.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/APIKeyRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/APIKeyResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
     get:
-      description: Retrieves an authentication API key for the given id
+      description: Retrieves an authentication API key for the given Id.
       operationId: retrieveAPIKeyWithId
       parameters:
       - name: keyId
@@ -9337,6 +9336,34 @@ paths:
           type: string
         required: true
         description: The Id of the API key to retrieve.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/APIKeyResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    put:
+      description: Updates an API key with the given Id.
+      operationId: updateAPIKeyWithId
+      parameters:
+      - name: keyId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the API key to update.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/APIKeyRequest"
       responses:
         '200':
           description: Success
@@ -9595,7 +9622,7 @@ paths:
         schema:
           type: string
         required: true
-        description: The application id.
+        description: The application Id.
       - in: header
         name: X-FusionAuth-TenantId
         description: The unique Id of the tenant used to scope this API request. Only
@@ -10468,7 +10495,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
   "/api/email/send/{emailTemplateId}":
     post:
-      description: Send an email using an email template id. You can optionally provide
+      description: Send an email using an email template Id. You can optionally provide
         <code>requestData</code> to access key value pairs in the email template.
       operationId: sendEmailWithId
       parameters:
@@ -10530,7 +10557,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
     get:
       description: Retrieves the email template for the given Id. If you don't specify
-        the id, this will return all the email templates.
+        the Id, this will return all the email templates.
       operationId: retrieveEmailTemplate
       parameters:
       - in: header
@@ -10703,7 +10730,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
     get:
       description: Retrieves the email template for the given Id. If you don't specify
-        the id, this will return all the email templates.
+        the Id, this will return all the email templates.
       operationId: retrieveEmailTemplateWithId
       parameters:
       - name: emailTemplateId
@@ -10844,7 +10871,7 @@ paths:
               schema:
                 "$ref": "#/components/schemas/Errors"
     get:
-      description: Retrieves the entities for the given ids. If any Id is invalid,
+      description: Retrieves the entities for the given Ids. If any Id is invalid,
         it is ignored.
       operationId: searchEntitiesByIdsWithId
       parameters:
@@ -13596,7 +13623,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
     get:
       description: Retrieves the message template for the given Id. If you don't specify
-        the id, this will return all the message templates.
+        the Id, this will return all the message templates.
       operationId: retrieveMessageTemplate
       parameters: []
       responses:
@@ -13712,7 +13739,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
     get:
       description: Retrieves the message template for the given Id. If you don't specify
-        the id, this will return all the message templates.
+        the Id, this will return all the message templates.
       operationId: retrieveMessageTemplateWithId
       parameters:
       - name: messageTemplateId
@@ -14013,7 +14040,7 @@ paths:
   "/api/report/daily-active-user":
     get:
       description: Retrieves the daily active user report between the two instants.
-        If you specify an application id, it will only return the daily active counts
+        If you specify an application Id, it will only return the daily active counts
         for that application.
       operationId: retrieveDailyActiveReportWithId
       parameters:
@@ -14021,7 +14048,7 @@ paths:
         in: query
         schema:
           type: string
-        description: The application id.
+        description: The application Id.
       - name: start
         in: query
         schema:
@@ -14048,11 +14075,11 @@ paths:
   "/api/report/login":
     get:
       description: Retrieves the login report between the two instants for a particular
-        user by login Id. If you specify an application id, it will only return the
+        user by login Id. If you specify an application Id, it will only return the
         login counts for that application. OR Retrieves the login report between the
-        two instants for a particular user by Id. If you specify an application id,
+        two instants for a particular user by Id. If you specify an application Id,
         it will only return the login counts for that application. OR Retrieves the
-        login report between the two instants. If you specify an application id, it
+        login report between the two instants. If you specify an application Id, it
         will only return the login counts for that application.
       operationId: retrieveReportLogin
       parameters:
@@ -14060,12 +14087,12 @@ paths:
         in: query
         schema:
           type: string
-        description: The application id.
+        description: The application Id.
       - name: loginId
         in: query
         schema:
           type: string
-        description: The userId id.
+        description: The userId Id.
       - name: start
         in: query
         schema:
@@ -14080,7 +14107,7 @@ paths:
         in: query
         schema:
           type: string
-        description: The userId id.
+        description: The userId Id.
       responses:
         '200':
           description: Success
@@ -14097,7 +14124,7 @@ paths:
   "/api/report/monthly-active-user":
     get:
       description: Retrieves the monthly active user report between the two instants.
-        If you specify an application id, it will only return the monthly active counts
+        If you specify an application Id, it will only return the monthly active counts
         for that application.
       operationId: retrieveMonthlyActiveReportWithId
       parameters:
@@ -14105,7 +14132,7 @@ paths:
         in: query
         schema:
           type: string
-        description: The application id.
+        description: The application Id.
       - name: start
         in: query
         schema:
@@ -14132,7 +14159,7 @@ paths:
   "/api/report/registration":
     get:
       description: Retrieves the registration report between the two instants. If
-        you specify an application id, it will only return the registration counts
+        you specify an application Id, it will only return the registration counts
         for that application.
       operationId: retrieveRegistrationReportWithId
       parameters:
@@ -14140,7 +14167,7 @@ paths:
         in: query
         schema:
           type: string
-        description: The application id.
+        description: The application Id.
       - name: start
         in: query
         schema:
@@ -15239,7 +15266,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
     get:
       description: Retrieves the user action for the given Id. If you pass in null
-        for the id, this will return all the user actions. OR Retrieves all the user
+        for the Id, this will return all the user actions. OR Retrieves all the user
         actions that are currently inactive.
       operationId: retrieveUserAction
       parameters:
@@ -15291,7 +15318,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
     get:
       description: Retrieves the user action reason for the given Id. If you pass
-        in null for the id, this will return all the user action reasons.
+        in null for the Id, this will return all the user action reasons.
       operationId: retrieveUserActionReason
       parameters: []
       responses:
@@ -15384,7 +15411,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
     get:
       description: Retrieves the user action reason for the given Id. If you pass
-        in null for the id, this will return all the user action reasons.
+        in null for the Id, this will return all the user action reasons.
       operationId: retrieveUserActionReasonWithId
       parameters:
       - name: userActionReasonId
@@ -15582,7 +15609,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
     get:
       description: Retrieves the user action for the given Id. If you pass in null
-        for the id, this will return all the user actions.
+        for the Id, this will return all the user actions.
       operationId: retrieveUserActionWithId
       parameters:
       - name: userActionId
@@ -15711,7 +15738,7 @@ paths:
           type: string
         required: true
         description: The Id of the action to modify. This is technically the user
-          action log id.
+          action log Id.
       requestBody:
         content:
           application/json:
@@ -15756,13 +15783,13 @@ paths:
                 "$ref": "#/components/schemas/Errors"
   "/api/user/bulk":
     delete:
-      description: Deletes the users with the given ids, or users matching the provided
-        JSON query or queryString. The order of preference is ids, query and then
+      description: Deletes the users with the given Ids, or users matching the provided
+        JSON query or queryString. The order of preference is Ids, query and then
         queryString, it is recommended to only provide one of the three for the request.  This
         method can be used to deactivate or permanently delete (hard-delete) users
         based upon the hardDelete boolean in the request body. Using the dryRun parameter
         you may also request the result of the action without actually deleting or
-        deactivating any users. OR Deactivates the users with the given ids.
+        deactivating any users. OR Deactivates the users with the given Ids.
       operationId: deleteUserBulk
       parameters:
       - name: userIds
@@ -16367,7 +16394,7 @@ paths:
           description: Error
   "/api/user/family/{familyId}/{userId}":
     delete:
-      description: Removes a user from the family with the given id.
+      description: Removes a user from the family with the given Id.
       operationId: removeUserFromFamilyWithId
       parameters:
       - name: familyId
@@ -16710,7 +16737,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
     get:
       description: Retrieves the user registration for the user with the given Id
-        and the given application id.
+        and the given application Id.
       operationId: retrieveRegistrationWithId
       parameters:
       - name: userId
@@ -16748,7 +16775,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
   "/api/user/search":
     get:
-      description: Retrieves the users for the given ids. If any Id is invalid, it
+      description: Retrieves the users for the given Ids. If any Id is invalid, it
         is ignored.
       operationId: searchUsersByIdsWithId
       parameters:
@@ -16756,7 +16783,7 @@ paths:
         in: query
         schema:
           type: string
-        description: The user ids to search for.
+        description: The user Ids to search for.
       responses:
         '200':
           description: Success
@@ -17450,7 +17477,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
     get:
       description: Retrieves the webhook for the given Id. If you pass in null for
-        the id, this will return all the webhooks.
+        the Id, this will return all the webhooks.
       operationId: retrieveWebhook
       parameters: []
       responses:
@@ -17565,7 +17592,7 @@ paths:
                 "$ref": "#/components/schemas/Errors"
     get:
       description: Retrieves the webhook for the given Id. If you pass in null for
-        the id, this will return all the webhooks.
+        the Id, this will return all the webhooks.
       operationId: retrieveWebhookWithId
       parameters:
       - name: webhookId
@@ -17661,7 +17688,7 @@ paths:
         in: query
         schema:
           type: string
-        description: The client id.
+        description: The client Id.
       responses:
         '200':
           description: Success
