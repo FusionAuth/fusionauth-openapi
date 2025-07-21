@@ -301,6 +301,8 @@ components:
         themeId:
           type: string
           format: uuid
+        universalConfiguration:
+          "$ref": "#/components/schemas/UniversalApplicationConfiguration"
         unverified:
           "$ref": "#/components/schemas/RegistrationUnverifiedOptions"
         verificationEmailTemplateId:
@@ -4965,6 +4967,7 @@ components:
       - invalid_target_entity_scope
       - invalid_entity_permission_scope
       - invalid_user_id
+      - invalid_tenant_id
       - grant_type_disabled
       - missing_client_id
       - missing_client_secret
@@ -4980,6 +4983,7 @@ components:
       - missing_user_code
       - missing_user_id
       - missing_verification_uri
+      - missing_tenant_id
       - login_prevented
       - not_licensed
       - user_code_expired
@@ -5600,7 +5604,11 @@ components:
           type: boolean
         scimServer:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
+        tenantManagerApplication:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
         threatDetection:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
+        universalApplication:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         webAuthn:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
@@ -7528,6 +7536,12 @@ components:
       enum:
       - Always
       - OnCollision
+    UniversalApplicationConfiguration:
+      description: ''
+      type: object
+      properties:
+        universal:
+          type: boolean
     UnknownScopePolicy:
       description: Policy for handling unknown OAuth scopes in the request
       type: string
