@@ -15825,15 +15825,17 @@ paths:
                 "$ref": "#/components/schemas/Errors"
   "/api/user/change-password":
     post:
-      description: 'Changes a user''s password using their identity (loginId and password).
-        Using a loginId instead of the changePasswordId bypasses the email verification
-        and allows a password to be changed directly without first calling the #forgotPassword
-        method. OR Changes a user''s password using their access token (JWT) instead
+      description: 'Changes a user''s password using their access token (JWT) instead
         of the changePasswordId A common use case for this method will be if you want
         to allow the user to change their own password.  Remember to send refreshToken
         in the request body if you want to get a new refresh token when login using
-        the returned oneTimePassword.'
+        the returned oneTimePassword. OR Changes a user''s password using their identity
+        (loginId and password). Using a loginId instead of the changePasswordId bypasses
+        the email verification and allows a password to be changed directly without
+        first calling the #forgotPassword method.'
       operationId: createUserChangePassword
+      security:
+      - BearerAuth: []
       parameters: []
       requestBody:
         content:
@@ -15843,6 +15845,10 @@ paths:
       responses:
         '200':
           description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ChangePasswordResponse"
         default:
           description: Error
           content:
