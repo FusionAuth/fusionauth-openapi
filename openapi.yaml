@@ -4956,6 +4956,7 @@ components:
       - invalid_pkce_code_verifier
       - invalid_pkce_code_challenge
       - invalid_pkce_code_challenge_method
+      - invalid_prompt
       - invalid_redirect_uri
       - invalid_response_mode
       - invalid_response_type
@@ -5002,6 +5003,9 @@ components:
       - missing_required_scope
       - unknown_scope
       - consent_canceled
+      - authentication_required
+      - multi_factor_challenge_required
+      - consent_required
     OAuthErrorType:
       type: string
       enum:
@@ -5009,6 +5013,9 @@ components:
       - invalid_client
       - invalid_grant
       - invalid_token
+      - consent_required
+      - interaction_required
+      - login_required
       - unauthorized_client
       - invalid_scope
       - server_error
