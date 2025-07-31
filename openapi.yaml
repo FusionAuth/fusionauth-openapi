@@ -3688,8 +3688,7 @@ components:
       - Twitter
       - Xbox
     IdentityType:
-      description: Keep track of identity types that FusionAuth provides out of the
-        box.
+      description: Model identity types provided by FusionAuth.
       type: object
       properties:
         name:
