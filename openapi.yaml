@@ -3688,7 +3688,7 @@ components:
       - Twitter
       - Xbox
     IdentityType:
-      description: ''
+      description: Model identity types provided by FusionAuth.
       type: object
       properties:
         name:
@@ -3706,6 +3706,7 @@ components:
       - Completed
       - Disabled
       - Administrative
+      - Import
     ImportRequest:
       description: Import request.
       type: object
