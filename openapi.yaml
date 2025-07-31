@@ -3688,7 +3688,8 @@ components:
       - Twitter
       - Xbox
     IdentityType:
-      description: ''
+      description: Keep track of identity types that FusionAuth provides out of the
+        box.
       type: object
       properties:
         name:
@@ -3706,6 +3707,7 @@ components:
       - Completed
       - Disabled
       - Administrative
+      - Import
     ImportRequest:
       description: Import request.
       type: object
