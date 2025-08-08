@@ -5401,7 +5401,7 @@ components:
           items:
             type: string
         loginStrategy:
-          type: string
+          "$ref": "#/components/schemas/PasswordlessStrategy"
         state:
           type: object
           additionalProperties:
@@ -8956,7 +8956,7 @@ components:
           additionalProperties:
             type: object
         verificationStrategy:
-          type: string
+          "$ref": "#/components/schemas/VerificationStrategy"
     VerifyStartResponse:
       description: ''
       type: object
