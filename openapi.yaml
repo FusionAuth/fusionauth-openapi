@@ -3026,8 +3026,6 @@ components:
           format: uuid
         insertInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
-        user:
-          "$ref": "#/components/schemas/User"
         userId:
           type: string
           format: uuid
