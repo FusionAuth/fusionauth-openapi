@@ -14581,7 +14581,7 @@ paths:
           type: array
           items:
             type: string
-        description: the identity types that FusionAuth will compare the loginId to.
+        description: The identity types that FusionAuth will compare the loginId to.
       - name: userId
         in: query
         schema:
@@ -15693,7 +15693,7 @@ paths:
           type: array
           items:
             type: string
-        description: the identity types that FusionAuth will compare the loginId to.
+        description: The identity types that FusionAuth will compare the loginId to.
       - name: email
         in: query
         schema:
@@ -16376,7 +16376,7 @@ paths:
           type: array
           items:
             type: string
-        description: the identity types that FusionAuth will compare the loginId to.
+        description: The identity types that FusionAuth will compare the loginId to.
       responses:
         '200':
           description: Success
