@@ -14581,7 +14581,7 @@ paths:
           type: array
           items:
             type: string
-        description: the identity types that FusionAuth will compare the loginId to.
+        description: The identity types that FusionAuth will compare the loginId to.
       - name: userId
         in: query
         schema:
@@ -15693,7 +15693,7 @@ paths:
           type: array
           items:
             type: string
-        description: the identity types that FusionAuth will compare the loginId to.
+        description: The identity types that FusionAuth will compare the loginId to.
       - name: email
         in: query
         schema:
@@ -16350,12 +16350,18 @@ paths:
         Step-Up authentication.  An HTTP status code of 400 with a general error code
         of [TrustTokenRequired] indicates that a Trust Token is required to make a
         POST request to this API. OR Check to see if the user must obtain a Trust
-        Token Id in order to complete a change password request. When a user has enabled
-        Two-Factor authentication, before you are allowed to use the Change Password
-        API to change your password, you must obtain a Trust Token by completing a
-        Two-Factor Step-Up authentication.  An HTTP status code of 400 with a general
-        error code of [TrustTokenRequired] indicates that a Trust Token is required
-        to make a POST request to this API.
+        Request Id in order to complete a change password request. When a user has
+        enabled Two-Factor authentication, before you are allowed to use the Change
+        Password API to change your password, you must obtain a Trust Request Id by
+        completing a Two-Factor Step-Up authentication.  An HTTP status code of 400
+        with a general error code of [TrustTokenRequired] indicates that a Trust Token
+        is required to make a POST request to this API. OR Check to see if the user
+        must obtain a Trust Token Id in order to complete a change password request.
+        When a user has enabled Two-Factor authentication, before you are allowed
+        to use the Change Password API to change your password, you must obtain a
+        Trust Token by completing a Two-Factor Step-Up authentication.  An HTTP status
+        code of 400 with a general error code of [TrustTokenRequired] indicates that
+        a Trust Token is required to make a POST request to this API.
       operationId: retrieveUserChangePassword
       parameters:
       - name: loginId
@@ -16364,6 +16370,13 @@ paths:
           type: string
         description: The loginId of the User that you intend to change the password
           for.
+      - name: loginIdTypes
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        description: The identity types that FusionAuth will compare the loginId to.
       responses:
         '200':
           description: Success
