@@ -3780,7 +3780,7 @@ components:
           type: string
         kty:
           "$ref": "#/components/schemas/KeyType"
-        "n":
+        n:
           type: string
         other:
           type: object
@@ -3804,7 +3804,7 @@ components:
           type: string
         x5t#S256:
           type: string
-        "y":
+        y:
           type: string
     JSONWebKeyInfoProvider:
       description: Interface for any object that can provide JSON Web key Information.
@@ -18158,7 +18158,12 @@ paths:
         API is useful if you want to build your own login workflow to complete a device
         grant.
       operationId: retrieveDeviceUserCode
-      parameters: []
+      parameters:
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+        description: The Id of the tenant to use for this request.
       responses:
         '200':
           description: Success
@@ -18182,6 +18187,11 @@ paths:
         schema:
           type: string
         description: The client Id.
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+        description: The Id of the tenant to use for this request.
       responses:
         '200':
           description: Success
@@ -18244,7 +18254,12 @@ paths:
       operationId: retrieveUserInfoFromAccessTokenWithId
       security:
       - BearerAuth: []
-      parameters: []
+      parameters:
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+        description: The Id of the tenant to use for this request.
       responses:
         '200':
           description: Success
