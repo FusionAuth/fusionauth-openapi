@@ -3150,8 +3150,6 @@ components:
       description: Search criteria for Groups
       type: object
       properties:
-        exact:
-          type: boolean
         name:
           type: string
         tenantId:
