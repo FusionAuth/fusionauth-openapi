@@ -18514,12 +18514,7 @@ paths:
       operationId: retrieveUserInfoFromAccessTokenWithId
       security:
       - BearerAuth: []
-      parameters:
-      - name: tenantId
-        in: query
-        schema:
-          type: string
-        description: The Id of the tenant to use for this request.
+      parameters: []
       responses:
         '200':
           description: Success
