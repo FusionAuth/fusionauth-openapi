@@ -5944,6 +5944,10 @@ components:
           type: boolean
         user:
           "$ref": "#/components/schemas/User"
+        verificationIds:
+          type: array
+          items:
+            type: string
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
     RegistrationResponse:
