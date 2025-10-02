@@ -8977,6 +8977,8 @@ components:
           type: string
         loginIdType:
           type: string
+        skipUserRequirement:
+          type: boolean
         state:
           type: object
           additionalProperties:
