@@ -2769,7 +2769,7 @@ components:
           items:
             type: string
             format: uuid
-        formStepType:
+        type:
           "$ref": "#/components/schemas/FormStepType"
     FormStepType:
       description: Which type of step is in use?
