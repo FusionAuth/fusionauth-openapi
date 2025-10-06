@@ -2777,7 +2777,7 @@ components:
       enum:
       - collectData
       - verifyEmail
-      - verifyPhone
+      - verifyPhoneNumber
     FormType:
       description: ''
       type: string
