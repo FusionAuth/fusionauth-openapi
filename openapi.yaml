@@ -5981,6 +5981,10 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         user:
           "$ref": "#/components/schemas/User"
+        verificationIds:
+          type: array
+          items:
+            "$ref": "#/components/schemas/VerificationId"
     RegistrationType:
       type: string
       enum:
