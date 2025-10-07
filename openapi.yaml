@@ -2769,6 +2769,16 @@ components:
           items:
             type: string
             format: uuid
+        type:
+          "$ref": "#/components/schemas/FormStepType"
+    FormStepType:
+      description: Denotes the type of form step. This is used to configure different
+        behavior on form steps in the registration flow.
+      type: string
+      enum:
+      - collectData
+      - verifyEmail
+      - verifyPhoneNumber
     FormType:
       description: ''
       type: string
