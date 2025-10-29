@@ -2254,6 +2254,13 @@ components:
       - Test
       - UserIdentityVerified
       - UserIdentityUpdate
+    ExistingUserStrategy:
+      description: Represent the various statesexpectations of a user in the context
+        of starting verification
+      type: string
+      enum:
+      - MustExist
+      - MustNotExist
     ExpandableRequest:
       description: An expandable API request.
       type: object
@@ -8978,12 +8985,12 @@ components:
         applicationId:
           type: string
           format: uuid
+        existingUserStrategy:
+          "$ref": "#/components/schemas/ExistingUserStrategy"
         loginId:
           type: string
         loginIdType:
           type: string
-        skipUserRequirement:
-          type: boolean
         state:
           type: object
           additionalProperties:
