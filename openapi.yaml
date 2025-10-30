@@ -2259,8 +2259,8 @@ components:
         of starting verification
       type: string
       enum:
-      - MustExist
-      - MustNotExist
+      - mustExist
+      - mustNotExist
     ExpandableRequest:
       description: An expandable API request.
       type: object
