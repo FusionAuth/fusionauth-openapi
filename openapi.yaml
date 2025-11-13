@@ -3399,6 +3399,9 @@ components:
           type: string
         oauth2:
           "$ref": "#/components/schemas/IdentityProviderOauth2Configuration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     IdentityProviderField:
