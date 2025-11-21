@@ -4333,6 +4333,7 @@ components:
       - SelfServiceRegistrationValidation
       - UserInfoPopulate
       - LoginValidation
+      - MFARequirement
     LinkedInApplicationConfiguration:
       description: ''
       type: object
