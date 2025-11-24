@@ -4839,6 +4839,14 @@ components:
           type: integer
         enabled:
           type: boolean
+    MultiFactorContext:
+      description: Communicate various contexts in which multi-factor authentication
+        can be used.
+      type: string
+      enum:
+      - changePassword
+      - login
+      - stepUp
     MultiFactorEmailMethod:
       type: object
       properties:
