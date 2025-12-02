@@ -4239,6 +4239,9 @@ components:
         idTokenPopulateId:
           type: string
           format: uuid
+        multiFactorRequirementId:
+          type: string
+          format: uuid
         samlv2PopulateId:
           type: string
           format: uuid
@@ -4396,7 +4399,7 @@ components:
     LocalDate:
       description: A date without a time-zone in the ISO-8601 calendar system, such
         as 2007-12-03.
-      example: '2007-12-03'
+      example: 2007-12-03
       pattern: "^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]$"
       type: string
     Locale:
@@ -7001,6 +7004,9 @@ components:
       type: object
       properties:
         loginValidationId:
+          type: string
+          format: uuid
+        multiFactorRequirementId:
           type: string
           format: uuid
         scimEnterpriseUserRequestConverterId:
