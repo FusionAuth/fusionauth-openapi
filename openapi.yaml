@@ -4239,6 +4239,9 @@ components:
         idTokenPopulateId:
           type: string
           format: uuid
+        multiFactorRequirementId:
+          type: string
+          format: uuid
         samlv2PopulateId:
           type: string
           format: uuid
@@ -7001,6 +7004,9 @@ components:
       type: object
       properties:
         loginValidationId:
+          type: string
+          format: uuid
+        multiFactorRequirementId:
           type: string
           format: uuid
         scimEnterpriseUserRequestConverterId:
