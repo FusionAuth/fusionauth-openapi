@@ -234,6 +234,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     Application:
@@ -2038,6 +2041,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     Error:
@@ -2406,6 +2412,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     FacebookApplicationConfiguration:
@@ -2473,6 +2482,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     FailedAuthenticationActionCancelPolicy:
@@ -2938,6 +2950,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     GoogleIdentityProviderProperties:
@@ -3260,6 +3275,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     HistoryItem:
@@ -3381,6 +3399,9 @@ components:
           type: string
         oauth2:
           "$ref": "#/components/schemas/IdentityProviderOauth2Configuration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     IdentityProviderField:
@@ -3592,6 +3613,9 @@ components:
           format: uuid
         name:
           type: string
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
         numberOfResults:
@@ -4390,6 +4414,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     LocalDate:
@@ -4945,6 +4972,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     NonTransactionalEvent:
@@ -5303,6 +5333,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     PasswordBreachDetection:
@@ -6585,6 +6618,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     Sort:
@@ -6674,6 +6710,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     SupportsPostBindings:
@@ -7500,6 +7539,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     TwitterApplicationConfiguration:
@@ -7555,6 +7597,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     TwoFactorDisableRequest:
@@ -9545,6 +9590,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     ZoneId:
