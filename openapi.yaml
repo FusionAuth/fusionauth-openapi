@@ -4716,6 +4716,8 @@ components:
         required:
           type: boolean
     MFATrust:
+      description: Represents the inbound lambda parameter 'mfaTrust' inside the 'context'
+        parameter for MFA Required lambdas.
       type: object
       properties:
         applicationId:
