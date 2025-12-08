@@ -4709,6 +4709,69 @@ components:
       properties:
         identityProvider:
           "$ref": "#/components/schemas/IdentityProviderDetails"
+    MFAContext:
+      description: Represents the inbound lambda parameter 'context' for MFA Required
+        lambdas.
+      type: object
+      properties:
+        authenticationThreats:
+          type: array
+          uniqueItems: true
+          items: {}
+        eventInfo:
+          "$ref": "#/components/schemas/EventInfo"
+        mfaTrust:
+          "$ref": "#/components/schemas/MFATrust"
+        registration:
+          "$ref": "#/components/schemas/UserRegistration"
+    MFAPolicies:
+      description: Represents the inbound lambda parameter 'policies' for MFA Required
+        lambdas.
+      type: object
+      properties:
+        applicationLoginPolicy:
+          "$ref": "#/components/schemas/MultiFactorLoginPolicy"
+        applicationMultiFactorTrustPolicy:
+          "$ref": "#/components/schemas/ApplicationMultiFactorTrustPolicy"
+        tenantLoginPolicy:
+          "$ref": "#/components/schemas/MultiFactorLoginPolicy"
+    MFARequiredLambdaResult:
+      description: Represents the inbound lambda parameter 'result' for MFA Required
+        lambdas.
+      type: object
+      properties:
+        required:
+          type: boolean
+    MFATrust:
+      description: Represents the inbound lambda parameter 'mfaTrust' inside the 'context'
+        parameter for MFA Required lambdas.
+      type: object
+      properties:
+        applicationId:
+          type: string
+          format: uuid
+        attributes:
+          type: object
+          additionalProperties:
+            type: string
+        expirationInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        startInstants:
+          "$ref": "#/components/schemas/StartInstant"
+        state:
+          type: object
+          additionalProperties:
+            type: object
+        tenantId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
     ManagedFields:
       description: 'This class contains the managed fields that are also put into
         the database during FusionAuth setup.  <p>  Internal Note: These fields are
@@ -4858,6 +4921,14 @@ components:
         total:
           type: integer
           format: int64
+    MultiFactorAction:
+      description: Communicate various actionscontexts in which multi-factor authentication
+        can be used.
+      type: string
+      enum:
+      - changePassword
+      - login
+      - stepUp
     MultiFactorAuthenticatorMethod:
       type: object
       properties:
@@ -4869,14 +4940,6 @@ components:
           type: integer
         enabled:
           type: boolean
-    MultiFactorContext:
-      description: Communicate various contexts in which multi-factor authentication
-        can be used.
-      type: string
-      enum:
-      - changePassword
-      - login
-      - stepUp
     MultiFactorEmailMethod:
       type: object
       properties:
@@ -6651,6 +6714,15 @@ components:
           type: string
         order:
           "$ref": "#/components/schemas/Sort"
+    StartInstant:
+      type: object
+      properties:
+        applications:
+          type: object
+          additionalProperties:
+            "$ref": "#/components/schemas/ZonedDateTime"
+        tenant:
+          "$ref": "#/components/schemas/ZonedDateTime"
     StatusResponse:
       description: The public Status API response
       type: object
