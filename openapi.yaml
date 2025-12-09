@@ -15740,6 +15740,32 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/two-factor/status":
+    post:
+      description: Retrieve a user's two-factor status.  This can be used to see if
+        a user will need to complete a two-factor challenge to complete a login, and
+        optionally identify the state of the two-factor trust across various applications.
+        This operation provides more payload options than retrieveTwoFactorStatus.
+      operationId: retrieveTwoFactorStatusUsingWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TwoFactorStatusRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TwoFactorStatusResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/two-factor/status/{twoFactorTrustId}":
     get:
       description: Retrieve a user's two-factor status.  This can be used to see if
