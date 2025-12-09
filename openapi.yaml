@@ -4720,6 +4720,10 @@ components:
           items: {}
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
+        jwt:
+          type: object
+          additionalProperties:
+            type: object
         mfaTrust:
           "$ref": "#/components/schemas/MFATrust"
         registration:
@@ -7853,6 +7857,25 @@ components:
             "$ref": "#/components/schemas/TwoFactorMethod"
         twoFactorId:
           type: string
+    TwoFactorStatusRequest:
+      description: Check the status of two-factor authentication for a user, with
+        more options than on a GET request.
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        action:
+          "$ref": "#/components/schemas/MultiFactorAction"
+        applicationId:
+          type: string
+          format: uuid
+        token:
+          type: string
+        twoFactorTrustId:
+          type: string
+        eventInfo:
+          "$ref": "#/components/schemas/EventInfo"
     TwoFactorStatusResponse:
       description: ''
       type: object
@@ -15709,6 +15732,32 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/TwoFactorStartResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/two-factor/status":
+    post:
+      description: Retrieve a user's two-factor status.  This can be used to see if
+        a user will need to complete a two-factor challenge to complete a login, and
+        optionally identify the state of the two-factor trust across various applications.
+        This operation provides more payload options than retrieveTwoFactorStatus.
+      operationId: retrieveTwoFactorStatusBodyWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TwoFactorStatusRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TwoFactorStatusResponse"
         default:
           description: Error
           content:
