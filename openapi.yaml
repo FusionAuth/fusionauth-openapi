@@ -16542,12 +16542,30 @@ paths:
         completing a Two-Factor Step-Up authentication.  An HTTP status code of 400
         with a general error code of [TrustTokenRequired] indicates that a Trust Token
         is required to make a POST request to this API. OR Check to see if the user
-        must obtain a Trust Token Id in order to complete a change password request.
+        must obtain a Trust Request Id in order to complete a change password request.
         When a user has enabled Two-Factor authentication, before you are allowed
         to use the Change Password API to change your password, you must obtain a
-        Trust Token by completing a Two-Factor Step-Up authentication.  An HTTP status
-        code of 400 with a general error code of [TrustTokenRequired] indicates that
-        a Trust Token is required to make a POST request to this API.
+        Trust Request Id by completing a Two-Factor Step-Up authentication.  An HTTP
+        status code of 400 with a general error code of [TrustTokenRequired] indicates
+        that a Trust Token is required to make a POST request to this API. OR Check
+        to see if the user must obtain a Trust Request Id in order to complete a change
+        password request. When a user has enabled Two-Factor authentication, before
+        you are allowed to use the Change Password API to change your password, you
+        must obtain a Trust Request Id by completing a Two-Factor Step-Up authentication.  An
+        HTTP status code of 400 with a general error code of [TrustTokenRequired]
+        indicates that a Trust Token is required to make a POST request to this API.
+        OR Check to see if the user must obtain a Trust Token Id in order to complete
+        a change password request. When a user has enabled Two-Factor authentication,
+        before you are allowed to use the Change Password API to change your password,
+        you must obtain a Trust Token by completing a Two-Factor Step-Up authentication.  An
+        HTTP status code of 400 with a general error code of [TrustTokenRequired]
+        indicates that a Trust Token is required to make a POST request to this API.
+        OR Check to see if the user must obtain a Trust Token Id in order to complete
+        a change password request. When a user has enabled Two-Factor authentication,
+        before you are allowed to use the Change Password API to change your password,
+        you must obtain a Trust Token by completing a Two-Factor Step-Up authentication.  An
+        HTTP status code of 400 with a general error code of [TrustTokenRequired]
+        indicates that a Trust Token is required to make a POST request to this API.
       operationId: retrieveUserChangePassword
       parameters:
       - name: loginId
@@ -16563,6 +16581,12 @@ paths:
           items:
             type: string
         description: The identity types that FusionAuth will compare the loginId to.
+      - name: ipAddress
+        in: query
+        schema:
+          type: string
+        description: IP address of the user changing their password. This is used
+          for MFA risk assessment.
       responses:
         '200':
           description: Success
@@ -16613,8 +16637,20 @@ paths:
         your password, you must obtain a Trust Token by completing a Two-Factor Step-Up
         authentication.  An HTTP status code of 400 with a general error code of [TrustTokenRequired]
         indicates that a Trust Token is required to make a POST request to this API.
-      operationId: checkChangePasswordUsingIdWithId
+        OR Check to see if the user must obtain a Trust Token Id in order to complete
+        a change password request. When a user has enabled Two-Factor authentication,
+        before you are allowed to use the Change Password API to change your password,
+        you must obtain a Trust Token by completing a Two-Factor Step-Up authentication.  An
+        HTTP status code of 400 with a general error code of [TrustTokenRequired]
+        indicates that a Trust Token is required to make a POST request to this API.
+      operationId: retrieveUserChangePasswordWithId
       parameters:
+      - name: ipAddress
+        in: query
+        schema:
+          type: string
+        description: IP address of the user changing their password. This is used
+          for MFA risk assessment.
       - name: changePasswordId
         in: path
         schema:
