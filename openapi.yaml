@@ -4720,6 +4720,10 @@ components:
           items: {}
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
+        jwt:
+          type: object
+          additionalProperties:
+            type: object
         mfaTrust:
           "$ref": "#/components/schemas/MFATrust"
         registration:
@@ -4741,6 +4745,8 @@ components:
       type: object
       properties:
         required:
+          type: boolean
+        sendSuspiciousLoginEvent:
           type: boolean
     MFATrust:
       description: Represents the inbound lambda parameter 'mfaTrust' inside the 'context'
@@ -7853,6 +7859,25 @@ components:
             "$ref": "#/components/schemas/TwoFactorMethod"
         twoFactorId:
           type: string
+    TwoFactorStatusRequest:
+      description: Check the status of two-factor authentication for a user, with
+        more options than on a GET request.
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        action:
+          "$ref": "#/components/schemas/MultiFactorAction"
+        applicationId:
+          type: string
+          format: uuid
+        token:
+          type: string
+        twoFactorTrustId:
+          type: string
+        eventInfo:
+          "$ref": "#/components/schemas/EventInfo"
     TwoFactorStatusResponse:
       description: ''
       type: object
