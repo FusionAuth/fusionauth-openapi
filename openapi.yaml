@@ -4746,6 +4746,8 @@ components:
       properties:
         required:
           type: boolean
+        sendSuspiciousLoginEvent:
+          type: boolean
     MFATrust:
       description: Represents the inbound lambda parameter 'mfaTrust' inside the 'context'
         parameter for MFA Required lambdas.
