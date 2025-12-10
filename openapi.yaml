@@ -15754,7 +15754,7 @@ paths:
         a user will need to complete a two-factor challenge to complete a login, and
         optionally identify the state of the two-factor trust across various applications.
         This operation provides more payload options than retrieveTwoFactorStatus.
-      operationId: retrieveTwoFactorStatusUsingWithId
+      operationId: retrieveTwoFactorStatusWithRequestWithId
       parameters: []
       requestBody:
         content:
