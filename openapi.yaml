@@ -14832,10 +14832,18 @@ paths:
                 "$ref": "#/components/schemas/Errors"
   "/api/report/totals":
     get:
-      description: Retrieves the totals report. This contains all the total counts
-        for each application and the global registration count.
-      operationId: retrieveTotalReportWithId
-      parameters: []
+      description: Retrieves the totals report. This allows excluding applicationTotals
+        from the report. An empty list will include the applicationTotals.
+      operationId: retrieveTotalReportWithExcludesWithId
+      parameters:
+      - name: excludes
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        description: List of fields to exclude in the response. Currently only allows
+          applicationTotals.
       responses:
         '200':
           description: Success
