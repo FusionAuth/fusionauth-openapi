@@ -244,6 +244,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     Application:
@@ -2104,6 +2107,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     Error:
@@ -2472,6 +2478,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     FacebookApplicationConfiguration:
@@ -2539,6 +2548,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     FailedAuthenticationActionCancelPolicy:
@@ -3004,6 +3016,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     GoogleIdentityProviderProperties:
@@ -3326,6 +3341,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     HistoryItem:
@@ -3447,6 +3465,9 @@ components:
           type: string
         oauth2:
           "$ref": "#/components/schemas/IdentityProviderOauth2Configuration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     IdentityProviderField:
@@ -3658,6 +3679,9 @@ components:
           format: uuid
         name:
           type: string
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
         numberOfResults:
@@ -4456,6 +4480,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     LocalDate:
@@ -5011,6 +5038,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     NonTransactionalEvent:
@@ -5407,6 +5437,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     PasswordBreachDetection:
@@ -6732,6 +6765,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     Sort:
@@ -6821,6 +6857,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     SupportsPostBindings:
@@ -7647,6 +7686,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     TwitterApplicationConfiguration:
@@ -7702,6 +7744,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     TwoFactorDisableRequest:
@@ -9725,6 +9770,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     ZoneId:
@@ -14852,10 +14900,18 @@ paths:
                 "$ref": "#/components/schemas/Errors"
   "/api/report/totals":
     get:
-      description: Retrieves the totals report. This contains all the total counts
-        for each application and the global registration count.
-      operationId: retrieveTotalReportWithId
-      parameters: []
+      description: Retrieves the totals report. This allows excluding applicationTotals
+        from the report. An empty list will include the applicationTotals.
+      operationId: retrieveTotalReportWithExcludesWithId
+      parameters:
+      - name: excludes
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        description: List of fields to exclude in the response. Currently only allows
+          applicationTotals.
       responses:
         '200':
           description: Success
