@@ -4426,7 +4426,7 @@ components:
     LocalDate:
       description: A date without a time-zone in the ISO-8601 calendar system, such
         as 2007-12-03.
-      example: '2007-12-03'
+      example: 2007-12-03
       pattern: "^[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]$"
       type: string
     Locale:
@@ -5854,6 +5854,8 @@ components:
             type: string
         licensed:
           type: boolean
+        multiFactorLambdas:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
         scimServer:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         tenantManagerApplication:
