@@ -1298,6 +1298,27 @@ components:
       - ACTIVE
       - PENDING
       - REJECTED
+    Context:
+      description: Represents the inbound lambda parameter 'context' for MFA Required
+        lambdas.
+      type: object
+      properties:
+        authenticationThreats:
+          type: array
+          uniqueItems: true
+          items: {}
+        eventInfo:
+          "$ref": "#/components/schemas/EventInfo"
+        jwt:
+          type: object
+          additionalProperties:
+            type: object
+        policies:
+          "$ref": "#/components/schemas/Policies"
+        registration:
+          "$ref": "#/components/schemas/UserRegistration"
+        trust:
+          "$ref": "#/components/schemas/Trust"
     CoseAlgorithmIdentifier:
       description: A number identifying a cryptographic algorithm. Values should be
         registered with the <a  href="https:www.iana.orgassignmentscosecose.xhtml#algorithms">IANA
@@ -4709,77 +4730,6 @@ components:
       properties:
         identityProvider:
           "$ref": "#/components/schemas/IdentityProviderDetails"
-    MFAContext:
-      description: Represents the inbound lambda parameter 'context' for MFA Required
-        lambdas.
-      type: object
-      properties:
-        authenticationThreats:
-          type: array
-          uniqueItems: true
-          items: {}
-        eventInfo:
-          "$ref": "#/components/schemas/EventInfo"
-        jwt:
-          type: object
-          additionalProperties:
-            type: object
-        mfaTrust:
-          "$ref": "#/components/schemas/MFATrust"
-        policies:
-          "$ref": "#/components/schemas/MFAPolicies"
-        registration:
-          "$ref": "#/components/schemas/UserRegistration"
-    MFAPolicies:
-      description: Represents the inbound lambda parameter 'policies' for MFA Required
-        lambdas.
-      type: object
-      properties:
-        applicationLoginPolicy:
-          "$ref": "#/components/schemas/MultiFactorLoginPolicy"
-        applicationMultiFactorTrustPolicy:
-          "$ref": "#/components/schemas/ApplicationMultiFactorTrustPolicy"
-        tenantLoginPolicy:
-          "$ref": "#/components/schemas/MultiFactorLoginPolicy"
-    MFARequiredLambdaResult:
-      description: Represents the inbound lambda parameter 'result' for MFA Required
-        lambdas.
-      type: object
-      properties:
-        required:
-          type: boolean
-        sendSuspiciousLoginEvent:
-          type: boolean
-    MFATrust:
-      description: Represents the inbound lambda parameter 'mfaTrust' inside the 'context'
-        parameter for MFA Required lambdas.
-      type: object
-      properties:
-        applicationId:
-          type: string
-          format: uuid
-        attributes:
-          type: object
-          additionalProperties:
-            type: string
-        expirationInstant:
-          "$ref": "#/components/schemas/ZonedDateTime"
-        id:
-          type: string
-        insertInstant:
-          "$ref": "#/components/schemas/ZonedDateTime"
-        startInstants:
-          "$ref": "#/components/schemas/StartInstant"
-        state:
-          type: object
-          additionalProperties:
-            type: object
-        tenantId:
-          type: string
-          format: uuid
-        userId:
-          type: string
-          format: uuid
     ManagedFields:
       description: 'This class contains the managed fields that are also put into
         the database during FusionAuth setup.  <p>  Internal Note: These fields are
@@ -5592,6 +5542,17 @@ components:
           type: boolean
         behavior:
           "$ref": "#/components/schemas/UnverifiedBehavior"
+    Policies:
+      description: Represents the inbound lambda parameter 'policies' for MFA Required
+        lambdas.
+      type: object
+      properties:
+        applicationLoginPolicy:
+          "$ref": "#/components/schemas/MultiFactorLoginPolicy"
+        applicationMultiFactorTrustPolicy:
+          "$ref": "#/components/schemas/ApplicationMultiFactorTrustPolicy"
+        tenantLoginPolicy:
+          "$ref": "#/components/schemas/MultiFactorLoginPolicy"
     PreviewMessageTemplateRequest:
       description: ''
       type: object
@@ -6127,6 +6088,15 @@ components:
         required:
           type: boolean
         enabled:
+          type: boolean
+    RequiredLambdaResult:
+      description: Represents the inbound lambda parameter 'result' for MFA Required
+        lambdas.
+      type: object
+      properties:
+        required:
+          type: boolean
+        sendSuspiciousLoginEvent:
           type: boolean
     RequiresCORSConfiguration:
       description: Interface describing the need for CORS configuration.
@@ -7545,6 +7515,36 @@ components:
       - SimpleMajority
       - SuperMajority
       - AbsoluteMajority
+    Trust:
+      description: Represents the inbound lambda parameter 'mfaTrust' inside the 'context'
+        parameter for MFA Required lambdas.
+      type: object
+      properties:
+        applicationId:
+          type: string
+          format: uuid
+        attributes:
+          type: object
+          additionalProperties:
+            type: string
+        expirationInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        startInstants:
+          "$ref": "#/components/schemas/StartInstant"
+        state:
+          type: object
+          additionalProperties:
+            type: object
+        tenantId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
     TwilioMessengerConfiguration:
       description: ''
       type: object
