@@ -1307,12 +1307,10 @@ components:
           type: array
           uniqueItems: true
           items: {}
+        encodedJWT:
+          type: string
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
-        jwt:
-          type: object
-          additionalProperties:
-            type: object
         mfaTrust:
           "$ref": "#/components/schemas/Trust"
         policies:
