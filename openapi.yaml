@@ -4726,6 +4726,8 @@ components:
             type: object
         mfaTrust:
           "$ref": "#/components/schemas/MFATrust"
+        policies:
+          "$ref": "#/components/schemas/MFAPolicies"
         registration:
           "$ref": "#/components/schemas/UserRegistration"
     MFAPolicies:
