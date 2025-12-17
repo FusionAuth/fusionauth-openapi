@@ -7871,13 +7871,13 @@ components:
         userId:
           type: string
           format: uuid
+        accessToken:
+          type: string
         action:
           "$ref": "#/components/schemas/MultiFactorAction"
         applicationId:
           type: string
           format: uuid
-        token:
-          type: string
         twoFactorTrustId:
           type: string
         eventInfo:
