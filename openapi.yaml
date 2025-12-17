@@ -1303,6 +1303,8 @@ components:
         lambdas.
       type: object
       properties:
+        accessToken:
+          type: string
         action:
           "$ref": "#/components/schemas/MultiFactorAction"
         application:
@@ -1311,8 +1313,6 @@ components:
           type: array
           uniqueItems: true
           items: {}
-        encodedJWT:
-          type: string
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
         mfaTrust:
