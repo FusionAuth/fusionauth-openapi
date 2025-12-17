@@ -1303,6 +1303,10 @@ components:
         lambdas.
       type: object
       properties:
+        action:
+          "$ref": "#/components/schemas/MultiFactorAction"
+        application:
+          "$ref": "#/components/schemas/Application"
         authenticationThreats:
           type: array
           uniqueItems: true
@@ -1315,8 +1319,6 @@ components:
           "$ref": "#/components/schemas/Trust"
         policies:
           "$ref": "#/components/schemas/Policies"
-        registration:
-          "$ref": "#/components/schemas/UserRegistration"
     CoseAlgorithmIdentifier:
       description: A number identifying a cryptographic algorithm. Values should be
         registered with the <a  href="https:www.iana.orgassignmentscosecose.xhtml#algorithms">IANA
