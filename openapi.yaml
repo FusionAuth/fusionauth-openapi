@@ -1410,8 +1410,6 @@ components:
           type: string
         client_secret:
           type: string
-        metaData:
-          "$ref": "#/components/schemas/MetaData"
         tenantId:
           type: string
           format: uuid
@@ -1443,8 +1441,6 @@ components:
           type: string
         client_secret:
           type: string
-        metaData:
-          "$ref": "#/components/schemas/MetaData"
         scope:
           type: string
         tenantId:
@@ -18385,11 +18381,6 @@ paths:
       description: Approve a device grant. OR Approve a device grant.
       operationId: createDeviceApprove
       parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/DeviceApprovalRequest"
       responses:
         '200':
           description: Success
@@ -18427,11 +18418,6 @@ paths:
         an API key.
       operationId: createDeviceUserCode
       parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/RetrieveUserCodeRequest"
       responses:
         '200':
           description: Success
@@ -18467,11 +18453,6 @@ paths:
         grant.
       operationId: validateDeviceWithRequestWithId
       parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/ValidateDeviceRequest"
       responses:
         '200':
           description: Success
@@ -18483,11 +18464,6 @@ paths:
         the Device Authorization flow using form-encoded parameters
       operationId: createDevice_authorize
       parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/DeviceAuthorizationRequest"
       responses:
         '200':
           description: Success
@@ -18512,11 +18488,6 @@ paths:
         the User Credentials Grant or the Refresh Grant.
       operationId: createIntrospect
       parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/ClientCredentialsAccessTokenIntrospectRequest"
       responses:
         '200':
           description: Success
@@ -18558,11 +18529,6 @@ paths:
         a Client Credentials grant request to obtain an access token.
       operationId: createToken
       parameters: []
-      requestBody:
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/UserCredentialsAccessTokenRequest"
       responses:
         '200':
           description: Success
