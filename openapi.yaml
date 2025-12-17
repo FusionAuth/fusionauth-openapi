@@ -1298,6 +1298,27 @@ components:
       - ACTIVE
       - PENDING
       - REJECTED
+    Context:
+      description: Represents the inbound lambda parameter 'context' for MFA Required
+        lambdas.
+      type: object
+      properties:
+        accessToken:
+          type: string
+        action:
+          "$ref": "#/components/schemas/MultiFactorAction"
+        application:
+          "$ref": "#/components/schemas/Application"
+        authenticationThreats:
+          type: array
+          uniqueItems: true
+          items: {}
+        eventInfo:
+          "$ref": "#/components/schemas/EventInfo"
+        mfaTrust:
+          "$ref": "#/components/schemas/Trust"
+        policies:
+          "$ref": "#/components/schemas/Policies"
     CoseAlgorithmIdentifier:
       description: A number identifying a cryptographic algorithm. Values should be
         registered with the <a  href="https:www.iana.orgassignmentscosecose.xhtml#algorithms">IANA
@@ -4273,6 +4294,9 @@ components:
         idTokenPopulateId:
           type: string
           format: uuid
+        multiFactorRequirementId:
+          type: string
+          format: uuid
         samlv2PopulateId:
           type: string
           format: uuid
@@ -4367,6 +4391,7 @@ components:
       - SelfServiceRegistrationValidation
       - UserInfoPopulate
       - LoginValidation
+      - MFARequirement
     LinkedInApplicationConfiguration:
       description: ''
       type: object
@@ -4864,6 +4889,14 @@ components:
         total:
           type: integer
           format: int64
+    MultiFactorAction:
+      description: Communicate various actionscontexts in which multi-factor authentication
+        can be used.
+      type: string
+      enum:
+      - changePassword
+      - login
+      - stepUp
     MultiFactorAuthenticatorMethod:
       type: object
       properties:
@@ -5519,6 +5552,17 @@ components:
           type: boolean
         behavior:
           "$ref": "#/components/schemas/UnverifiedBehavior"
+    Policies:
+      description: Represents the inbound lambda parameter 'policies' for MFA Required
+        lambdas.
+      type: object
+      properties:
+        applicationLoginPolicy:
+          "$ref": "#/components/schemas/MultiFactorLoginPolicy"
+        applicationMultiFactorTrustPolicy:
+          "$ref": "#/components/schemas/ApplicationMultiFactorTrustPolicy"
+        tenantLoginPolicy:
+          "$ref": "#/components/schemas/MultiFactorLoginPolicy"
     PreviewMessageTemplateRequest:
       description: ''
       type: object
@@ -5783,6 +5827,8 @@ components:
             type: string
         licensed:
           type: boolean
+        multiFactorLambdas:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
         scimServer:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         tenantManagerApplication:
@@ -6052,6 +6098,15 @@ components:
         required:
           type: boolean
         enabled:
+          type: boolean
+    RequiredLambdaResult:
+      description: Represents the inbound lambda parameter 'result' for MFA Required
+        lambdas.
+      type: object
+      properties:
+        required:
+          type: boolean
+        sendSuspiciousLoginEvent:
           type: boolean
     RequiresCORSConfiguration:
       description: Interface describing the need for CORS configuration.
@@ -6649,6 +6704,15 @@ components:
           type: string
         order:
           "$ref": "#/components/schemas/Sort"
+    StartInstant:
+      type: object
+      properties:
+        applications:
+          type: object
+          additionalProperties:
+            "$ref": "#/components/schemas/ZonedDateTime"
+        tenant:
+          "$ref": "#/components/schemas/ZonedDateTime"
     StatusResponse:
       description: The public Status API response
       type: object
@@ -7041,6 +7105,9 @@ components:
       type: object
       properties:
         loginValidationId:
+          type: string
+          format: uuid
+        multiFactorRequirementId:
           type: string
           format: uuid
         scimEnterpriseUserRequestConverterId:
@@ -7458,6 +7525,36 @@ components:
       - SimpleMajority
       - SuperMajority
       - AbsoluteMajority
+    Trust:
+      description: Represents the inbound lambda parameter 'mfaTrust' inside the 'context'
+        parameter for MFA Required lambdas.
+      type: object
+      properties:
+        applicationId:
+          type: string
+          format: uuid
+        attributes:
+          type: object
+          additionalProperties:
+            type: string
+        expirationInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        startInstants:
+          "$ref": "#/components/schemas/StartInstant"
+        state:
+          type: object
+          additionalProperties:
+            type: object
+        tenantId:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
     TwilioMessengerConfiguration:
       description: ''
       type: object
@@ -7776,6 +7873,25 @@ components:
             "$ref": "#/components/schemas/TwoFactorMethod"
         twoFactorId:
           type: string
+    TwoFactorStatusRequest:
+      description: Check the status of two-factor authentication for a user, with
+        more options than on a GET request.
+      type: object
+      properties:
+        userId:
+          type: string
+          format: uuid
+        accessToken:
+          type: string
+        action:
+          "$ref": "#/components/schemas/MultiFactorAction"
+        applicationId:
+          type: string
+          format: uuid
+        twoFactorTrustId:
+          type: string
+        eventInfo:
+          "$ref": "#/components/schemas/EventInfo"
     TwoFactorStatusResponse:
       description: ''
       type: object
@@ -15646,6 +15762,32 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/two-factor/status":
+    post:
+      description: Retrieve a user's two-factor status.  This can be used to see if
+        a user will need to complete a two-factor challenge to complete a login, and
+        optionally identify the state of the two-factor trust across various applications.
+        This operation provides more payload options than retrieveTwoFactorStatus.
+      operationId: retrieveTwoFactorStatusWithRequestWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TwoFactorStatusRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TwoFactorStatusResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/two-factor/status/{twoFactorTrustId}":
     get:
       description: Retrieve a user's two-factor status.  This can be used to see if
@@ -16422,12 +16564,30 @@ paths:
         completing a Two-Factor Step-Up authentication.  An HTTP status code of 400
         with a general error code of [TrustTokenRequired] indicates that a Trust Token
         is required to make a POST request to this API. OR Check to see if the user
-        must obtain a Trust Token Id in order to complete a change password request.
+        must obtain a Trust Request Id in order to complete a change password request.
         When a user has enabled Two-Factor authentication, before you are allowed
         to use the Change Password API to change your password, you must obtain a
-        Trust Token by completing a Two-Factor Step-Up authentication.  An HTTP status
-        code of 400 with a general error code of [TrustTokenRequired] indicates that
-        a Trust Token is required to make a POST request to this API.
+        Trust Request Id by completing a Two-Factor Step-Up authentication.  An HTTP
+        status code of 400 with a general error code of [TrustTokenRequired] indicates
+        that a Trust Token is required to make a POST request to this API. OR Check
+        to see if the user must obtain a Trust Request Id in order to complete a change
+        password request. When a user has enabled Two-Factor authentication, before
+        you are allowed to use the Change Password API to change your password, you
+        must obtain a Trust Request Id by completing a Two-Factor Step-Up authentication.  An
+        HTTP status code of 400 with a general error code of [TrustTokenRequired]
+        indicates that a Trust Token is required to make a POST request to this API.
+        OR Check to see if the user must obtain a Trust Token Id in order to complete
+        a change password request. When a user has enabled Two-Factor authentication,
+        before you are allowed to use the Change Password API to change your password,
+        you must obtain a Trust Token by completing a Two-Factor Step-Up authentication.  An
+        HTTP status code of 400 with a general error code of [TrustTokenRequired]
+        indicates that a Trust Token is required to make a POST request to this API.
+        OR Check to see if the user must obtain a Trust Token Id in order to complete
+        a change password request. When a user has enabled Two-Factor authentication,
+        before you are allowed to use the Change Password API to change your password,
+        you must obtain a Trust Token by completing a Two-Factor Step-Up authentication.  An
+        HTTP status code of 400 with a general error code of [TrustTokenRequired]
+        indicates that a Trust Token is required to make a POST request to this API.
       operationId: retrieveUserChangePassword
       parameters:
       - name: loginId
@@ -16443,6 +16603,12 @@ paths:
           items:
             type: string
         description: The identity types that FusionAuth will compare the loginId to.
+      - name: ipAddress
+        in: query
+        schema:
+          type: string
+        description: IP address of the user changing their password. This is used
+          for MFA risk assessment.
       responses:
         '200':
           description: Success
@@ -16493,8 +16659,20 @@ paths:
         your password, you must obtain a Trust Token by completing a Two-Factor Step-Up
         authentication.  An HTTP status code of 400 with a general error code of [TrustTokenRequired]
         indicates that a Trust Token is required to make a POST request to this API.
-      operationId: checkChangePasswordUsingIdWithId
+        OR Check to see if the user must obtain a Trust Token Id in order to complete
+        a change password request. When a user has enabled Two-Factor authentication,
+        before you are allowed to use the Change Password API to change your password,
+        you must obtain a Trust Token by completing a Two-Factor Step-Up authentication.  An
+        HTTP status code of 400 with a general error code of [TrustTokenRequired]
+        indicates that a Trust Token is required to make a POST request to this API.
+      operationId: retrieveUserChangePasswordWithId
       parameters:
+      - name: ipAddress
+        in: query
+        schema:
+          type: string
+        description: IP address of the user changing their password. This is used
+          for MFA risk assessment.
       - name: changePasswordId
         in: path
         schema:
