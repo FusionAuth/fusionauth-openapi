@@ -1,7 +1,7 @@
 
 openapi: "3.0.3"
 info:
-  version: 1.61.0
+  version: 1.62.0
   title: FusionAuth API
   description: "This is a FusionAuth server. Find out more at [https://fusionauth.io](https://fusionauth.io). You need to [set up an API key](https://fusionauth.io/docs/v1/tech/apis/authentication#managing-api-keys) in the FusionAuth instance you are using to test out the API calls."
   license:
@@ -234,6 +234,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     Application:
@@ -2038,6 +2041,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     Error:
@@ -2406,6 +2412,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     FIPS:
@@ -2481,6 +2490,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     FailedAuthenticationActionCancelPolicy:
@@ -2946,6 +2958,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     GoogleIdentityProviderProperties:
@@ -3268,6 +3283,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     HistoryItem:
@@ -3389,6 +3407,9 @@ components:
           type: string
         oauth2:
           "$ref": "#/components/schemas/IdentityProviderOauth2Configuration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     IdentityProviderField:
@@ -3600,6 +3621,9 @@ components:
           format: uuid
         name:
           type: string
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
         numberOfResults:
@@ -4083,6 +4107,7 @@ components:
       - RS256
       - RS384
       - RS512
+      - Ed25519
     KeyRequest:
       description: Key API request object.
       type: object
@@ -4138,6 +4163,7 @@ components:
       - EC
       - RSA
       - HMAC
+      - OKP
     KeyUse:
       description: The use type of a key.
       type: string
@@ -4398,6 +4424,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     LocalDate:
@@ -4953,6 +4982,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     NonTransactionalEvent:
@@ -5311,6 +5343,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     PasswordBreachDetection:
@@ -6593,6 +6628,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     Sort:
@@ -6682,6 +6720,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     SupportsPostBindings:
@@ -7508,6 +7549,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     TwitterApplicationConfiguration:
@@ -7563,6 +7607,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     TwoFactorDisableRequest:
@@ -9553,6 +9600,9 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/IdentityProviderTenantConfiguration"
+        tenantId:
+          type: string
+          format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
     ZoneId:
@@ -14680,10 +14730,18 @@ paths:
                 "$ref": "#/components/schemas/Errors"
   "/api/report/totals":
     get:
-      description: Retrieves the totals report. This contains all the total counts
-        for each application and the global registration count.
-      operationId: retrieveTotalReportWithId
-      parameters: []
+      description: Retrieves the totals report. This allows excluding applicationTotals
+        from the report. An empty list will include the applicationTotals.
+      operationId: retrieveTotalReportWithExcludesWithId
+      parameters:
+      - name: excludes
+        in: query
+        schema:
+          type: array
+          items:
+            type: string
+        description: List of fields to exclude in the response. Currently only allows
+          applicationTotals.
       responses:
         '200':
           description: Success
