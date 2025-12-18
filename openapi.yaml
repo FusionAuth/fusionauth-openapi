@@ -2281,6 +2281,13 @@ components:
       - Test
       - UserIdentityVerified
       - UserIdentityUpdate
+    ExistingUserStrategy:
+      description: Represent the various statesexpectations of a user in the context
+        of starting verification
+      type: string
+      enum:
+      - mustExist
+      - mustNotExist
     ExpandableRequest:
       description: An expandable API request.
       type: object
@@ -2810,6 +2817,16 @@ components:
           items:
             type: string
             format: uuid
+        type:
+          "$ref": "#/components/schemas/FormStepType"
+    FormStepType:
+      description: Denotes the type of form step. This is used to configure different
+        behavior on form steps in the registration flow.
+      type: string
+      enum:
+      - collectData
+      - verifyEmail
+      - verifyPhoneNumber
     FormType:
       description: ''
       type: string
@@ -6033,6 +6050,10 @@ components:
           type: boolean
         user:
           "$ref": "#/components/schemas/User"
+        verificationIds:
+          type: array
+          items:
+            type: string
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
     RegistrationResponse:
@@ -6056,6 +6077,10 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         user:
           "$ref": "#/components/schemas/User"
+        verificationIds:
+          type: array
+          items:
+            "$ref": "#/components/schemas/VerificationId"
     RegistrationType:
       type: string
       enum:
@@ -9131,6 +9156,8 @@ components:
         applicationId:
           type: string
           format: uuid
+        existingUserStrategy:
+          "$ref": "#/components/schemas/ExistingUserStrategy"
         loginId:
           type: string
         loginIdType:
