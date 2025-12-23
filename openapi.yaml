@@ -5335,6 +5335,7 @@ components:
       - authorization_pending
       - expired_token
       - unsupported_token_type
+      - invalid_dpop_proof
     OAuthResponse:
       description: ''
       type: object
@@ -7651,11 +7652,13 @@ components:
       description: <ul>  <li>Bearer Token type as defined by <a href="https:tools.ietf.orghtmlrfc6750">RFC
         6750<a>.<li>  <li>MAC Token type as referenced by <a href="https:tools.ietf.orghtmlrfc6749">RFC
         6749<a> and  <a href="https:tools.ietf.orghtmldraft-ietf-oauth-v2-http-mac-05">  Draft
-        RFC on OAuth 2.0 Message Authentication Code (MAC) Tokens<a>  <li>  <ul>
+        RFC on OAuth 2.0 Message Authentication Code (MAC) Tokens<a>  <li>  <li>DPoP
+        Token type as defined by <a href="https:datatracker.ietf.orgdochtmlrfc9449"><li>  <ul>
       type: string
       enum:
       - Bearer
       - MAC
+      - DPoP
     Totals:
       type: object
       properties:
