@@ -5389,6 +5389,10 @@ components:
             type: string
         device_authorization_endpoint:
           type: string
+        dpop_signing_alg_values_supported:
+          type: array
+          items:
+            type: string
         end_session_endpoint:
           type: string
         frontchannel_logout_supported:
