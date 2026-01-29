@@ -670,6 +670,9 @@ components:
           type: object
         reason:
           type: string
+        tenantId:
+          type: string
+          format: uuid
     AuditLogConfiguration:
       type: object
       properties:
@@ -733,6 +736,9 @@ components:
           type: string
         start:
           "$ref": "#/components/schemas/ZonedDateTime"
+        tenantId:
+          type: string
+          format: uuid
         user:
           type: string
         numberOfResults:
