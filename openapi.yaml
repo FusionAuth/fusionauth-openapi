@@ -240,6 +240,8 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
           type: string
+        source:
+          "$ref": "#/components/schemas/IdentityProviderSource"
         tenantConfiguration:
           type: object
           additionalProperties:
@@ -2126,6 +2128,8 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
           type: string
+        source:
+          "$ref": "#/components/schemas/IdentityProviderSource"
         tenantConfiguration:
           type: object
           additionalProperties:
@@ -2504,6 +2508,8 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
           type: string
+        source:
+          "$ref": "#/components/schemas/IdentityProviderSource"
         tenantConfiguration:
           type: object
           additionalProperties:
@@ -2582,6 +2588,8 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
           type: string
+        source:
+          "$ref": "#/components/schemas/IdentityProviderSource"
         tenantConfiguration:
           type: object
           additionalProperties:
@@ -3060,6 +3068,8 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
           type: string
+        source:
+          "$ref": "#/components/schemas/IdentityProviderSource"
         tenantConfiguration:
           type: object
           additionalProperties:
@@ -3385,6 +3395,8 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
           type: string
+        source:
+          "$ref": "#/components/schemas/IdentityProviderSource"
         tenantConfiguration:
           type: object
           additionalProperties:
@@ -3727,6 +3739,8 @@ components:
           format: uuid
         name:
           type: string
+        source:
+          "$ref": "#/components/schemas/IdentityProviderSource"
         tenantId:
           type: string
           format: uuid
@@ -3755,6 +3769,12 @@ components:
         total:
           type: integer
           format: int64
+    IdentityProviderSource:
+      description: The source of an identity provider configuration.
+      type: string
+      enum:
+      - System
+      - TenantManager
     IdentityProviderStartLoginRequest:
       description: ''
       type: object
@@ -4530,6 +4550,8 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
           type: string
+        source:
+          "$ref": "#/components/schemas/IdentityProviderSource"
         tenantConfiguration:
           type: object
           additionalProperties:
@@ -5096,6 +5118,8 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
           type: string
+        source:
+          "$ref": "#/components/schemas/IdentityProviderSource"
         tenantConfiguration:
           type: object
           additionalProperties:
@@ -5495,6 +5519,8 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
           type: string
+        source:
+          "$ref": "#/components/schemas/IdentityProviderSource"
         tenantConfiguration:
           type: object
           additionalProperties:
@@ -6853,6 +6879,8 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
           type: string
+        source:
+          "$ref": "#/components/schemas/IdentityProviderSource"
         tenantConfiguration:
           type: object
           additionalProperties:
@@ -6954,6 +6982,8 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
           type: string
+        source:
+          "$ref": "#/components/schemas/IdentityProviderSource"
         tenantConfiguration:
           type: object
           additionalProperties:
@@ -7816,6 +7846,8 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
           type: string
+        source:
+          "$ref": "#/components/schemas/IdentityProviderSource"
         tenantConfiguration:
           type: object
           additionalProperties:
@@ -7874,6 +7906,8 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
           type: string
+        source:
+          "$ref": "#/components/schemas/IdentityProviderSource"
         tenantConfiguration:
           type: object
           additionalProperties:
@@ -9921,6 +9955,8 @@ components:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
           type: string
+        source:
+          "$ref": "#/components/schemas/IdentityProviderSource"
         tenantConfiguration:
           type: object
           additionalProperties:
