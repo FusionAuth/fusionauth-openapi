@@ -16060,21 +16060,22 @@ paths:
               schema:
                 "$ref": "#/components/schemas/Errors"
     get:
-      description: Retrieves the user for the given Id. This method does not use an
-        API key, instead it uses a JSON Web Token (JWT) for authentication. OR Retrieves
-        the user by a verificationId. The intended use of this API is to retrieve
+      description: Retrieves the user by a verificationId. The intended use of this
+        API is to retrieve a user after the forgot password workflow has been initiated
+        and you may not know the user's email or username. OR Retrieves the user for
+        the given username. OR Retrieves the user for the loginId, using specific
+        loginIdTypes. OR Retrieves the user for the loginId. The loginId can be either
+        the username or the email. OR Retrieves the user for the given email. OR Retrieves
+        the user by a change password Id. The intended use of this API is to retrieve
         a user after the forgot password workflow has been initiated and you may not
-        know the user's email or username. OR Retrieves the user for the given username.
-        OR Retrieves the user for the loginId, using specific loginIdTypes. OR Retrieves
-        the user for the loginId. The loginId can be either the username or the email.
-        OR Retrieves the user for the given email. OR Retrieves the user by a change
-        password Id. The intended use of this API is to retrieve a user after the
-        forgot password workflow has been initiated and you may not know the user's
-        email or username.
+        know the user's email or username.
       operationId: retrieveUser
-      security:
-      - BearerAuth: []
       parameters:
+      - name: verificationId
+        in: query
+        schema:
+          type: string
+        description: The unique verification Id that has been set on the user object.
       - in: header
         name: X-FusionAuth-TenantId
         description: The unique Id of the tenant used to scope this API request. Only
@@ -16083,11 +16084,6 @@ paths:
         schema:
           type: string
           format: UUID
-      - name: verificationId
-        in: query
-        schema:
-          type: string
-        description: The unique verification Id that has been set on the user object.
       - name: username
         in: query
         schema:
