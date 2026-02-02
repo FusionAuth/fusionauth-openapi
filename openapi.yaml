@@ -8151,6 +8151,8 @@ components:
       description: ''
       type: object
       properties:
+        allowTenantManagerIdentityProviders:
+          type: boolean
         universal:
           type: boolean
     UnknownScopePolicy:
