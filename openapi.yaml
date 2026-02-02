@@ -4219,6 +4219,8 @@ components:
           type: string
         secret:
           type: string
+        source:
+          "$ref": "#/components/schemas/KeySource"
         type:
           "$ref": "#/components/schemas/KeyType"
     KeyAlgorithm:
@@ -4258,6 +4260,8 @@ components:
           "$ref": "#/components/schemas/KeyAlgorithm"
         name:
           type: string
+        source:
+          "$ref": "#/components/schemas/KeySource"
         type:
           "$ref": "#/components/schemas/KeyType"
         numberOfResults:
@@ -4283,6 +4287,12 @@ components:
         total:
           type: integer
           format: int64
+    KeySource:
+      description: The source of a key.
+      type: string
+      enum:
+      - System
+      - TenantManager
     KeyType:
       type: string
       enum:
