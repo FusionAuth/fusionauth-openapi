@@ -6141,6 +6141,8 @@ components:
       properties:
         birthDate:
           "$ref": "#/components/schemas/Requirable"
+        completeRegistration:
+          type: boolean
         confirmPassword:
           type: boolean
         firstName:
