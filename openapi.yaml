@@ -7014,6 +7014,8 @@ components:
       properties:
         auditLogConfiguration:
           "$ref": "#/components/schemas/AuditLogConfiguration"
+        brandName:
+          type: string
         corsConfiguration:
           "$ref": "#/components/schemas/CORSConfiguration"
         data:
@@ -7030,6 +7032,9 @@ components:
           "$ref": "#/components/schemas/LoginRecordConfiguration"
         reportTimezone:
           "$ref": "#/components/schemas/ZoneId"
+        tenantManagerAttributeFormId:
+          type: string
+          format: uuid
         trustedProxyConfiguration:
           "$ref": "#/components/schemas/SystemTrustedProxyConfiguration"
         uiConfiguration:
