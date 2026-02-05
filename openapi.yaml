@@ -7030,6 +7030,8 @@ components:
           "$ref": "#/components/schemas/LoginRecordConfiguration"
         reportTimezone:
           "$ref": "#/components/schemas/ZoneId"
+        tenantManagerConfiguration:
+          "$ref": "#/components/schemas/TenantManagerConfiguration"
         trustedProxyConfiguration:
           "$ref": "#/components/schemas/SystemTrustedProxyConfiguration"
         uiConfiguration:
@@ -7348,6 +7350,14 @@ components:
       properties:
         requireAuthentication:
           type: boolean
+    TenantManagerConfiguration:
+      type: object
+      properties:
+        attributeFormId:
+          type: string
+          format: uuid
+        brandName:
+          type: string
     TenantMultiFactorConfiguration:
       description: ''
       type: object
