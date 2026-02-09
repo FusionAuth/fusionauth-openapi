@@ -7360,6 +7360,25 @@ components:
           format: uuid
         brandName:
           type: string
+    TenantManagerIdentityProviderTypeConfiguration:
+      description: Configuration object for identity provider types allowed in Tenant
+        Manager
+      type: object
+      properties:
+        defaultAttributeMappings:
+          type: object
+          additionalProperties:
+            type: string
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        lastUpdateInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        linkingStrategy:
+          "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
+        type:
+          "$ref": "#/components/schemas/IdentityProviderType"
+        enabled:
+          type: boolean
     TenantMultiFactorConfiguration:
       description: ''
       type: object
