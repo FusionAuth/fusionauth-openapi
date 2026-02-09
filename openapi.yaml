@@ -7360,6 +7360,10 @@ components:
           format: uuid
         brandName:
           type: string
+        identityProviderTypeConfigurations:
+          type: object
+          additionalProperties:
+            "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfiguration"
     TenantManagerIdentityProviderTypeConfiguration:
       description: Configuration object for identity provider types allowed in Tenant
         Manager
