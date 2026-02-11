@@ -7390,7 +7390,7 @@ components:
         typeConfiguration:
           "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfiguration"
     TenantManagerIdentityProviderTypeConfigurationResponse:
-      description: The Tenant Manager IdP type configuration request object
+      description: The Tenant Manager IdP type configuration response object
       type: object
       properties:
         typeConfiguration:
