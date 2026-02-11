@@ -7383,6 +7383,18 @@ components:
           "$ref": "#/components/schemas/IdentityProviderType"
         enabled:
           type: boolean
+    TenantManagerIdentityProviderTypeConfigurationRequest:
+      description: The Tenant Manager IdP type configuration request object
+      type: object
+      properties:
+        typeConfiguration:
+          "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfiguration"
+    TenantManagerIdentityProviderTypeConfigurationResponse:
+      description: The Tenant Manager IdP type configuration request object
+      type: object
+      properties:
+        typeConfiguration:
+          "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfiguration"
     TenantMultiFactorConfiguration:
       description: ''
       type: object
@@ -15507,6 +15519,85 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/TenantResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/tenant-manager/identity-provider/{type}":
+    post:
+      description: Creates a tenant manager identity provider type configuration for
+        the given identity provider type.
+      operationId: createTenantManagerIdentityProviderTypeConfigurationWithId
+      parameters:
+      - name: type
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The type of the identity provider.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfigurationRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfigurationResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    delete:
+      description: Deletes the tenant manager identity provider type configuration
+        for the given identity provider type.
+      operationId: deleteTenantManagerIdentityProviderTypeConfigurationWithId
+      parameters:
+      - name: type
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The type of the identity provider.
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    put:
+      description: Updates the tenant manager identity provider type configuration
+        for the given identity provider type.
+      operationId: updateTenantManagerIdentityProviderTypeConfigurationWithId
+      parameters:
+      - name: type
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The type of the identity provider.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfigurationRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfigurationResponse"
         default:
           description: Error
           content:
