@@ -15575,6 +15575,35 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    patch:
+      description: Patches the tenant manager identity provider type configuration
+        for the given identity provider type.
+      operationId: patchTenantManagerIdentityProviderTypeConfigurationWithId
+      parameters:
+      - name: type
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The type of the identity provider.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfigurationRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfigurationResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
     put:
       description: Updates the tenant manager identity provider type configuration
         for the given identity provider type.
