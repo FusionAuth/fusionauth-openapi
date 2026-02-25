@@ -5527,6 +5527,8 @@ components:
       properties:
         breachDetection:
           "$ref": "#/components/schemas/PasswordBreachDetection"
+        disallowUserLoginId:
+          type: boolean
         maxLength:
           type: integer
         minLength:
