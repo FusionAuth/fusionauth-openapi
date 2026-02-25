@@ -5337,6 +5337,7 @@ components:
       - authorization_pending
       - expired_token
       - unsupported_token_type
+      - invalid_dpop_proof
     OAuthResponse:
       description: ''
       type: object
@@ -5390,6 +5391,10 @@ components:
             type: string
         device_authorization_endpoint:
           type: string
+        dpop_signing_alg_values_supported:
+          type: array
+          items:
+            type: string
         end_session_endpoint:
           type: string
         frontchannel_logout_supported:
@@ -5937,6 +5942,8 @@ components:
         breachedPasswordDetection:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         connectors:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
+        dPoP:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         entityManagement:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
@@ -7655,11 +7662,14 @@ components:
       description: <ul>  <li>Bearer Token type as defined by <a href="https:tools.ietf.orghtmlrfc6750">RFC
         6750<a>.<li>  <li>MAC Token type as referenced by <a href="https:tools.ietf.orghtmlrfc6749">RFC
         6749<a> and  <a href="https:tools.ietf.orghtmldraft-ietf-oauth-v2-http-mac-05">  Draft
-        RFC on OAuth 2.0 Message Authentication Code (MAC) Tokens<a>  <li>  <ul>
+        RFC on OAuth 2.0 Message Authentication Code (MAC) Tokens<a>  <li>  <li>DPoP
+        Token type as defined by <a href="https:datatracker.ietf.orgdochtmlrfc9449">RFC
+        9449<a><li>  <ul>
       type: string
       enum:
       - Bearer
       - MAC
+      - DPoP
     Totals:
       type: object
       properties:
