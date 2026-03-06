@@ -5439,6 +5439,10 @@ components:
           type: array
           items:
             type: string
+        code_challenge_methods_supported:
+          type: array
+          items:
+            type: string
     OpenIdConnectApplicationConfiguration:
       description: ''
       type: object
