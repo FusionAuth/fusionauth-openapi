@@ -4210,6 +4210,7 @@ components:
       - RS384
       - RS512
       - Ed25519
+      - None
     KeyRequest:
       description: Key API request object.
       type: object
@@ -4266,6 +4267,7 @@ components:
       - RSA
       - HMAC
       - OKP
+      - Secret
     KeyUse:
       description: The use type of a key.
       type: string
