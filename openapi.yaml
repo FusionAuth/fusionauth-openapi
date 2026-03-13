@@ -5955,6 +5955,8 @@ components:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         expiration:
           "$ref": "#/components/schemas/LocalDate"
+        ipGeoLocation:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
         licenseAttributes:
           type: object
           additionalProperties:
