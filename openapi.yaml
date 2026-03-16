@@ -5565,6 +5565,10 @@ components:
     PasswordlessConfiguration:
       type: object
       properties:
+        emailLoginStrategy:
+          "$ref": "#/components/schemas/PasswordlessStrategy"
+        phoneLoginStrategy:
+          "$ref": "#/components/schemas/PasswordlessStrategy"
         enabled:
           type: boolean
     PasswordlessIdentityProvider:
