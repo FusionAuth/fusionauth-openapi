@@ -1,5 +1,6 @@
 # FusionAuth OpenAPI
 
+
 This is an OpenAPI specification for the FusionAuth API.
 
 [Here's the openapi specification YAML file](https://github.com/FusionAuth/fusionauth-openapi/blob/main/openapi.yaml).
