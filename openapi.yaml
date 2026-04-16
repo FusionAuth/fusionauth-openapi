@@ -417,6 +417,8 @@ components:
           "$ref": "#/components/schemas/MultiFactorSMSTemplate"
         trustPolicy:
           "$ref": "#/components/schemas/ApplicationMultiFactorTrustPolicy"
+        voice:
+          "$ref": "#/components/schemas/MultiFactorVoiceTemplate"
     ApplicationMultiFactorTrustPolicy:
       description: ''
       type: string
@@ -956,6 +958,10 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         lastUpdateInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
+        messageTypes:
+          type: array
+          uniqueItems: true
+          items: {}
         name:
           type: string
         transport:
@@ -2991,6 +2997,10 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         lastUpdateInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
+        messageTypes:
+          type: array
+          uniqueItems: true
+          items: {}
         name:
           type: string
         transport:
@@ -4155,6 +4165,10 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         lastUpdateInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
+        messageTypes:
+          type: array
+          uniqueItems: true
+          items: {}
         name:
           type: string
         transport:
@@ -4915,6 +4929,7 @@ components:
       type: string
       enum:
       - SMS
+      - Voice
     MessengerRequest:
       description: ''
       type: object
@@ -4932,7 +4947,7 @@ components:
           items:
             "$ref": "#/components/schemas/BaseMessengerConfiguration"
     MessengerTransport:
-      description: ''
+      description: "@deprecated since 1.65.0,  use {@code MessageType} instead"
       type: object
       properties: {}
     MessengerType:
@@ -5026,6 +5041,23 @@ components:
         enabled:
           type: boolean
     MultiFactorSMSTemplate:
+      type: object
+      properties:
+        templateId:
+          type: string
+          format: uuid
+    MultiFactorVoiceMethod:
+      type: object
+      properties:
+        messengerId:
+          type: string
+          format: uuid
+        templateId:
+          type: string
+          format: uuid
+        enabled:
+          type: boolean
+    MultiFactorVoiceTemplate:
       type: object
       properties:
         templateId:
@@ -5717,6 +5749,8 @@ components:
           "$ref": "#/components/schemas/Errors"
         message:
           "$ref": "#/components/schemas/SMSMessage"
+        previewMessage:
+          "$ref": "#/components/schemas/Message"
     PreviewRequest:
       description: ''
       type: object
@@ -7339,6 +7373,8 @@ components:
           "$ref": "#/components/schemas/MultiFactorLoginPolicy"
         sms:
           "$ref": "#/components/schemas/MultiFactorSMSMethod"
+        voice:
+          "$ref": "#/components/schemas/MultiFactorVoiceMethod"
     TenantOAuth2Configuration:
       type: object
       properties:
@@ -7779,6 +7815,10 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         lastUpdateInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
+        messageTypes:
+          type: array
+          uniqueItems: true
+          items: {}
         name:
           type: string
         transport:
@@ -8024,6 +8064,8 @@ components:
           format: uuid
         email:
           type: string
+        messageType:
+          "$ref": "#/components/schemas/MessageType"
         method:
           type: string
         methodId:
@@ -9386,6 +9428,39 @@ components:
       properties:
         version:
           type: string
+    VoiceMessage:
+      description: ''
+      type: object
+      properties:
+        locale:
+          "$ref": "#/components/schemas/Locale"
+        message:
+          type: string
+        phoneNumber:
+          type: string
+    VoiceMessageTemplate:
+      description: ''
+      type: object
+      properties:
+        defaultTemplate:
+          type: string
+        localizedTemplates:
+          "$ref": "#/components/schemas/LocalizedStrings"
+        data:
+          type: object
+          additionalProperties:
+            type: object
+        id:
+          type: string
+          format: uuid
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        lastUpdateInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        name:
+          type: string
+        type:
+          "$ref": "#/components/schemas/MessageType"
     WebAuthnAssertResponse:
       description: API response for completing WebAuthn assertion
       type: object
