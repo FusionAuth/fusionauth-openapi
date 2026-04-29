@@ -227,6 +227,10 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/AppleApplicationConfiguration"
+        attributeMappings:
+          type: object
+          additionalProperties:
+            type: string
         debug:
           type: boolean
         id:
@@ -241,6 +245,8 @@ components:
         linkingStrategy:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
+          type: string
+        source:
           type: string
         tenantConfiguration:
           type: object
@@ -573,6 +579,8 @@ components:
         tenantId:
           type: string
           format: uuid
+        universal:
+          type: boolean
         numberOfResults:
           type: integer
         orderBy:
@@ -674,6 +682,9 @@ components:
           type: object
         reason:
           type: string
+        tenantId:
+          type: string
+          format: uuid
     AuditLogConfiguration:
       type: object
       properties:
@@ -737,6 +748,9 @@ components:
           type: string
         start:
           "$ref": "#/components/schemas/ZonedDateTime"
+        tenantId:
+          type: string
+          format: uuid
         user:
           type: string
         numberOfResults:
@@ -2115,6 +2129,10 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/EpicGamesApplicationConfiguration"
+        attributeMappings:
+          type: object
+          additionalProperties:
+            type: string
         debug:
           type: boolean
         id:
@@ -2129,6 +2147,8 @@ components:
         linkingStrategy:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
+          type: string
+        source:
           type: string
         tenantConfiguration:
           type: object
@@ -2408,6 +2428,8 @@ components:
           "$ref": "#/components/schemas/SecureGeneratorConfiguration"
         externalAuthenticationIdTimeToLiveInSeconds:
           type: integer
+        identityProviderConnectionTestTimeToLiveInSeconds:
+          type: integer
         loginIntentTimeToLiveInSeconds:
           type: integer
         oneTimePasswordTimeToLiveInSeconds:
@@ -2493,6 +2515,10 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/ExternalJWTApplicationConfiguration"
+        attributeMappings:
+          type: object
+          additionalProperties:
+            type: string
         debug:
           type: boolean
         id:
@@ -2507,6 +2533,8 @@ components:
         linkingStrategy:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
+          type: string
+        source:
           type: string
         tenantConfiguration:
           type: object
@@ -2571,6 +2599,10 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/FacebookApplicationConfiguration"
+        attributeMappings:
+          type: object
+          additionalProperties:
+            type: string
         debug:
           type: boolean
         id:
@@ -2585,6 +2617,8 @@ components:
         linkingStrategy:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
+          type: string
+        source:
           type: string
         tenantConfiguration:
           type: object
@@ -2712,6 +2746,19 @@ components:
       - Child
       - Teen
       - Adult
+    Favicon:
+      description: Components of a Favicon in an HTML {@code <head>} element.
+      type: object
+      properties:
+        href:
+          type: string
+          format: URI
+        rel:
+          type: string
+        sizes:
+          type: string
+        type:
+          type: string
     ForgotPasswordRequest:
       description: Forgot password request object.
       type: object
@@ -3053,6 +3100,10 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/GoogleApplicationConfiguration"
+        attributeMappings:
+          type: object
+          additionalProperties:
+            type: string
         debug:
           type: boolean
         id:
@@ -3067,6 +3118,8 @@ components:
         linkingStrategy:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
+          type: string
+        source:
           type: string
         tenantConfiguration:
           type: object
@@ -3378,6 +3431,10 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/HYPRApplicationConfiguration"
+        attributeMappings:
+          type: object
+          additionalProperties:
+            type: string
         debug:
           type: boolean
         id:
@@ -3392,6 +3449,8 @@ components:
         linkingStrategy:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
+          type: string
+        source:
           type: string
         tenantConfiguration:
           type: object
@@ -3502,6 +3561,46 @@ components:
         type:
           type: string
         value:
+          type: string
+    IdentityProviderConnectionTestRequest:
+      description: A request for interacting with the identity provider connection
+        test API
+      type: object
+      properties:
+        identityProviderId:
+          type: string
+          format: uuid
+        tenantId:
+          type: string
+          format: uuid
+    IdentityProviderConnectionTestResponse:
+      description: A response for the identity provider connection test API
+      type: object
+      properties:
+        connectionTestId:
+          type: string
+        result:
+          "$ref": "#/components/schemas/IdentityProviderConnectionTestResult"
+    IdentityProviderConnectionTestResult:
+      description: The results of an identity provider connection test.
+      type: object
+      properties:
+        email:
+          type: string
+        identityProviderId:
+          type: string
+          format: uuid
+        identityProviderUserId:
+          type: string
+        startInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        steps:
+          type: array
+          items:
+            "$ref": "#/components/schemas/IdentityProviderLoginStep"
+        success:
+          type: boolean
+        username:
           type: string
     IdentityProviderDetails:
       type: object
@@ -3646,6 +3745,8 @@ components:
         (i.e. Login with Facebook).
       type: object
       properties:
+        connectionTestId:
+          type: string
         data:
           type: object
           additionalProperties:
@@ -3668,6 +3769,15 @@ components:
           type: boolean
         noJWT:
           type: boolean
+    IdentityProviderLoginStep:
+      type: object
+      properties:
+        detail:
+          type: string
+        success:
+          type: boolean
+        title:
+          type: string
     IdentityProviderOauth2Configuration:
       description: ''
       type: object
@@ -3735,6 +3845,8 @@ components:
           format: uuid
         name:
           type: string
+        source:
+          type: string
         tenantId:
           type: string
           format: uuid
@@ -3767,6 +3879,8 @@ components:
       description: ''
       type: object
       properties:
+        connectionTestId:
+          type: string
         data:
           type: object
           additionalProperties:
@@ -4529,6 +4643,10 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/LinkedInApplicationConfiguration"
+        attributeMappings:
+          type: object
+          additionalProperties:
+            type: string
         debug:
           type: boolean
         id:
@@ -4543,6 +4661,8 @@ components:
         linkingStrategy:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
+          type: string
+        source:
           type: string
         tenantConfiguration:
           type: object
@@ -5113,6 +5233,10 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/NintendoApplicationConfiguration"
+        attributeMappings:
+          type: object
+          additionalProperties:
+            type: string
         debug:
           type: boolean
         id:
@@ -5127,6 +5251,8 @@ components:
         linkingStrategy:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
+          type: string
+        source:
           type: string
         tenantConfiguration:
           type: object
@@ -5521,6 +5647,10 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/OpenIdConnectApplicationConfiguration"
+        attributeMappings:
+          type: object
+          additionalProperties:
+            type: string
         debug:
           type: boolean
         id:
@@ -5535,6 +5665,8 @@ components:
         linkingStrategy:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
+          type: string
+        source:
           type: string
         tenantConfiguration:
           type: object
@@ -5750,7 +5882,7 @@ components:
         message:
           "$ref": "#/components/schemas/SMSMessage"
         previewMessage:
-          "$ref": "#/components/schemas/Message"
+          type: string
     PreviewRequest:
       description: ''
       type: object
@@ -6168,6 +6300,8 @@ components:
       properties:
         birthDate:
           "$ref": "#/components/schemas/Requirable"
+        completeRegistration:
+          type: boolean
         confirmPassword:
           type: boolean
         firstName:
@@ -6810,6 +6944,10 @@ components:
           type: string
         errorIconColor:
           type: string
+        favicons:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Favicon"
         fontColor:
           type: string
         fontFamily:
@@ -6891,6 +7029,10 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/SonyPSNApplicationConfiguration"
+        attributeMappings:
+          type: object
+          additionalProperties:
+            type: string
         debug:
           type: boolean
         id:
@@ -6905,6 +7047,8 @@ components:
         linkingStrategy:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
+          type: string
+        source:
           type: string
         tenantConfiguration:
           type: object
@@ -6992,6 +7136,10 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/SteamApplicationConfiguration"
+        attributeMappings:
+          type: object
+          additionalProperties:
+            type: string
         debug:
           type: boolean
         id:
@@ -7006,6 +7154,8 @@ components:
         linkingStrategy:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
+          type: string
+        source:
           type: string
         tenantConfiguration:
           type: object
@@ -7361,6 +7511,77 @@ components:
       properties:
         requireAuthentication:
           type: boolean
+    TenantManagerApplicationConfiguration:
+      description: Tenant Manager application configuration.
+      type: object
+      properties:
+        applicationId:
+          type: string
+          format: uuid
+    TenantManagerConfiguration:
+      description: Configuration object for the Tenant Manager.
+      type: object
+      properties:
+        applicationConfigurations:
+          type: array
+          items:
+            "$ref": "#/components/schemas/TenantManagerApplicationConfiguration"
+        attributeFormId:
+          type: string
+          format: uuid
+        brandName:
+          type: string
+        identityProviderTypeConfigurations:
+          type: object
+          additionalProperties:
+            "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfiguration"
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        lastUpdateInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+    TenantManagerConfigurationRequest:
+      description: The Tenant Manager configuration request object
+      type: object
+      properties:
+        tenantManagerConfiguration:
+          "$ref": "#/components/schemas/TenantManagerConfiguration"
+    TenantManagerConfigurationResponse:
+      description: The Tenant Manager configuration response object
+      type: object
+      properties:
+        tenantManagerConfiguration:
+          "$ref": "#/components/schemas/TenantManagerConfiguration"
+    TenantManagerIdentityProviderTypeConfiguration:
+      description: Configuration object for identity provider types allowed in Tenant
+        Manager
+      type: object
+      properties:
+        defaultAttributeMappings:
+          type: object
+          additionalProperties:
+            type: string
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        lastUpdateInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        linkingStrategy:
+          "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
+        type:
+          "$ref": "#/components/schemas/IdentityProviderType"
+        enabled:
+          type: boolean
+    TenantManagerIdentityProviderTypeConfigurationRequest:
+      description: The Tenant Manager IdP type configuration request object
+      type: object
+      properties:
+        typeConfiguration:
+          "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfiguration"
+    TenantManagerIdentityProviderTypeConfigurationResponse:
+      description: The Tenant Manager IdP type configuration response object
+      type: object
+      properties:
+        typeConfiguration:
+          "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfiguration"
     TenantMultiFactorConfiguration:
       description: ''
       type: object
@@ -7863,6 +8084,10 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/TwitchApplicationConfiguration"
+        attributeMappings:
+          type: object
+          additionalProperties:
+            type: string
         debug:
           type: boolean
         id:
@@ -7877,6 +8102,8 @@ components:
         linkingStrategy:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
+          type: string
+        source:
           type: string
         tenantConfiguration:
           type: object
@@ -7921,6 +8148,10 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/TwitterApplicationConfiguration"
+        attributeMappings:
+          type: object
+          additionalProperties:
+            type: string
         debug:
           type: boolean
         id:
@@ -7935,6 +8166,8 @@ components:
         linkingStrategy:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
+          type: string
+        source:
           type: string
         tenantConfiguration:
           type: object
@@ -10003,6 +10236,10 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/XboxApplicationConfiguration"
+        attributeMappings:
+          type: object
+          additionalProperties:
+            type: string
         debug:
           type: boolean
         id:
@@ -10017,6 +10254,8 @@ components:
         linkingStrategy:
           "$ref": "#/components/schemas/IdentityProviderLinkingStrategy"
         name:
+          type: string
+        source:
           type: string
         tenantConfiguration:
           type: object
@@ -13280,6 +13519,51 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+  "/api/identity-provider/test":
+    get:
+      description: Retrieves the results for an identity provider connection test.
+      operationId: retrieveIdentityProviderConnectionTestResultsWithId
+      parameters:
+      - name: connectionTestId
+        in: query
+        schema:
+          type: string
+        description: The connection test id to retrieve results for.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/IdentityProviderConnectionTestResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    post:
+      description: Begins an identity provider connection test.
+      operationId: startIdentityProviderConnectionTestWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/IdentityProviderConnectionTestRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/IdentityProviderConnectionTestResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/identity-provider/{identityProviderId}":
     post:
       description: Creates an identity provider. You can optionally specify an Id
@@ -15531,6 +15815,159 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/TenantResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/tenant-manager":
+    patch:
+      description: Updates, via PATCH, the Tenant Manager configuration.
+      operationId: patchTenantManagerConfigurationWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TenantManagerConfigurationRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TenantManagerConfigurationResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    put:
+      description: Updates the Tenant Manager configuration.
+      operationId: updateTenantManagerConfigurationWithId
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TenantManagerConfigurationRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TenantManagerConfigurationResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+  "/api/tenant-manager/identity-provider/{type}":
+    post:
+      description: Creates a tenant manager identity provider type configuration for
+        the given identity provider type.
+      operationId: createTenantManagerIdentityProviderTypeConfigurationWithId
+      parameters:
+      - name: type
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The type of the identity provider.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfigurationRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfigurationResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    delete:
+      description: Deletes the tenant manager identity provider type configuration
+        for the given identity provider type.
+      operationId: deleteTenantManagerIdentityProviderTypeConfigurationWithId
+      parameters:
+      - name: type
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The type of the identity provider.
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    patch:
+      description: Patches the tenant manager identity provider type configuration
+        for the given identity provider type.
+      operationId: patchTenantManagerIdentityProviderTypeConfigurationWithId
+      parameters:
+      - name: type
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The type of the identity provider.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfigurationRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfigurationResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    put:
+      description: Updates the tenant manager identity provider type configuration
+        for the given identity provider type.
+      operationId: updateTenantManagerIdentityProviderTypeConfigurationWithId
+      parameters:
+      - name: type
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The type of the identity provider.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfigurationRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TenantManagerIdentityProviderTypeConfigurationResponse"
         default:
           description: Error
           content:
