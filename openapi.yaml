@@ -6722,10 +6722,15 @@ components:
       description: ''
       type: object
       properties:
+        code:
+          type: string
         phoneNumber:
           type: string
         textMessage:
           type: string
+        userId:
+          type: string
+          format: uuid
     SMSMessageTemplate:
       description: ''
       type: object
@@ -9665,12 +9670,17 @@ components:
       description: ''
       type: object
       properties:
+        code:
+          type: string
         locale:
           "$ref": "#/components/schemas/Locale"
         message:
           type: string
         phoneNumber:
           type: string
+        userId:
+          type: string
+          format: uuid
     VoiceMessageTemplate:
       description: ''
       type: object
