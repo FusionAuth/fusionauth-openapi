@@ -6125,6 +6125,8 @@ components:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         entityManagement:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
+        legacyAdapter:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
         expiration:
           "$ref": "#/components/schemas/LocalDate"
         ipGeoLocation:
@@ -8475,6 +8477,8 @@ components:
         insertInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
         lastName:
+          type: string
+        legacyIdentifier:
           type: string
         lastUpdateInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
