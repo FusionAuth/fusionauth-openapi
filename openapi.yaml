@@ -5086,6 +5086,11 @@ components:
             type: object
         device:
           "$ref": "#/components/schemas/DeviceInfo"
+        resources:
+          type: array
+          items:
+            type: string
+            format: URI
         scopes:
           type: array
           uniqueItems: true
@@ -5277,6 +5282,11 @@ components:
             type: string
             format: URI
         authorizedRedirectURLs:
+          type: array
+          items:
+            type: string
+            format: URI
+        authorizedResourceUris:
           type: array
           items:
             type: string
@@ -5500,6 +5510,7 @@ components:
       - expired_token
       - unsupported_token_type
       - invalid_dpop_proof
+      - invalid_target
     OAuthResponse:
       description: ''
       type: object
