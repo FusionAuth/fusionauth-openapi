@@ -7274,6 +7274,8 @@ components:
           type: string
         accountTwoFactorDisable:
           type: string
+        accountTwoFactorEdit:
+          type: string
         accountTwoFactorEnable:
           type: string
         accountTwoFactorIndex:
@@ -8261,6 +8263,8 @@ components:
           type: string
         mobilePhone:
           type: string
+        name:
+          type: string
         secret:
           type: string
     TwoFactorRecoveryCodeResponse:
@@ -8287,6 +8291,8 @@ components:
         method:
           type: string
         mobilePhone:
+          type: string
+        name:
           type: string
         secret:
           type: string
@@ -8401,6 +8407,16 @@ components:
           "$ref": "#/components/schemas/ZonedDateTime"
         startInstant:
           "$ref": "#/components/schemas/ZonedDateTime"
+    TwoFactorUpdateRequest:
+      description: Request to update an existing two-factor method for a user.
+      type: object
+      properties:
+        methodId:
+          type: string
+        name:
+          type: string
+        eventInfo:
+          "$ref": "#/components/schemas/EventInfo"
     UIConfiguration:
       type: object
       properties:
@@ -18450,6 +18466,30 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/TwoFactorResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    put:
+      description: Updates the two-factor method for the given user using a JSON body.
+      operationId: updateTwoFactorWithId
+      parameters:
+      - name: userId
+        in: path
+        schema:
+          type: string
+        required: true
+        description: The Id of the user to update.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/TwoFactorUpdateRequest"
+      responses:
+        '200':
+          description: Success
         default:
           description: Error
           content:
