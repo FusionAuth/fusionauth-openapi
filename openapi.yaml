@@ -1627,6 +1627,9 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/EmailHeader"
+        adminTwoFactorMethodRemoveEmailTemplateId:
+          type: string
+          format: uuid
         debug:
           type: boolean
         defaultFromEmail:
@@ -7627,6 +7630,9 @@ components:
         cases.
       type: object
       properties:
+        adminTwoFactorMethodRemoveTemplateId:
+          type: string
+          format: uuid
         forgotPasswordTemplateId:
           type: string
           format: uuid
