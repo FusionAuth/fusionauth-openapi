@@ -267,6 +267,9 @@ components:
           type: boolean
         authenticationTokenConfiguration:
           "$ref": "#/components/schemas/AuthenticationTokenConfiguration"
+        baseURL:
+          type: string
+          format: URI
         cleanSpeakConfiguration:
           "$ref": "#/components/schemas/CleanSpeakConfiguration"
         data:
@@ -7387,6 +7390,9 @@ components:
             type: object
         accessControlConfiguration:
           "$ref": "#/components/schemas/TenantAccessControlConfiguration"
+        baseURL:
+          type: string
+          format: URI
         captchaConfiguration:
           "$ref": "#/components/schemas/TenantCaptchaConfiguration"
         configured:
