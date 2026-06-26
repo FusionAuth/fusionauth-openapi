@@ -783,7 +783,16 @@ components:
       description: ''
       type: string
       enum:
+      - BotDetected
+      - BlocklistedIp
+      - DormantAccount
+      - DormantPassword
       - ImpossibleTravel
+      - RecentIdentityChange
+      - RecentPasswordChange
+      - SuspiciousUserAgent
+      - UnrecognizedDevice
+      - UntrustedDevice
     AuthenticationTokenConfiguration:
       type: object
       properties:
@@ -947,6 +956,9 @@ components:
         applicationId:
           type: string
           format: uuid
+        botDetectionScore:
+          type: number
+          format: double
         ipAddress:
           type: string
         metaData:
@@ -1220,6 +1232,40 @@ components:
           type: string
         tenantId:
           type: string
+    ClientRisk:
+      description: Represents the inbound lambda parameter 'clientRisk' inside the
+        'context' parameter for MFA Required lambdas.
+      type: object
+      properties:
+        status:
+          type: string
+    ClientRiskConfiguration:
+      description: Flags to enable or disable specific risk signals that contribute
+        to the composite client risk calculation.
+      type: object
+      properties:
+        blocklistedIp:
+          type: boolean
+        botDetected:
+          type: boolean
+        dormantAccount:
+          type: boolean
+        dormantPassword:
+          type: boolean
+        impossibleTravel:
+          type: boolean
+        recentIdentityChange:
+          type: boolean
+        recentPasswordChange:
+          type: boolean
+        suspiciousUserAgent:
+          type: boolean
+        unrecognizedDevice:
+          type: boolean
+        untrustedDevice:
+          type: boolean
+        enabled:
+          type: boolean
     ConnectorLambdaConfiguration:
       type: object
       properties:
@@ -1374,6 +1420,8 @@ components:
           items: {}
         authenticationType:
           type: string
+        clientRisk:
+          "$ref": "#/components/schemas/ClientRisk"
         eventInfo:
           "$ref": "#/components/schemas/EventInfo"
         mfaTrust:
@@ -2359,6 +2407,7 @@ components:
       - UserLoginNewDevice
       - UserLoginSuccess
       - UserLoginSuspicious
+      - UserTwoFactorChallenge
       - UserPasswordBreach
       - UserPasswordResetSend
       - UserPasswordResetStart
@@ -2379,6 +2428,8 @@ components:
       - Test
       - UserIdentityVerified
       - UserIdentityUpdate
+      - UserTwoFactorFailedAttempt
+      - UserTwoFactorSuccess
     ExistingUserStrategy:
       description: Represent the various statesexpectations of a user in the context
         of starting verification
@@ -3767,6 +3818,9 @@ components:
         applicationId:
           type: string
           format: uuid
+        botDetectionScore:
+          type: number
+          format: double
         ipAddress:
           type: string
         metaData:
@@ -3907,6 +3961,9 @@ components:
         applicationId:
           type: string
           format: uuid
+        botDetectionScore:
+          type: number
+          format: double
         ipAddress:
           type: string
         metaData:
@@ -4762,6 +4819,9 @@ components:
         applicationId:
           type: string
           format: uuid
+        botDetectionScore:
+          type: number
+          format: double
         ipAddress:
           type: string
         metaData:
@@ -4881,6 +4941,9 @@ components:
         applicationId:
           type: string
           format: uuid
+        botDetectionScore:
+          type: number
+          format: double
         ipAddress:
           type: string
         metaData:
@@ -4965,6 +5028,20 @@ components:
       properties:
         identityProvider:
           "$ref": "#/components/schemas/IdentityProviderDetails"
+    MFATenantMetric:
+      description: Reactor metric with counts of MFA challenges, successes, and failures
+        for a tenant.
+      type: object
+      properties:
+        challengeCount:
+          type: integer
+          format: int64
+        failedAttemptCount:
+          type: integer
+          format: int64
+        successCount:
+          type: integer
+          format: int64
     ManagedFields:
       description: 'This class contains the managed fields that are also put into
         the database during FusionAuth setup.  <p>  Internal Note: These fields are
@@ -5157,6 +5234,8 @@ components:
       description: ''
       type: string
       enum:
+      - ChallengeOnHighRisk
+      - ChallengeOnMediumRisk
       - Disabled
       - Enabled
       - Required
@@ -5772,6 +5851,9 @@ components:
         applicationId:
           type: string
           format: uuid
+        botDetectionScore:
+          type: number
+          format: double
         ipAddress:
           type: string
         metaData:
@@ -6092,6 +6174,10 @@ components:
           type: object
           additionalProperties:
             "$ref": "#/components/schemas/BreachedPasswordTenantMetric"
+        mfaMetrics:
+          type: object
+          additionalProperties:
+            "$ref": "#/components/schemas/MFATenantMetric"
     ReactorMetricsResponse:
       description: ''
       type: object
@@ -6136,17 +6222,25 @@ components:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         breachedPasswordDetection:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
+        clientRiskConfiguration:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
         connectors:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         dPoP:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         entityManagement:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
-        legacyAdapter:
-          "$ref": "#/components/schemas/ReactorFeatureStatus"
         expiration:
           "$ref": "#/components/schemas/LocalDate"
+        imfaWebhooks:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
+        intelligentMFA:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
         ipGeoLocation:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
+        ipReputation:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
+        legacyAdapter:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         licenseAttributes:
           type: object
@@ -6163,6 +6257,8 @@ components:
         threatDetection:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         universalApplication:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
+        userAgentReputation:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         webAuthn:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
@@ -7395,6 +7491,8 @@ components:
           format: URI
         captchaConfiguration:
           "$ref": "#/components/schemas/TenantCaptchaConfiguration"
+        clientRiskConfiguration:
+          "$ref": "#/components/schemas/ClientRiskConfiguration"
         configured:
           type: boolean
         connectorPolicies:
@@ -7617,6 +7715,8 @@ components:
       properties:
         authenticator:
           "$ref": "#/components/schemas/MultiFactorAuthenticatorMethod"
+        debug:
+          type: boolean
         email:
           "$ref": "#/components/schemas/MultiFactorEmailMethod"
         loginPolicy:
@@ -8251,6 +8351,9 @@ components:
         applicationId:
           type: string
           format: uuid
+        botDetectionScore:
+          type: number
+          format: double
         ipAddress:
           type: string
         metaData:
@@ -9503,6 +9606,18 @@ components:
       - AuthenticatedNotRegistered
       - AuthenticatedNotVerified
       - AuthenticatedRegistrationNotVerified
+    UserTwoFactorChallengeEvent:
+      description: Models the User Two Factor Challenge Event. Fired when a two-factor
+        challenge is started (before the user submits a code).
+      type: object
+      properties:
+        applicationId:
+          type: string
+          format: uuid
+        clientRisk:
+          type: string
+        user:
+          "$ref": "#/components/schemas/User"
     UserTwoFactorConfiguration:
       description: ''
       type: object
@@ -9515,6 +9630,22 @@ components:
           type: array
           items:
             type: string
+    UserTwoFactorFailedAttemptEvent:
+      description: Models the User Two Factor Failed Attempt Event. Fired when a user
+        fails a two-factor challenge.
+      type: object
+      properties:
+        applicationId:
+          type: string
+          format: uuid
+        clientRisk:
+          type: string
+        messageType:
+          type: string
+        method:
+          type: string
+        user:
+          "$ref": "#/components/schemas/User"
     UserTwoFactorMethodAddEvent:
       description: Model a user event when a two-factor method has been removed.
       type: object
@@ -9529,6 +9660,22 @@ components:
       properties:
         method:
           "$ref": "#/components/schemas/TwoFactorMethod"
+        user:
+          "$ref": "#/components/schemas/User"
+    UserTwoFactorSuccessEvent:
+      description: Models the User Two Factor Success Event. Fired when a user successfully
+        completes a two-factor challenge.
+      type: object
+      properties:
+        applicationId:
+          type: string
+          format: uuid
+        clientRisk:
+          type: string
+        messageType:
+          type: string
+        method:
+          type: string
         user:
           "$ref": "#/components/schemas/User"
     UserUpdateCompleteEvent:
@@ -9865,6 +10012,9 @@ components:
         applicationId:
           type: string
           format: uuid
+        botDetectionScore:
+          type: number
+          format: double
         ipAddress:
           type: string
         metaData:
