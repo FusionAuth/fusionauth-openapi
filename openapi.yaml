@@ -2231,9 +2231,11 @@ components:
       type: object
       properties:
         fieldErrors:
-          type: array
-          items:
-            "$ref": "#/components/schemas/Error"
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              "$ref": "#/components/schemas/Error"
         generalErrors:
           type: array
           items:
@@ -3227,9 +3229,11 @@ components:
         name:
           type: string
         roles:
-          type: array
-          items:
-            "$ref": "#/components/schemas/ApplicationRole"
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              "$ref": "#/components/schemas/ApplicationRole"
         tenantId:
           type: string
           format: uuid
@@ -5068,26 +5072,32 @@ components:
             type: string
             format: uuid
         members:
-          type: array
-          items:
-            type: string
-            format: uuid
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              type: string
+              format: uuid
     MemberRequest:
       description: Group Member Request
       type: object
       properties:
         members:
-          type: array
-          items:
-            "$ref": "#/components/schemas/GroupMember"
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              "$ref": "#/components/schemas/GroupMember"
     MemberResponse:
       description: Group Member Response
       type: object
       properties:
         members:
-          type: array
-          items:
-            "$ref": "#/components/schemas/GroupMember"
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              "$ref": "#/components/schemas/GroupMember"
     Message:
       description: ''
       type: object
@@ -11450,6 +11460,19 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Retrieves all the connectors.
+      operationId: retrieveConnectorsWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ConnectorResponse"
+        default:
+          description: Error
   "/api/connector/{connectorId}":
     post:
       description: Creates a connector.  You can optionally specify an Id for the
@@ -11607,6 +11630,27 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Retrieves all the consent.
+      operationId: retrieveConsentsWithId
+      parameters:
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ConsentResponse"
+        default:
+          description: Error
   "/api/consent/search":
     post:
       description: Searches consents with the specified criteria and pagination.
@@ -11617,6 +11661,45 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/ConsentSearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ConsentSearchResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    get:
+      description: Searches consents with the specified criteria and pagination.
+      operationId: searchConsentsByParametersWithId
+      parameters:
+      - name: name
+        in: query
+        schema:
+          type: string
+        description: The name of the consent to search for. Supports wildcard search
+          using *.
+      - name: numberOfResults
+        in: query
+        schema:
+          type: string
+        description: The number of results to return. Defaults to 25.
+      - name: orderBy
+        in: query
+        schema:
+          type: string
+        description: 'The field to order the results by. Supported values: id, insertInstant,
+          name.'
+      - name: startRow
+        in: query
+        schema:
+          type: string
+        description: The offset into the total results. Defaults to 0.
       responses:
         '200':
           description: Success
@@ -12149,6 +12232,54 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Searches entity grants with the specified criteria and pagination.
+      operationId: searchEntityGrantsByParametersWithId
+      parameters:
+      - name: entityId
+        in: query
+        schema:
+          type: string
+        description: The entity Id to search for grants on.
+      - name: name
+        in: query
+        schema:
+          type: string
+        description: The name of the entity grant to search for. Supports wildcard
+          search using *.
+      - name: userId
+        in: query
+        schema:
+          type: string
+        description: The user Id to search for grants on.
+      - name: numberOfResults
+        in: query
+        schema:
+          type: string
+        description: The number of results to return. Defaults to 25.
+      - name: orderBy
+        in: query
+        schema:
+          type: string
+        description: The field to order the results by.
+      - name: startRow
+        in: query
+        schema:
+          type: string
+        description: The offset into the total results. Defaults to 0.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/EntityGrantSearchResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/entity/search":
     post:
       description: Searches entities with the specified criteria and pagination.
@@ -12195,6 +12326,21 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    put:
+      description: Request a refresh of the Entity search index. This API is not generally
+        necessary and the search index will become consistent in a reasonable amount
+        of time. There may be scenarios where you may wish to manually request an
+        index refresh. One example may be  if you are using the Search API or Delete
+        Tenant API immediately following a Entity Create etc, you may wish to request
+        a refresh to  ensure the index immediately current before making a query request
+        to the search index.
+      operationId: refreshEntitySearchIndexWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
   "/api/entity/type":
     post:
       description: Creates a Entity Type. You can optionally specify an Id for the
@@ -12219,6 +12365,23 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Retrieves all the Entity Types.
+      operationId: retrieveEntityTypesWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/EntityTypeResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/entity/type/search":
     post:
       description: Searches the entity types with the specified criteria and pagination.
@@ -12229,6 +12392,45 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/EntityTypeSearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/EntityTypeSearchResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    get:
+      description: Searches entity types with the specified criteria and pagination.
+      operationId: searchEntityTypesByParametersWithId
+      parameters:
+      - name: name
+        in: query
+        schema:
+          type: string
+        description: The name of the entity type to search for. Use * to return all
+          entity types.
+      - name: numberOfResults
+        in: query
+        schema:
+          type: string
+        description: The number of results to return. Defaults to 25.
+      - name: orderBy
+        in: query
+        schema:
+          type: string
+        description: 'The field to order the results by. Supported values: insertInstant,
+          lastUpdateInstant, name.'
+      - name: startRow
+        in: query
+        schema:
+          type: string
+        description: The offset into the total results. Defaults to 0.
       responses:
         '200':
           description: Success
@@ -12843,6 +13045,19 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Retrieves all the forms.
+      operationId: retrieveFormsWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/FormResponse"
+        default:
+          description: Error
   "/api/form/field":
     post:
       description: Creates a form field.  You can optionally specify an Id for the
@@ -12867,6 +13082,19 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Retrieves all the forms fields
+      operationId: retrieveFormFieldsWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/FormFieldResponse"
+        default:
+          description: Error
   "/api/form/field/{fieldId}":
     post:
       description: Creates a form field.  You can optionally specify an Id for the
@@ -13149,6 +13377,27 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Retrieves all the groups.
+      operationId: retrieveGroupsWithId
+      parameters:
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/GroupResponse"
+        default:
+          description: Error
   "/api/group/member":
     post:
       description: Creates a member in a group.
@@ -13698,6 +13947,60 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Searches identity providers with the specified criteria and pagination.
+      operationId: searchIdentityProvidersByParametersWithId
+      parameters:
+      - name: applicationId
+        in: query
+        schema:
+          type: string
+        description: The application Id to search for identity providers.
+      - name: name
+        in: query
+        schema:
+          type: string
+        description: The name of the identity provider to search for. Supports wildcard
+          search using *.
+      - name: numberOfResults
+        in: query
+        schema:
+          type: string
+        description: The number of results to return. Defaults to 25.
+      - name: orderBy
+        in: query
+        schema:
+          type: string
+        description: 'The field to order the results by. Supported values: enabled,
+          id, insertInstant, name, type.'
+      - name: startRow
+        in: query
+        schema:
+          type: string
+        description: The offset into the total results. Defaults to 0.
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+        description: The tenant Id to restrict the results to.
+      - name: type
+        in: query
+        schema:
+          type: string
+        description: The type of identity provider to search for.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/IdentityProviderSearchResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/identity-provider/start":
     post:
       description: Begins a login request for a 3rd party login that requires user
@@ -14031,6 +14334,19 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Retrieves the available integrations.
+      operationId: retrieveIntegrationWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/IntegrationResponse"
+        default:
+          description: Error
   "/api/ip-acl":
     post:
       description: Creates an IP Access Control List. You can optionally specify an
@@ -14066,6 +14382,46 @@ paths:
           application/json:
             schema:
               "$ref": "#/components/schemas/IPAccessControlListSearchRequest"
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/IPAccessControlListSearchResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
+    get:
+      description: Searches IP access control lists with the specified criteria and
+        pagination.
+      operationId: searchIPAccessControlListsByParametersWithId
+      parameters:
+      - name: name
+        in: query
+        schema:
+          type: string
+        description: The name of the IP access control list to search for. Supports
+          wildcard search using *.
+      - name: numberOfResults
+        in: query
+        schema:
+          type: string
+        description: The number of results to return. Defaults to 25.
+      - name: orderBy
+        in: query
+        schema:
+          type: string
+        description: 'The field to order the results by. Supported values: id, insertInstant,
+          lastUpdateInstant, name.'
+      - name: startRow
+        in: query
+        schema:
+          type: string
+        description: The offset into the total results. Defaults to 0.
       responses:
         '200':
           description: Success
@@ -14255,7 +14611,7 @@ paths:
         schema:
           type: string
         description: The Id of the Application for which this key is used.
-      - name: keyId
+      - name: kid
         in: query
         schema:
           type: string
@@ -14630,6 +14986,56 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Searches keys with the specified criteria and pagination.
+      operationId: searchKeysByParametersWithId
+      parameters:
+      - name: algorithm
+        in: query
+        schema:
+          type: string
+        description: The algorithm of the key to search for.
+      - name: name
+        in: query
+        schema:
+          type: string
+        description: The name of the key to search for. Supports wildcard search using
+          *.
+      - name: numberOfResults
+        in: query
+        schema:
+          type: string
+        description: The number of results to return. Defaults to 25.
+      - name: orderBy
+        in: query
+        schema:
+          type: string
+        description: 'The field to order the results by. Supported values: algorithm,
+          expiration, id, insertInstant, name, type.'
+      - name: startRow
+        in: query
+        schema:
+          type: string
+        description: The offset into the total results. Defaults to 0.
+      - name: type
+        in: query
+        schema:
+          type: string
+        description: 'The type of key to search for. Supported values: EC, HMAC, OKP,
+          RSA.'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/KeySearchResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/key/{keyId}":
     delete:
       description: Deletes the key for the given Id.
@@ -14970,7 +15376,7 @@ paths:
         times and helps with reporting.
       operationId: loginPingWithId
       parameters:
-      - name: callerIPAddress
+      - name: ipAddress
         in: query
         schema:
           type: string
@@ -15255,6 +15661,19 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Retrieves all the messengers.
+      operationId: retrieveMessengersWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/MessengerResponse"
+        default:
+          description: Error
   "/api/messenger/{messengerId}":
     post:
       description: Creates a messenger.  You can optionally specify an Id for the
@@ -15469,6 +15888,37 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    delete:
+      description: Deactivates the FusionAuth Reactor.
+      operationId: deactivateReactorWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+    put:
+      description: Regenerates any keys that are used by the FusionAuth Reactor.
+      operationId: regenerateReactorKeysWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+    get:
+      description: Retrieves the FusionAuth Reactor status.
+      operationId: retrieveReactorStatusWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ReactorResponse"
+        default:
+          description: Error
   "/api/reactor/metrics":
     get:
       description: Retrieves the FusionAuth Reactor metrics.
@@ -15672,13 +16122,11 @@ paths:
           description: Error
   "/api/status":
     get:
-      description: Retrieves the FusionAuth system status using an API key. Using
-        an API key will cause the response to include the product version, health
-        checks and various runtime metrics. OR Retrieves the FusionAuth system status.
-        This request is anonymous and does not require an API key. When an API key
-        is not provided the response will contain a single value in the JSON response
-        indicating the current health check.
-      operationId: retrieveStatus
+      description: Retrieves the FusionAuth system status. This request is anonymous
+        and does not require an API key. When an API key is not provided the response
+        will contain a single value in the JSON response indicating the current health
+        check.
+      operationId: retrieveSystemStatusWithId
       parameters: []
       responses:
         '200':
@@ -15734,6 +16182,19 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Retrieves the system configuration.
+      operationId: retrieveSystemConfigurationWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/SystemConfigurationResponse"
+        default:
+          description: Error
   "/api/system/audit-log":
     post:
       description: Creates an audit log with the message and user name (usually an
@@ -15902,6 +16363,21 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Retrieve the status of a re-index process. A status code of 200
+        indicates the re-index is in progress, a status code of   404 indicates no
+        re-index is in progress.
+      operationId: retrieveReindexStatusWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/system/version":
     get:
       description: Retrieves the FusionAuth version string.
@@ -16024,6 +16500,27 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Retrieves all the tenants.
+      operationId: retrieveTenantsWithId
+      parameters:
+      - in: header
+        name: X-FusionAuth-TenantId
+        description: The unique Id of the tenant used to scope this API request. Only
+          required when there is more than one tenant and the API key is not tenant-scoped.
+        required: false
+        schema:
+          type: string
+          format: UUID
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TenantResponse"
+        default:
+          description: Error
   "/api/tenant-manager":
     patch:
       description: Updates, via PATCH, the Tenant Manager configuration.
@@ -16069,6 +16566,19 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Retrieves the Tenant Manager configuration.
+      operationId: retrieveTenantManagerConfigurationWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/TenantManagerConfigurationResponse"
+        default:
+          description: Error
   "/api/tenant-manager/identity-provider/{type}":
     post:
       description: Creates a tenant manager identity provider type configuration for
@@ -16447,6 +16957,19 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Retrieves all the themes.
+      operationId: retrieveThemesWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ThemeResponse"
+        default:
+          description: Error
   "/api/theme/search":
     post:
       description: Searches themes with the specified criteria and pagination.
@@ -17439,7 +17962,7 @@ paths:
         deactivating any users. OR Deactivates the users with the given Ids.
       operationId: deleteUserBulk
       parameters:
-      - name: userIds
+      - name: userId
         in: query
         schema:
           type: string
@@ -18521,6 +19044,21 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    put:
+      description: Request a refresh of the User search index. This API is not generally
+        necessary and the search index will become consistent in a reasonable amount
+        of time. There may be scenarios where you may wish to manually request an
+        index refresh. One example may be  if you are using the Search API or Delete
+        Tenant API immediately following a User Create etc, you may wish to request
+        a refresh to  ensure the index immediately current before making a query request
+        to the search index.
+      operationId: refreshUserSearchIndexWithId
+      parameters: []
+      responses:
+        '200':
+          description: Success
+        default:
+          description: Error
   "/api/user/two-factor/recovery-code/{userId}":
     post:
       description: Generate two-factor recovery codes for a user. Generating two-factor
@@ -19256,6 +19794,56 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+    get:
+      description: Searches webhooks with the specified criteria and pagination.
+      operationId: searchWebhooksByParametersWithId
+      parameters:
+      - name: description
+        in: query
+        schema:
+          type: string
+        description: The description of the webhook to search for. Supports wildcard
+          search using *.
+      - name: numberOfResults
+        in: query
+        schema:
+          type: string
+        description: The number of results to return. Defaults to 25.
+      - name: orderBy
+        in: query
+        schema:
+          type: string
+        description: 'The field to order the results by. Supported values: description,
+          id, insertInstant, url.'
+      - name: startRow
+        in: query
+        schema:
+          type: string
+        description: The offset into the total results. Defaults to 0.
+      - name: tenantId
+        in: query
+        schema:
+          type: string
+        description: The tenant Id to restrict the results to.
+      - name: url
+        in: query
+        schema:
+          type: string
+        description: The URL of the webhook to search for. Supports wildcard search
+          using *.
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/WebhookSearchResponse"
+        default:
+          description: Error
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Errors"
   "/api/webhook/{webhookId}":
     post:
       description: Creates a webhook. You can optionally specify an Id for the webhook,
@@ -19400,21 +19988,26 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Errors"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                  description: The unique client identifier. The client Id is the
+                    Id of the FusionAuth Application in which you are attempting to
+                    authenticate.
+                client_secret:
+                  type: string
+                  description: The client secret. This value will be required if client
+                    authentication is enabled.
+                user_code:
+                  type: string
+                  description: The end-user verification code.
   "/oauth2/device/user-code":
-    get:
-      description: Retrieve a user_code that is part of an in-progress Device Authorization
-        Grant.  This API is useful if you want to build your own login workflow to
-        complete a device grant.  This request will require an API key. OR Retrieve
-        a user_code that is part of an in-progress Device Authorization Grant.  This
-        API is useful if you want to build your own login workflow to complete a device
-        grant.
-      operationId: retrieveDeviceUserCode
-      parameters: []
-      responses:
-        '200':
-          description: Success
-        default:
-          description: Error
     post:
       description: Retrieve a user_code that is part of an in-progress Device Authorization
         Grant.  This API is useful if you want to build your own login workflow to
@@ -19474,6 +20067,26 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/OAuthError"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                client_id:
+                  type: string
+                  description: The unique client identifier. The client Id is the
+                    Id of the FusionAuth Application in which you are attempting to
+                    authenticate.
+                client_secret:
+                  type: string
+                  description: The client secret. This value may optionally be provided
+                    in the request body instead of the Authorization header.
+                scope:
+                  type: string
+                  description: A space-delimited string of the requested scopes. Defaults
+                    to all scopes configured in the Application's OAuth configuration.
   "/oauth2/introspect":
     post:
       description: Inspect an access token issued as the result of the Client Credentials
@@ -19498,6 +20111,17 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/OAuthError"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                token:
+                  type: string
+                  description: The access token returned by this OAuth provider as
+                    the result of a successful client credentials grant.
   "/oauth2/token":
     post:
       description: Exchange User Credentials for a Token. If you will be using the
@@ -19539,6 +20163,45 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/OAuthError"
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  description: The login identifier of the user. The login identifier
+                    can be either the email or the username.
+                password:
+                  type: string
+                  description: The user’s password.
+                client_id:
+                  type: string
+                  description: The unique client identifier. The client Id is the
+                    Id of the FusionAuth Application in which you are attempting to
+                    authenticate. This parameter is optional when the Authorization
+                    header is provided. This parameter is optional when Basic Authorization
+                    is used to authenticate this request.
+                client_secret:
+                  type: string
+                  description: The client secret. This value may optionally be provided
+                    in the request body instead of the Authorization header.
+                grant_type:
+                  type: string
+                  description: The grant type to be used. This value must be set to
+                    password
+                scope:
+                  type: string
+                  description: This parameter is optional and if omitted, the same
+                    scope requested during the authorization request will be used.
+                    If provided the scopes must match those requested during the initial
+                    authorization request.
+                user_code:
+                  type: string
+                  description: The end-user verification code. This code is required
+                    if using this endpoint to approve the Device Authorization.
   "/oauth2/userinfo":
     get:
       description: Call the UserInfo endpoint to retrieve User Claims from the access
