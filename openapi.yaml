@@ -5721,9 +5721,15 @@ components:
       properties:
         authorization_endpoint:
           type: string
+        authorization_response_iss_parameter_supported:
+          type: boolean
         backchannel_logout_supported:
           type: boolean
         claims_supported:
+          type: array
+          items:
+            type: string
+        code_challenge_methods_supported:
           type: array
           items:
             type: string
@@ -5774,10 +5780,6 @@ components:
         userinfo_endpoint:
           type: string
         userinfo_signing_alg_values_supported:
-          type: array
-          items:
-            type: string
-        code_challenge_methods_supported:
           type: array
           items:
             type: string
