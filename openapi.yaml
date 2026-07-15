@@ -887,6 +887,24 @@ components:
           type: string
         startRow:
           type: integer
+    BaseEntityEvent:
+      description: Base class for all {@link Entity}-related events.
+      type: object
+      properties:
+        entity:
+          "$ref": "#/components/schemas/Entity"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
     BaseEvent:
       description: Base class for all FusionAuth events.
       type: object
@@ -1908,6 +1926,34 @@ components:
           format: uuid
         type:
           "$ref": "#/components/schemas/EntityType"
+    EntityCreateCompleteEvent:
+      description: Models the Entity Create Complete Event.  <p>  This is different
+        than the entity.create event in that it will be sent after the entity has
+        been created. This event cannot be made  transactional.
+      type: object
+      properties:
+        entity:
+          "$ref": "#/components/schemas/Entity"
+    EntityCreateEvent:
+      description: Models the Entity Create Event.
+      type: object
+      properties:
+        entity:
+          "$ref": "#/components/schemas/Entity"
+    EntityDeleteCompleteEvent:
+      description: Models the Entity Delete Complete Event.  <p>  This is different
+        than the entity.delete event in that it will be sent after the entity has
+        been deleted. This event cannot be made  transactional.
+      type: object
+      properties:
+        entity:
+          "$ref": "#/components/schemas/Entity"
+    EntityDeleteEvent:
+      description: Models the Entity Delete Event.
+      type: object
+      properties:
+        entity:
+          "$ref": "#/components/schemas/Entity"
     EntityGrant:
       description: A grant for an entity to a user or another entity.
       type: object
@@ -2145,6 +2191,24 @@ components:
         total:
           type: integer
           format: int64
+    EntityUpdateCompleteEvent:
+      description: Models the Entity Update Complete Event.  <p>  This is different
+        than the entity.update event in that it will be sent after the entity has
+        been updated. This event cannot be made  transactional.
+      type: object
+      properties:
+        original:
+          "$ref": "#/components/schemas/Entity"
+        entity:
+          "$ref": "#/components/schemas/Entity"
+    EntityUpdateEvent:
+      description: Models the Entity Update Event.
+      type: object
+      properties:
+        original:
+          "$ref": "#/components/schemas/Entity"
+        entity:
+          "$ref": "#/components/schemas/Entity"
     EpicGamesApplicationConfiguration:
       description: ''
       type: object
@@ -2432,6 +2496,12 @@ components:
       - UserIdentityUpdate
       - UserTwoFactorFailedAttempt
       - UserTwoFactorSuccess
+      - EntityCreate
+      - EntityCreateComplete
+      - EntityDelete
+      - EntityDeleteComplete
+      - EntityUpdate
+      - EntityUpdateComplete
     ExistingUserStrategy:
       description: Represent the various statesexpectations of a user in the context
         of starting verification
