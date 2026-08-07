@@ -5878,6 +5878,12 @@ components:
           type: integer
         modifyEncryptionSchemeOnLogin:
           type: boolean
+    PasswordType:
+      description: Indicates whether a password is plaintext or hashed
+      type: string
+      enum:
+      - PLAINTEXT
+      - HASHED
     PasswordValidationRules:
       description: ''
       type: object
@@ -9618,6 +9624,8 @@ components:
           type: string
         disableDomainBlock:
           type: boolean
+        passwordFieldType:
+          "$ref": "#/components/schemas/PasswordType"
         sendSetPasswordEmail:
           type: boolean
         sendSetPasswordIdentityType:
