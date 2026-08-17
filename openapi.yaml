@@ -2039,6 +2039,11 @@ components:
         accessTokenKeyId:
           type: string
           format: uuid
+        accessTokenVerificationKeyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         timeToLiveInSeconds:
           type: integer
         enabled:
@@ -2630,6 +2635,11 @@ components:
         defaultKeyId:
           type: string
           format: uuid
+        verificationKeyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         headerKeyParameter:
           type: string
         oauth2:
@@ -4249,9 +4259,19 @@ components:
         accessTokenKeyId:
           type: string
           format: uuid
+        accessTokenVerificationKeyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         idTokenKeyId:
           type: string
           format: uuid
+        idTokenVerificationKeyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         refreshTokenExpirationPolicy:
           "$ref": "#/components/schemas/RefreshTokenExpirationPolicy"
         refreshTokenOneTimeUseConfiguration:
@@ -4542,6 +4562,7 @@ components:
       - SignOnly
       - SignAndVerify
       - VerifyOnly
+      - None
     KickstartSuccessEvent:
       description: Event to indicate kickstart has been successfully completed.
       type: object
@@ -6775,6 +6796,11 @@ components:
           format: URI
         requireSignedRequests:
           type: boolean
+        verificationKeyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         xmlSignatureC14nMethod:
           "$ref": "#/components/schemas/CanonicalizationMethod"
         xmlSignatureLocation:
@@ -6824,6 +6850,11 @@ components:
         keyId:
           type: string
           format: uuid
+        verificationKeyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         uniqueIdClaim:
           type: string
         useNameIdForEmail:
@@ -6880,6 +6911,11 @@ components:
         keyId:
           type: string
           format: uuid
+        verificationKeyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         uniqueIdClaim:
           type: string
         useNameIdForEmail:
@@ -6910,6 +6946,11 @@ components:
           type: boolean
         singleLogout:
           "$ref": "#/components/schemas/SAMLv2SingleLogout"
+        verificationKeyIds:
+          type: array
+          items:
+            type: string
+            format: uuid
         xmlSignatureC14nMethod:
           "$ref": "#/components/schemas/CanonicalizationMethod"
     SAMLv2SingleLogout:
