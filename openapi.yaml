@@ -85,6 +85,8 @@ components:
           type: integer
         id_token:
           type: string
+        issued_token_type:
+          type: string
         refresh_token:
           type: string
         refresh_token_id:
@@ -1901,6 +1903,8 @@ components:
         an entity that can be granted permissions to another entity.
       type: object
       properties:
+        actAsTokenExchangeClient:
+          type: boolean
         data:
           type: object
           additionalProperties:
@@ -2507,6 +2511,8 @@ components:
       - EntityDeleteComplete
       - EntityUpdate
       - EntityUpdateComplete
+      - TokenExchange
+      - TokenExchangeComplete
     ExistingUserStrategy:
       description: Represent the various statesexpectations of a user in the context
         of starting verification
@@ -3288,6 +3294,7 @@ components:
       - implicit
       - password
       - client_credentials
+      - token_exchange
       - refresh_token
       - unknown
       - device_code
@@ -4165,6 +4172,20 @@ components:
           type: string
         token:
           type: string
+    IssuedTokenInfo:
+      description: Nested structure for issued token information in the webhook payload.
+      type: object
+      properties:
+        delegationSemantics:
+          "$ref": "#/components/schemas/TokenExchangeDelegationSemantics"
+        grantedAudience:
+          type: array
+          items:
+            type: string
+        grantedScope:
+          type: string
+        jti:
+          type: string
     JSONWebKey:
       description: A JSON Web Key as defined by <a href="https:tools.ietf.orghtmlrfc7517#section-4">RFC
         7517 JSON Web Key (JWK)  Section 4<a> and <a href="https:tools.ietf.orghtmlrfc7518">RFC
@@ -4763,6 +4784,8 @@ components:
       - UserInfoPopulate
       - LoginValidation
       - MFARequirement
+      - TokenExchangePolicy
+      - TokenExchangePopulate
     LinkedInApplicationConfiguration:
       description: ''
       type: object
@@ -5635,6 +5658,7 @@ components:
       - invalid_entity_permission_scope
       - invalid_user_id
       - invalid_tenant_id
+      - resource_parameter_not_supported
       - grant_type_disabled
       - missing_client_id
       - missing_client_secret
@@ -5677,6 +5701,14 @@ components:
       - registration_required
       - registration_verification_required
       - consent_required
+      - audience_required
+      - invalid_audience
+      - invalid_intent
+      - invalid_jwt
+      - invalid_scope
+      - invalid_state
+      - invalid_resource
+      - lambda_denied
     OAuthErrorType:
       type: string
       enum:
@@ -6077,6 +6109,17 @@ components:
           "$ref": "#/components/schemas/ApplicationMultiFactorTrustPolicy"
         tenantLoginPolicy:
           "$ref": "#/components/schemas/MultiFactorLoginPolicy"
+    PolicyInfo:
+      description: Nested structure for policy evaluation information in the webhook
+        payload.
+      type: object
+      properties:
+        decision:
+          "$ref": "#/components/schemas/TokenExchangePolicyDecision"
+        decisionDurationMs:
+          type: integer
+        engine:
+          "$ref": "#/components/schemas/TokenExchangePolicyEngine"
     PreviewMessageTemplateRequest:
       description: ''
       type: object
@@ -6368,6 +6411,8 @@ components:
         tenantManagerApplication:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         threatDetection:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
+        tokenExchange:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         universalApplication:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
@@ -7419,6 +7464,29 @@ components:
           format: uuid
         type:
           "$ref": "#/components/schemas/IdentityProviderType"
+    SubjectTokenInfo:
+      description: Nested structure for subject token information in the webhook payload.
+      type: object
+      properties:
+        iss:
+          type: string
+        jti:
+          type: string
+        sub:
+          type: string
+        type:
+          type: string
+        validationStatus:
+          "$ref": "#/components/schemas/SubjectTokenValidationStatus"
+    SubjectTokenValidationStatus:
+      description: How much confidence we have in the validation of the subject token
+        that was presented. These values are specified by the ARC and are  stored
+        by name, so they may not be renamed without a migration.
+      type: string
+      enum:
+      - AUTHORITATIVE
+      - BEST_EFFORT
+      - FAILED
     SupportsPostBindings:
       description: Helper interface that indicates an identity provider can be federated
         to using the HTTP POST method.
@@ -7446,6 +7514,8 @@ components:
           "$ref": "#/components/schemas/LoginRecordConfiguration"
         reportTimezone:
           "$ref": "#/components/schemas/ZoneId"
+        tokenExchangeAuditLogConfiguration:
+          "$ref": "#/components/schemas/TokenExchangeAuditLogConfiguration"
         trustedProxyConfiguration:
           "$ref": "#/components/schemas/SystemTrustedProxyConfiguration"
         uiConfiguration:
@@ -7693,6 +7763,8 @@ components:
         themeId:
           type: string
           format: uuid
+        tokenExchangeConfiguration:
+          "$ref": "#/components/schemas/TenantTokenExchangeConfiguration"
         userDeletePolicy:
           "$ref": "#/components/schemas/TenantUserDeletePolicy"
         usernameConfiguration:
@@ -8032,6 +8104,28 @@ components:
         total:
           type: integer
           format: int64
+    TenantTokenExchangeConfiguration:
+      description: Tenant level configuration for RFC 8693 token exchange.
+      type: object
+      properties:
+        allowedIssuers:
+          type: array
+          items:
+            type: string
+        debug:
+          type: boolean
+        maxClaimDepth:
+          type: integer
+        policyEngine:
+          "$ref": "#/components/schemas/TokenExchangePolicyEngine"
+        policyEngineLambdaId:
+          type: string
+          format: uuid
+        populateLambdaId:
+          type: string
+          format: uuid
+        enabled:
+          type: boolean
     TenantUnverifiedConfiguration:
       description: ''
       type: object
@@ -8194,6 +8288,214 @@ components:
           type: integer
         enabled:
           type: boolean
+    TokenExchangeAuditLog:
+      description: An audit record for a single token exchange attempt. Exactly one
+        of these is written for every attempt, whether it succeeded or failed,  so
+        this is the authoritative record of who exchanged what for what.
+      type: object
+      properties:
+        actChain:
+          type: string
+        delegationSemantics:
+          "$ref": "#/components/schemas/TokenExchangeDelegationSemantics"
+        eventId:
+          type: string
+          format: uuid
+        exchangerClientId:
+          type: string
+          format: uuid
+        grantedAudience:
+          type: string
+        grantedScope:
+          type: string
+        insertInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        intent:
+          type: string
+        issuedTokenJti:
+          type: string
+        outcome:
+          "$ref": "#/components/schemas/TokenExchangeOutcome"
+        policyDecision:
+          "$ref": "#/components/schemas/TokenExchangePolicyDecision"
+        policyDecisionDurationMs:
+          type: integer
+        policyEngine:
+          "$ref": "#/components/schemas/TokenExchangePolicyEngine"
+        requestedAudience:
+          type: string
+        subjectTokenIss:
+          type: string
+        subjectTokenJti:
+          type: string
+        subjectTokenSub:
+          type: string
+        subjectTokenType:
+          type: string
+        subjectTokenValidationStatus:
+          "$ref": "#/components/schemas/SubjectTokenValidationStatus"
+        tenantId:
+          type: string
+          format: uuid
+    TokenExchangeAuditLogChainResponse:
+      description: Token exchange audit log chain response.
+      type: object
+      properties:
+        tokenExchangeAuditLogs:
+          type: array
+          items:
+            "$ref": "#/components/schemas/TokenExchangeAuditLog"
+    TokenExchangeAuditLogConfiguration:
+      description: The system configuration for token exchange audit log data.  <p>  Deleting
+        these entries is mandatory, so this configuration intentionally has no enabled
+        flag. Token exchange volume can be high enough  that retaining entries indefinitely
+        would grow the database without bound. Longer retention is served by ingesting
+        the token exchange  webhooks into external storage.
+      type: object
+      properties:
+        numberOfDaysToRetain:
+          type: integer
+    TokenExchangeAuditLogSearchCriteria:
+      description: Search criteria for the token exchange audit log. Filterable on
+        exactly {@code tenantId}, {@code exchangerClientId}, {@code outcome},  and
+        an exchange instant range — no other fields, per the ARC decision to limit
+        the index count on this table.
+      type: object
+      properties:
+        end:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        exchangerClientId:
+          type: string
+          format: uuid
+        outcome:
+          "$ref": "#/components/schemas/TokenExchangeOutcome"
+        start:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        tenantId:
+          type: string
+          format: uuid
+        numberOfResults:
+          type: integer
+        orderBy:
+          type: string
+        startRow:
+          type: integer
+    TokenExchangeAuditLogSearchRequest:
+      description: Token exchange audit log search request.
+      type: object
+      properties:
+        search:
+          "$ref": "#/components/schemas/TokenExchangeAuditLogSearchCriteria"
+    TokenExchangeAuditLogSearchResponse:
+      description: Token exchange audit log search response.
+      type: object
+      properties:
+        tokenExchangeAuditLogs:
+          type: array
+          items:
+            "$ref": "#/components/schemas/TokenExchangeAuditLog"
+        total:
+          type: integer
+          format: int64
+    TokenExchangeCompleteEvent:
+      description: Models the Token Exchange Complete event. This is a non-transactional
+        variant of the token.exchange event.  Delivery failure does not block or fail
+        the token exchange request.
+      type: object
+      properties:
+        actChain:
+          type: object
+        exchangerClientId:
+          type: string
+          format: uuid
+        intent:
+          type: string
+        issuedToken:
+          "$ref": "#/components/schemas/IssuedTokenInfo"
+        outcome:
+          "$ref": "#/components/schemas/TokenExchangeOutcome"
+        policy:
+          "$ref": "#/components/schemas/PolicyInfo"
+        requestedAudience:
+          type: array
+          items:
+            type: string
+        subjectToken:
+          "$ref": "#/components/schemas/SubjectTokenInfo"
+    TokenExchangeDelegationSemantics:
+      description: The delegation semantics applied to the issued token. These are
+        RFC 8693 terms.  FusionAuth does not support token exchange impersonation.
+      type: string
+      enum:
+      - DELEGATION
+      - IMPERSONATION
+    TokenExchangeEvent:
+      description: Models the Token Exchange event. This event fires for every token
+        exchange attempt (success and failure).
+      type: object
+      properties:
+        actChain:
+          type: object
+        exchangerClientId:
+          type: string
+          format: uuid
+        intent:
+          type: string
+        issuedToken:
+          "$ref": "#/components/schemas/IssuedTokenInfo"
+        outcome:
+          "$ref": "#/components/schemas/TokenExchangeOutcome"
+        policy:
+          "$ref": "#/components/schemas/PolicyInfo"
+        requestedAudience:
+          type: array
+          items:
+            type: string
+        subjectToken:
+          "$ref": "#/components/schemas/SubjectTokenInfo"
+        createInstant:
+          "$ref": "#/components/schemas/ZonedDateTime"
+        id:
+          type: string
+          format: uuid
+        info:
+          "$ref": "#/components/schemas/EventInfo"
+        tenantId:
+          type: string
+          format: uuid
+        type:
+          "$ref": "#/components/schemas/EventType"
+    TokenExchangeOutcome:
+      description: The terminal outcome of a token exchange attempt. Every failure
+        stage gets a distinct value so a denial can be attributed to the stage  that
+        rejected it.
+      type: string
+      enum:
+      - CLIENT_AUTHENTICATION_FAILED
+      - CLIENT_DISALLOWED
+      - CLIENT_REQUEST_FAILURE
+      - DEPTH_EXCEEDED
+      - POLICY_DENIED
+      - POLICY_LAMBDA_ERROR
+      - POPULATE_LAMBDA_ERROR
+      - SUBJECT_TOKEN_INVALID
+      - SUCCESS
+      - TENANT_DISALLOWED
+      - WEBHOOK_FAILURE
+    TokenExchangePolicyDecision:
+      description: The decision returned by the policy engine.
+      type: string
+      enum:
+      - ALLOW
+      - DENY
+      - ERROR
+    TokenExchangePolicyEngine:
+      description: The policy engine used to authorize an RFC 8693 token exchange
+        request.
+      type: string
+      enum:
+      - ENTITY
+      - LAMBDA
     TokenType:
       description: <ul>  <li>Bearer Token type as defined by <a href="https:tools.ietf.orghtmlrfc6750">RFC
         6750<a>.<li>  <li>MAC Token type as referenced by <a href="https:tools.ietf.orghtmlrfc6749">RFC
