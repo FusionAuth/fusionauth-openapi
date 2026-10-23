@@ -6378,6 +6378,8 @@ components:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         breachedPasswordDetection:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
+        cimd:
+          "$ref": "#/components/schemas/ReactorFeatureStatus"
         clientRiskConfiguration:
           "$ref": "#/components/schemas/ReactorFeatureStatus"
         connectors:
