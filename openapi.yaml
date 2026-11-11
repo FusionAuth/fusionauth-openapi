@@ -8463,6 +8463,8 @@ components:
           "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
         forgotPassword:
           "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
+        passwordlessLogin:
+          "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
         sendEmailVerification:
           "$ref": "#/components/schemas/RateLimitedRequestConfiguration"
         sendPasswordless:
