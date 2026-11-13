@@ -8610,6 +8610,10 @@ components:
       description: Tenant-level configuration for WebAuthn
       type: object
       properties:
+        allowedOrigins:
+          type: array
+          items:
+            type: string
         bootstrapWorkflow:
           "$ref": "#/components/schemas/TenantWebAuthnWorkflowConfiguration"
         debug:
